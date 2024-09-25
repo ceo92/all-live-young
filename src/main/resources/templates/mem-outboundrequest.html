@@ -12,13 +12,14 @@
     <title>All Live Young: Dashboard</title>
 
     <!-- Custom fonts for this template-->
-    <link href="../static/startbootstrap-sb-admin-2-gh-pages..static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="../static/startbootstrap-sb-admin-2-gh-pages/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../static/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../static/css/outbound.css" rel="stylesheet">
 
 </head>
 
@@ -33,7 +34,7 @@
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
             <div class="sidebar-brand-icon">
-                <img src="../static/startbootstrap-sb-admin-2-gh-pages/img/logo.png" width="80px">
+                <img src="../static/img/logo.png" width="80px">
             </div>
         </a>
 
@@ -336,7 +337,7 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">  이경민</span>
                             <img class="img-profile rounded-circle"
-                                 src="../static/startbootstrap-sb-admin-2-gh-pages/img/undraw_profile.svg">
+                                 src="../static/img/undraw_profile.svg">
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -364,18 +365,35 @@
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">출고요청관리</h1>
 
+                    <div class="card shadow mb-4 p-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <label class="mb-0">검색</label>
+                            <input type="search" class="form-control form-control-sm w-50 ml-3" placeholder="Search" aria-controls="dataTable">
+                        </div>
+                        <div class="mt-2">
+                            <label>
+                                <input type="checkbox" name="선택1" id="선택1"> 조건1
+                            </label>
+                            <label class="ml-2">
+                                <input type="checkbox" name="선택2" id="선택2"> 조건2
+                            </label>
+                            <label class="ml-2">
+                                <input type="checkbox" name="선택3" id="선택3"> 조건3
+                            </label>
+                        </div>
+                    </div>
+
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">출고요청내역</h6>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
+                            <div class="table-responsive table-scroll">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>작업코드</th>
+                                            <th>번호</th>
+                                            <th>출고요청코드</th>
                                             <th>처리상태</th>
                                             <th>주문자ID</th>
                                             <th>재고번호</th>
@@ -385,14 +403,14 @@
                                             <th>수령인 연락처</th>
                                             <th>등록일자</th>
                                             <th>수정일자</th>
-                                            <th>비고</th>
+                                            <th>주문요청사항</th>
                                         </tr>
                                     </thead>
                                     
                                     <tbody>
                                     <tr>
                                         <td>1</td>
-                                        <td>obreq-2024092008300000001</td>
+                                        <td>obreq-20240920-083000-0001</td>
                                         <td>검수완료</td>
                                         <td>ssg@gmail.com</td>
                                         <td>20240801000000001</td>
@@ -878,21 +896,24 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="../static/startbootstrap-sb-admin-2-gh-pages..static/vendor/jquery/jquery.min.js"></script>
-    <script src="../static/startbootstrap-sb-admin-2-gh-pages..static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/vendor/jquery/jquery.min.js"></script>
+    <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="../static/startbootstrap-sb-admin-2-gh-pages..static/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../static/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="../static/js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="../static/startbootstrap-sb-admin-2-gh-pages..static/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="../static/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="../static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="../static/startbootstrap-sb-admin-2-gh-pages/js/demo/datatables-demo.js"></script>
+    <script src="../static/js/demo/datatables-demo.js"></script>
+
+    <script src="../static/js/demo/outbound-demo.js"></script>
+
 
 </body>
 

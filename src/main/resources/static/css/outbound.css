@@ -1,0 +1,9 @@
+.table-scroll {
+  overflow-x: auto;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.dataTables_filter>label {
+  display: none;
+}

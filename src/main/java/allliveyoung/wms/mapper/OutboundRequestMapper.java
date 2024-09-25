@@ -12,7 +12,7 @@ public interface OutboundRequestMapper {
 
   public Long save(OutboundRequest outboundRequest);
 
-  public List<OutboundRequest> findAll(PageRequest pageRequest, @Param("Status") Status status,
+  public List<OutboundRequest> findAll(PageRequest pageRequest, @Param("status") Status status,
       @Param("id") Member member);
 
   public Optional<OutboundRequest> findById(Long id);

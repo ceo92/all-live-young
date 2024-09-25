@@ -20,7 +20,7 @@ public class OutboundRequest {
   private Status status;
   private Member member;
   private Stock stock;
-  private int quantity;
+  private Integer quantity;
   private String recipientName;
   private Address address;
   private String recipientContact;

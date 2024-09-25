@@ -9,10 +9,10 @@
   </select>
 
   <select id="findById" resultType="allliveyoung.wms.domain.Dispatch">
-    select * from DISPATCH where dispatch_id = ${id}
+    select * from DISPATCH where dispatch_id = #{id}
   </select>
 
   <update id="update">
-    update DISPATCH set dispatch_status = ${status}, member_id = ${Member.getId()}, dispatch_date = ${modDate}, dispatch_note = ${note} where dispatch_id = ${id}
+    update DISPATCH set dispatch_status = #{status}, member_id = #{Member.getId()}, dispatch_date = #{modDate}, dispatch_note = #{note} where dispatch_id = #{id}
   </update>
 </mapper>

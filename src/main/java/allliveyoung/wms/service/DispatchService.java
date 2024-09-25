@@ -3,24 +3,17 @@ package allliveyoung.wms.service;
 import allliveyoung.wms.domain.Dispatch;
 import allliveyoung.wms.domain.Status;
 import allliveyoung.wms.web.dto.DispatchDTO;
-import allliveyoung.wms.web.dto.PageRequestDTO;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
-@Service
-public class DispatchService {
 
-  public List<Dispatch> findDispatches(PageRequestDTO pageRequestDTO,
-      @Param("Status") Status status) {
-    return null;
-  }
+public interface DispatchService{
+
+  public List<Dispatch> findDispatches(@Param("Status") Status status);
+
   
-  public Dispatch findDispatch(Long id) {
-    return null;
-  }
+  public Dispatch findDispatch(Long id);
   
-  public void updateDispatch(DispatchDTO DispatchDTO) {
-    
-  }
+  public void updateDispatch(DispatchDTO DispatchDTO);
 }
