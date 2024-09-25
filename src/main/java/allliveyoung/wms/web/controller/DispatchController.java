@@ -26,7 +26,7 @@ public class DispatchController {
   }
 
   @PostMapping("/dispatch/{id}/update")
-  public String postDispatchUpdateForm(@Valid DispatchDTO dispatchDTO,
+  public String postDispatchUpdateForm(@Validated DispatchDTO dispatchDTO,
       PageRequestDTO pageRequestDTO, BindingResult bindingResult,
       RedirectAttributes redirectAttributes) {
     if (bindingResult.hasErrors()) {

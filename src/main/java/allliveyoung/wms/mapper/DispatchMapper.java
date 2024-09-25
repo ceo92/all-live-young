@@ -7,17 +7,11 @@ import java.util.List;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Param;
 
-public class DispatchMapper {
+public interface DispatchMapper {
 
-  public List<Dispatch> findAll(PageRequestDTO pageRequestDTO, @Param("Status") Status status) {
-    return null;
-  }
+  public List<Dispatch> findAll(PageRequestDTO pageRequestDTO, @Param("Status") Status status);
 
-  public Optional<Dispatch> findById(Long id) {
-    return null;
-  }
+  public Optional<Dispatch> findById(Long id);
 
-  public void update(Dispatch dispatch) {
-
-  }
+  public void update(Dispatch dispatch);
 }

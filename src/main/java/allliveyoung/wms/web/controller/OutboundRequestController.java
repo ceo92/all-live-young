@@ -26,7 +26,7 @@ public class OutboundRequestController {
   }
 
   @PostMapping("/outbound-request/save")
-  public String getOutboundRequestsSaveForm(@Valid OutboundRequestDTO outboundRequestDTO,
+  public String getOutboundRequestsSaveForm(@Validated OutboundRequestDTO outboundRequestDTO,
       BindingResult bindingResult, RedirectAttributes redirectAttributes) {
     if (bindingResult.hasErrors()) {
       return "redirect:/outbound-request/save";
@@ -42,7 +42,7 @@ public class OutboundRequestController {
   }
 
   @PostMapping("/outbound-reqeust/{id}/update")
-  public String postOutboundRequestUpdateForm(@Valid OutboundRequestDTO outboundRequestDTO, BindingResult bindingResult,
+  public String postOutboundRequestUpdateForm(@Validated OutboundRequestDTO outboundRequestDTO, BindingResult bindingResult,
       PageRequestDTO pageRequestDTO, RedirectAttributes redirectAttributes) {
     if (bindingResult.hasErrors()) {
       return "redirect:/outbound-request/{id}/update";

@@ -26,7 +26,7 @@ public class OutboundInspectionController {
   }
 
   @PostMapping("/outbound-inspection/{id}/update")
-  public String postOutboundInspectionUpdateForm(@Valid OutboundInspectionDTO outboundInspectionDTO,
+  public String postOutboundInspectionUpdateForm(@Validated OutboundInspectionDTO outboundInspectionDTO,
       PageRequestDTO pageRequestDTO, BindingResult bindingResult,
       RedirectAttributes redirectAttributes) {
     if (bindingResult.hasErrors()) {

@@ -25,7 +25,7 @@ public class ShipmentController {
   }
 
   @PostMapping("/shipment/{id}/update")
-  public String postShipmentUpdateForm(@Valid ShipmentDTO ShipmentDTO,
+  public String postShipmentUpdateForm(@Validated ShipmentDTO ShipmentDTO,
       PageRequestDTO pageRequestDTO, BindingResult bindingResult,
       RedirectAttributes redirectAttributes) {
     if (bindingResult.hasErrors()) {
