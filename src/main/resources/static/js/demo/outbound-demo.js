@@ -26,3 +26,63 @@ tableContainer.addEventListener('mousemove', (e) => {
   const walk = (x - startX);  // 이동한 거리
   tableContainer.scrollLeft = scrollLeft - walk;  // 이동한 거리만큼 스크롤
 });
+
+
+
+document.getElementById('addRowBtn').addEventListener('click', function() {
+  const table = document.getElementById('outboundrequest_register').getElementsByTagName('tbody')[0];
+  const rowCount = table.rows.length;
+  const newRow = table.insertRow(rowCount);
+
+  const cell1 = newRow.insertCell(0);
+  cell1.innerHTML = rowCount + 1;
+
+  const cell2 = newRow.insertCell(1);
+  cell2.innerHTML = '<select name="stockInfo[' + rowCount + ']" class="form-control" required>'
+      + '<option value="">선택</option>'
+      + '<option value="stock1">재고 1</option>'
+      + '<option value="stock2">재고 2</option>'
+      + '<option value="stock3">재고 3</option>'
+      + '</select>';
+
+  const cell3 = newRow.insertCell(2);
+  cell3.innerHTML = '<input type="text" name="availableStock[' + rowCount + ']" class="form-control" readonly>';
+
+  const cell4 = newRow.insertCell(3);
+  cell4.innerHTML = '<input type="number" name="quantity[' + rowCount + ']" class="form-control" required min="1">';
+
+  const cell5 = newRow.insertCell(4);
+  cell5.innerHTML = '<input type="text" name="recipientName[' + rowCount + ']" class="form-control" required>';
+
+  const cell6 = newRow.insertCell(5);
+  cell6.innerHTML = '<input type="text" name="recipientAddress[' + rowCount + ']" class="form-control" required>';
+
+  const cell7 = newRow.insertCell(6);
+  cell7.innerHTML = '<input type="text" name="recipientContact[' + rowCount + ']" class="form-control" required>';
+
+  const cell8 = newRow.insertCell(7);
+  cell8.innerHTML = '<input type="text" name="note[' + rowCount + ']" class="form-control">';
+});
+
+document.getElementById('removeRowBtn').addEventListener('click', function() {
+  const table = document.getElementById('outboundrequest_register').getElementsByTagName('tbody')[0];
+  const rowCount = table.rows.length;
+
+  if (rowCount > 1) {
+    table.deleteRow(rowCount - 1);
+  }
+});
+
+document.getElementById("modifyBtn").addEventListener("click", function() {
+  // 수정 가능한 항목들을 가져오기
+  var editableFields = document.querySelectorAll('.editable');
+
+  // 각 항목의 disabled 속성을 제거하여 수정 가능하게 전환
+  editableFields.forEach(function(field) {
+    field.disabled = false; // 수정 가능 상태로 전환
+  });
+
+  // 수정 버튼 숨기고 저장 버튼 보이기
+  document.getElementById("editBtn").style.display = 'none';
+  document.getElementById("saveBtn").style.display = 'inline-block';
+});

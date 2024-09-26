@@ -1,4 +1,4 @@
-package allliveyoung.wms.domain.dummy;
+package allliveyoung.wms.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,5 +14,9 @@ import lombok.ToString;
 public class Member {
   private Long id;
   private String email;
+
+  public Member(Long id) {
+    this.id = id;
+  }
 
 }

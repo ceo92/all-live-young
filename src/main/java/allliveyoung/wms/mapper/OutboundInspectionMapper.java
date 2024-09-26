@@ -5,17 +5,15 @@ import allliveyoung.wms.domain.Status;
 import allliveyoung.wms.web.dto.PageRequestDTO;
 import java.util.List;
 import java.util.Optional;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-public class OutboundInspectionMapper {
+@Mapper
+public interface OutboundInspectionMapper {
 
-  public List<OutboundInspection> findAll(PageRequestDTO page, @Param("Status") Status status) {
-    return null;
-  }
+  public List<OutboundInspection> findAll(PageRequestDTO page, @Param("Status") Status status);
 
-  public Optional<OutboundInspection> findById(Long id) {
-    return null;
-  }
+  public Optional<OutboundInspection> findById(Long id);
 
-  public void update(OutboundInspection outboundInspection) {}
+  public void update(OutboundInspection outboundInspection);
 }

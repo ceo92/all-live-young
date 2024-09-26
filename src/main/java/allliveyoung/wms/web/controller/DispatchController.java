@@ -1,12 +1,11 @@
 package allliveyoung.wms.web.controller;
 
 import allliveyoung.wms.web.dto.DispatchDTO;
-import allliveyoung.wms.web.dto.dispatchDTO;
 import allliveyoung.wms.web.dto.PageRequestDTO;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +16,12 @@ public class DispatchController {
 
   @GetMapping("/dispatches")
   public String getDispatches(PageRequestDTO pageRequestDTO, Model model) {
-    return;
+    return null;
   }
 
   @GetMapping("/dispatch/{id}")
   public String getDispatch(@PathVariable("id") Long id, Model model) {
-    return;
+    return null;
   }
 
   @PostMapping("/dispatch/{id}/update")

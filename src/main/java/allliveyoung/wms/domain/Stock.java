@@ -1,4 +1,4 @@
-package allliveyoung.wms.domain.dummy;
+package allliveyoung.wms.domain;
 
 public class Stock {
   private Long id;

@@ -2,23 +2,18 @@ package allliveyoung.wms.mapper;
 
 import allliveyoung.wms.domain.Shipment;
 import allliveyoung.wms.domain.Status;
-import allliveyoung.wms.domain.dummy.Stock;
 import allliveyoung.wms.web.dto.PageRequestDTO;
 import java.util.List;
 import java.util.Optional;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.repository.query.Param;
 
-public class ShipmentMapper {
+@Mapper
+public interface ShipmentMapper {
 
-  public List<Shipment> findAll(PageRequestDTO page, @Param("Status") Status status) {
-    return null;
-  }
+  public List<Shipment> findAll(PageRequestDTO page, @Param("Status") Status status);
 
-  public Optional<Shipment> findById(Long id) {
-    return null;
-  }
+  public Optional<Shipment> findById(Long id);
 
-  public void update(Shipment shipment) {
-
-  }
+  public void update(Shipment shipment);
 }

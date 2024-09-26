@@ -1,8 +1,5 @@
 package allliveyoung.wms.domain;
 
-import allliveyoung.wms.domain.dummy.Address;
-import allliveyoung.wms.domain.dummy.Member;
-import allliveyoung.wms.domain.dummy.Stock;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

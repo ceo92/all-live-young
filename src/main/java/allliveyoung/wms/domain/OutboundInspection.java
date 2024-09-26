@@ -1,6 +1,5 @@
 package allliveyoung.wms.domain;
 
-import allliveyoung.wms.domain.dummy.Member;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

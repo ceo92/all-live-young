@@ -7,3 +7,9 @@
 .dataTables_filter>label {
   display: none;
 }
+
+.editable {
+  background-color: white;
+  pointer-events: auto;
+  opacity: 1;
+}

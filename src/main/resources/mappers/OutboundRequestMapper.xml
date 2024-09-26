@@ -3,13 +3,22 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="allliveyoung.wms.mapper.OutboundRequestMapper">
+
   <insert id="save" useGeneratedKeys="true" keyProperty="id">
     insert outbound_request (member_id, stock_id, order_quantity, recipient_name,recipient_address, recipient_contact, outbound_note)
            values (#{member.id}, #{stock.id}, #{quantity}, #{recipientName}, #{address.fullAddress}, #{recipientContact}, #{note})
   </insert>
 
   <select id="findAll" resultType="alllliveyoung.wms.domain.OutboundRequest">
-    select * from outbound_request order by outbound_request_id desc
+    select * from outbound_request
+    where 1 = 1
+    <if test="status != null">
+      and status = #{status}
+    </if>
+    <if test="id != null">
+      and member_id = #{id}
+    </if>
+    order by outbound_request_id desc
   </select>
 
   <select id="findById" resultType="alllliveyoung.wms.domain.OutboundRequest">

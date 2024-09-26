@@ -2,22 +2,24 @@ package allliveyoung.wms.mapper;
 
 import allliveyoung.wms.domain.OutboundRequest;
 import allliveyoung.wms.domain.Status;
-import allliveyoung.wms.domain.dummy.Member;
+import allliveyoung.wms.domain.Member;
+import allliveyoung.wms.web.dto.OutboundRequestDTO;
 import java.util.List;
 import java.util.Optional;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.data.domain.PageRequest;
 
+@Mapper
 public interface OutboundRequestMapper {
 
-  public Long save(OutboundRequest outboundRequest);
+  Long save(OutboundRequest outboundRequest);
 
-  public List<OutboundRequest> findAll(PageRequest pageRequest, @Param("status") Status status,
+  List<OutboundRequest> findAll(OutboundRequestDTO outboundRequestDTO, @Param("status") Status status,
       @Param("id") Member member);
 
-  public Optional<OutboundRequest> findById(Long id);
+  Optional<OutboundRequest> findById(Long id);
 
-  public void update(OutboundRequest outboundRequest);
+  void update(OutboundRequest outboundRequest);
 
-  public void delete(Long id);
+  void delete(Long id);
 }

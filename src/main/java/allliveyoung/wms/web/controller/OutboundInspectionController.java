@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +18,12 @@ public class OutboundInspectionController {
 
   @GetMapping("/outbound-inspections")
   public String getOutboundInspections(PageRequestDTO pageRequestDTO, Model model) {
-    return;
+    return null;
   }
 
   @GetMapping("/outbound-inspection/{id}")
   public String getOutboundInspection(@PathVariable("id") Long id, Model model) {
-    return;
+    return null;
   }
 
   @PostMapping("/outbound-inspection/{id}/update")
