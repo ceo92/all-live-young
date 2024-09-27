@@ -8,13 +8,14 @@ import java.util.List;
 
 public interface OutboundRequestService {
 
-  public Long saveOutboundRequest(OutboundRequestDTO outboundRequestDTO);
+  Long saveOutboundRequest(OutboundRequestDTO outboundRequestDTO);
 
-  public List<OutboundRequest> findOutboundRequests(OutboundRequestDTO outboundRequestDTO, Status status, Member member);
+  List<OutboundRequest> findOutboundRequests(OutboundRequestDTO outboundRequestDTO);
 
-  public OutboundRequest findOneOutboundRequest(Long id);
+  OutboundRequest findOneOutboundRequest(Long id);
 
-  public void updateOutboundRequest(OutboundRequestDTO outboundRequestDTO);
+  void updateOutboundRequestByCompany(OutboundRequestDTO outboundRequestDTO);
+  void updateOutboundRequestByManager(OutboundRequestDTO outboundRequestDTO);
 
-  public void deleteOutboundRequest(Long id);
+  void deleteOutboundRequest(Long id);
 }

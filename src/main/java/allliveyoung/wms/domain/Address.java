@@ -13,5 +13,5 @@ public class Address {
   private String roadAddress;
   private String zipCode;
   private String detailsAddress;
-  private String fullAddress = zipCode + " " + roadAddress + " " + detailsAddress;
+  private String fullAddress;
 }

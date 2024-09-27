@@ -5,31 +5,30 @@
 <mapper namespace="allliveyoung.wms.mapper.OutboundRequestMapper">
 
   <insert id="save" useGeneratedKeys="true" keyProperty="id">
-    insert outbound_request (member_id, stock_id, order_quantity, recipient_name,recipient_address, recipient_contact, outbound_note)
-           values (#{member.id}, #{stock.id}, #{quantity}, #{recipientName}, #{address.fullAddress}, #{recipientContact}, #{note})
+    insert outbound_request (member_id, stock_id, order_quantity, recipient_name,recipient_address, recipient_contact)
+           values (#{member.id}, #{stock.id}, #{quantity}, #{recipientName}, #{address.fullAddress}, #{recipientContact})
   </insert>
 
-  <select id="findAll" resultType="alllliveyoung.wms.domain.OutboundRequest">
-    select * from outbound_request
-    where 1 = 1
-    <if test="status != null">
-      and status = #{status}
-    </if>
-    <if test="id != null">
-      and member_id = #{id}
-    </if>
-    order by outbound_request_id desc
+  <select id="findAll" resultType="allliveyoung.wms.domain.OutboundRequest">
+    select * from outbound_request order by outbound_request_id desc
   </select>
 
-  <select id="findById" resultType="alllliveyoung.wms.domain.OutboundRequest">
+  <select id="findById" resultType="allliveyoung.wms.domain.OutboundRequest">
     select * from outbound_request where outbound_request_id = #{id}
   </select>
 
-  <update id="update">
+  <update id="memberUpdate">
     update outbound_request
-    set member_id = #{member.id}, stock_id = #{stock.id}, order_quantity = #{quantity},
+    set stock_id = #{stock.id}, order_quantity = #{quantity},
         recipient_name = #{recipientName}, recipient_address = #{address.fullAddress},
-        recipient_contact = #{recipientContact}, outbound_note = #{note}
+        recipient_contact = #{recipientContact}, outbound_request_note = #{note}
+    where outbound_request_id = #{id}
+  </update>
+
+  <update id="managerUpdate">
+    update outbound_request
+    set outbound_request_status = #{status}, is_fault = #{isFault},
+        rejection_note = #{rejectionNote}, outbound_note = #{note}
     where outbound_request_id = #{id}
   </update>
 

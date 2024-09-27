@@ -27,9 +27,8 @@ public class OutboundRequestServiceImpl implements OutboundRequestService {
   }
 
   @Override
-  public List<OutboundRequest> findOutboundRequests(OutboundRequestDTO outboundRequestDTO,
-      Status status, Member member) {
-    List<OutboundRequest> list = outboundRequestMapper.findAll(outboundRequestDTO, status, member);
+  public List<OutboundRequest> findOutboundRequests(OutboundRequestDTO outboundRequestDTO) {
+    List<OutboundRequest> list = outboundRequestMapper.findAll(outboundRequestDTO);
     return list;
   }
 
@@ -41,8 +40,13 @@ public class OutboundRequestServiceImpl implements OutboundRequestService {
   }
 
   @Override
-  public void updateOutboundRequest(OutboundRequestDTO outboundRequestDTO) {
-    outboundRequestMapper.update(modelMapper.map(outboundRequestDTO, OutboundRequest.class));
+  public void updateOutboundRequestByCompany(OutboundRequestDTO outboundRequestDTO) {
+    outboundRequestMapper.memberUpdate(modelMapper.map(outboundRequestDTO, OutboundRequest.class));
+  }
+
+  @Override
+  public void updateOutboundRequestByManager(OutboundRequestDTO outboundRequestDTO) {
+    outboundRequestMapper.managerUpdate(modelMapper.map(outboundRequestDTO, OutboundRequest.class));
   }
 
   @Override

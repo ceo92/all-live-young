@@ -1,5 +1,6 @@
 package allliveyoung.wms.domain;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,5 +22,9 @@ public class OutboundRequest {
   private String recipientName;
   private Address address;
   private String recipientContact;
+  private Boolean isFault;
+  private String rejectionNote;
+  private LocalDateTime regDate;
+  private LocalDateTime modDate;
   private String note;
 }

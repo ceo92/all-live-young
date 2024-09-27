@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
@@ -12,14 +12,13 @@
     <title>All Live Young: Dashboard</title>
 
     <!-- Custom fonts for this template-->
-    <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="../static/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="../static/css/outbound.css" rel="stylesheet">
+    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
@@ -34,7 +33,7 @@
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
             <div class="sidebar-brand-icon">
-                <img src="../static/img/logo.png" width="80px">
+                <img src="../img/logo.png" width="80px">
             </div>
         </a>
 
@@ -81,14 +80,10 @@
             </a>
             <div id="outboundBar" class="collapse" aria-labelledby="headingOutboundBar" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">출고현황</h6>
+                    <h6 class="collapse-header">출고관리</h6>
+                    <a class="collapse-item" href="mgr-outboundrequest.html">출고요청 관리</a>
                     <a class="collapse-item" href="mgr-outbounding.html">진행중인 출고</a>
                     <a class="collapse-item" href="mgr-outbounded.html">완료된 출고</a>
-                    <h6 class="collapse-header">출고관리</h6>
-                    <a class="collapse-item" href="mgr-outboundrequest.html">출고요청</a>
-                    <a class="collapse-item" href="mgr-outboundinspection.html">출고검수</a>
-                    <a class="collapse-item" href="mgr-dispatch.html">배차</a>
-                    <a class="collapse-item" href="mgr-shipment.html">운송</a>
                 </div>
             </div>
         </li>
@@ -322,7 +317,7 @@
                                 </div>
                                 <div>
                                     <div class="small text-gray-600">2019.12.12.</div>
-                                    <span class="text-gray-700">진행중인 출고가 10건 있습니다!</span>
+                                    <span class="text-gray-700">출고 검수 대기가 10건 있습니다!</span>
                                 </div>
                             </a>
                             <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
@@ -337,7 +332,7 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">  이경민</span>
                             <img class="img-profile rounded-circle"
-                                 src="../static/img/undraw_profile.svg">
+                                 src="../img/undraw_profile.svg">
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -386,7 +381,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">출고요청내역</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">전체 출고</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive table-scroll">
@@ -398,30 +393,34 @@
                                             <th>주문자ID</th>
                                             <th>재고번호</th>
                                             <th>주문수량</th>
-                                            <th>수령인 이름</th>
-                                            <th>수령인 주소</th>
-                                            <th>수령인 연락처</th>
+                                            <th>수취인 이름</th>
+                                            <th>수취인 주소</th>
+                                            <th>수취인 연락처</th>
+                                            <th>이상유무</th>
+                                            <th>반려사유</th>
                                             <th>등록일자</th>
                                             <th>수정일자</th>
-                                            <th>주문요청사항</th>
+                                            <th>비고</th>
                                         </tr>
                                     </thead>
                                     
                                     <tbody>
 
                                     <tr th:each="outboundRequest : ${outboundRequestList}">
-                                        <td th:text="${request.id}"></td>
-                                        <td th:text="${request.code}"></td>
-                                        <td th:text="${request.status}"></td>
-                                        <td th:text="${request.member.id}"></td>
-                                        <td th:text="${request.stock.id}"></td>
-                                        <td th:text="${request.quantity}"></td>
-                                        <td th:text="${request.recipientName}"></td>
-                                        <td th:text="${request.recipientAddress}"></td>
-                                        <td th:text="${request.recipientContact}"></td>
-                                        <td th:text="${request.regDate}"></td>
-                                        <td th:text="${request.modDate != null ? request.modDate : 'N/A'}"></td>
-                                        <td th:text="${request.note}"></td>
+                                        <td th:text="${outboundRequest.id}"></td>
+                                        <td th:text="${outboundRequest.code}"></td>
+                                        <td th:text="${outboundRequest.status}"></td>
+                                        <td th:text="${outboundRequest.member.id}"></td>
+                                        <td th:text="${outboundRequest.stock.id}"></td>
+                                        <td th:text="${outboundRequest.quantity}"></td>
+                                        <td th:text="${outboundRequest.recipientName}"></td>
+                                        <td th:text="${outboundRequest.recipientAddress}"></td>
+                                        <td th:text="${outboundRequest.recipientContact}"></td>
+                                        <td th:text="${outboundRequest.isFault}"></td>
+                                        <td th:text="${outboundRequest.rejectionNote}"></td>
+                                        <td th:text="${outboundRequest.regDate}"></td>
+                                        <td th:text="${outboundRequest.modDate != null ? outboundRequest.modDate : 'N/A'}"></td>
+                                        <td th:text="${outboundRequest.note != null ? outboundRequest.modDate : 'N/A'}"></td>
                                     </tr>
 
 
@@ -480,23 +479,23 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="../static/vendor/jquery/jquery.min.js"></script>
-    <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="../static/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="../static/js/sb-admin-2.min.js"></script>
+    <script src="../js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="../static/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="../static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="../static/js/demo/datatables-demo.js"></script>
+    <script src="../js/demo/datatables-demo.js"></script>
 
-    <script src="../static/js/demo/outbound-demo.js"></script>
+    <script src="../js/demo/outbound-demo.js"></script>
 
 
 </body>
