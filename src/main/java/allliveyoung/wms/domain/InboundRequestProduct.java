@@ -17,5 +17,5 @@ public class InboundRequestProduct {
     private String manufactureNum;
     private LocalDateTime expDate;
     private InboundRequest inboundRequest;
-    private allliveyoung.allliveinbound.domain.Product product;
+    private Product product;
 }

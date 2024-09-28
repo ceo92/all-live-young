@@ -22,15 +22,6 @@ public class InboundRequestController {
 
     private final InboundRequestService inboundRequestService;
 
-    ///inbound-requests
-    //"/inbound-requests/{id}
-    ///inbound-requests/{id}/update"
-    ///inbound-requests/save
-    ///inbound-requests/save
-    ///inbound-requests/{id}/delete
-    ///inbound-requests/{id}/update
-    ///inbound-requests/{id}/update-status
-    //url 경로 위에서부터 적어줘야함
     @GetMapping()
     public void getInboundRequests(@Validated PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model) {
 
