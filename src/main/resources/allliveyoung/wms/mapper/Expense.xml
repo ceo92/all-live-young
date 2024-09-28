@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.all_live_young_wms_local.mapper.ExpenseMapper">
-    <resultMap id="ExpenseResultMap" type="com.all_live_young_wms_local.domain.Expense">
+<mapper namespace="allliveyoung.wms.mapper.ExpenseMapper">
+    <resultMap id="ExpenseResultMap" type="allliveyoung.wms.domain.Expense">
         <id property="id" column="expense_id"/>
         <result property="expenseDate" column="expense_date"/>
         <result property="category" column="expense_category"/>
@@ -12,12 +12,12 @@
         <result property="regDate" column="reg_date"/>
         <result property="modDate" column="mod_date"/>
 
-        <association property="warehouse" javaType="com.all_live_young_wms_local.domain.Warehouse">
+        <association property="warehouse" javaType="allliveyoung.wms.domain.Warehouse">
             <id property="id" column="warehouse_id"/>
             <result property="name" column="warehouse_name"/>
             <result property="code" column="warehouse_code"/>
 
-            <association property="warehouseAddress" javaType="com.all_live_young_wms_local.domain.Address">
+            <association property="warehouseAddress" javaType="allliveyoung.wms.domain.Address">
                 <result property="roadNameAddress" column="warehouse_road_address"/>
                 <result property="jibunAddress" column="warehouse_jibun_address"/>
                 <result property="zipCode" column="warehouse_zipcode"/>
