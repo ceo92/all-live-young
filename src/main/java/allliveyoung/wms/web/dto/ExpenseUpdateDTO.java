@@ -1,6 +1,5 @@
 package allliveyoung.wms.web.dto;
 
-import allliveyoung.wms.domain.Warehouse;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
