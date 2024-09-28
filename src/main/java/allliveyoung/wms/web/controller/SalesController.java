@@ -76,6 +76,13 @@ public class SalesController {
         return "redirect:/sales";
     }
 
+    @PostMapping("/{id}/delete")
+    public String postSalesDelete(@PathVariable(value = "id") Long id) {
+        salesService.deleteSale(id);
+        log.info("{}번 매출 내역 삭제 완료", id);
+        return "redirect:/sales";
+    }
+
     private static void printErrorLog(BindingResult result) {
         log.info("{}", "*".repeat(20));
         for (FieldError fieldError : result.getFieldErrors()) {

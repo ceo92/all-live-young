@@ -71,6 +71,11 @@
         WHERE sales_id = #{sales.id}
     </update>
 
+    <delete id="delete">
+        DELETE FROM sales
+        WHERE sales_id = #{id}
+    </delete>
+
     <select id="findById" resultMap="SalesResultMap">
         SELECT *
         FROM sales s

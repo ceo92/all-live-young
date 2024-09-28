@@ -96,4 +96,14 @@ public class SalesService {
                 .modDate(LocalDateTime.now())
                 .build());
     }
+
+    /**
+     * 매출 삭제
+     *
+     * @param id
+     */
+    @Transactional
+    public void deleteSale(Long id) {
+        salesMapper.delete(id);
+    }
 }

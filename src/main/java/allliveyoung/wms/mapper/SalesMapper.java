@@ -18,6 +18,8 @@ public interface SalesMapper {
 
     void update(@Param("sales") Sales sales);
 
+    void delete(@Param("id") Long id);
+
     Integer count(@Param("requestDTO") SalesRequestDTO requestDTO);
 
 }
