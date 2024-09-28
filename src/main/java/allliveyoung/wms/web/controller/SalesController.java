@@ -5,11 +5,13 @@ import allliveyoung.wms.web.dto.SalesRequestDTO;
 import allliveyoung.wms.web.dto.SalesSaveDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,5 +39,26 @@ public class SalesController {
         model.addAttribute("salesSaveDTO", new SalesSaveDTO());
         model.addAttribute("members", memberService.getCompanies());
         return "/finance/sales-form";
+    }
+
+    @PostMapping("/save")
+    public String postSalesSaveForm(@AuthenticationPrincipal UserDetailsDTO user, Model model,
+                                    @ModelAttribute @Validated SalesSaveDTO salesSaveDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("members", memberService.getCompanies());
+            printErrorLog(bindingResult);
+            return "/finance/sales-form";
+        }
+        salesService.saveSale(salesSaveDTO, user.getMember().getWarehouse());
+        log.info("매출 등록 완료 | 등록자: {}", user.getMember().getName());
+        return "redirect:/sales";
+    }
+
+    private static void printErrorLog(BindingResult result) {
+        log.info("{}", "*".repeat(20));
+        for (FieldError fieldError : result.getFieldErrors()) {
+            log.error("{}: {}", fieldError.getField(), fieldError.getDefaultMessage());
+        }
+        log.info("{}", "*".repeat(20));
     }
 }
