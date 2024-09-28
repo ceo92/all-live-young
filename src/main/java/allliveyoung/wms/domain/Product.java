@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class Product {
     private Long id;
     private String name;
-    private Company company;
+    private Member member;
     private enum storageMethod{}
     private enum designatedType{}
     private LocalDateTime licenseDate;

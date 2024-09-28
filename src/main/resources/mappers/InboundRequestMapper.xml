@@ -34,27 +34,48 @@
         <result property="status" column="inbound_request_status"/>
         <result property="regDate" column="reg_date"/>
         <result property="modDate" column="mod_date"/>
-        <association property="company" javaType="allliveyoung.allliveinbound.domain.Company" column="company_id" select="allliveyoung.allliveinbound.mapper.InboundRequestMapper.findCompany">
+        <result property="isFault" column="is_fault"/>
+        <result property="rejectionNote" column="rejection_note"/>
+        <association property="member" javaType="allliveyoung.allliveinbound.domain.Member" column="member_id" select="allliveyoung.allliveinbound.mapper.InboundRequestMapper.findMember">
         </association>
         <association property="warehouse" javaType="allliveyoung.allliveinbound.domain.Warehouse" column="warehouse_id" select="allliveyoung.allliveinbound.mapper.InboundRequestMapper.findWarehouse">
         </association>
     </resultMap>
 
-    <resultMap id="CompanyResultMap" type="allliveyoung.allliveinbound.domain.Company">
-        <id property="id" column="company_id"/>
+    <resultMap id="MemberResultMap" type="allliveyoung.allliveinbound.domain.Member">
+        <id property="id" column="member_id"/>
+        <result property="name" column="name"/>
+        <result property="password" column="password"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="email" column="email"/>
+        <result property="roadNameAddress" column="road_name_address"/>
+        <result property="detailsAddress" column="details_address"/>
+        <result property="accountStatus" column="account_status"/>
+        <result property="joinDate" column="join_date"/>
+        <result property="lastLoginDate" column="last_login_date"/>
+        <result property="roleType" column="role_type"/>
         <result property="businessNumber" column="business_number"/>
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="isAgree" column="is_agree"/>
+        <result property="agreeDate" column="agree_date"/>
     </resultMap>
 
     <resultMap id="WarehouseResultMap" type="allliveyoung.allliveinbound.domain.Warehouse">
         <id property="id" column="warehouse_id"/>
+        <result property="memberId" column="member_id"/>
         <result property="name" column="warehouse_name"/>
+        <result property="code" column="warehouse_code"/>
+        <result property="roadAddress" column="warehouse_road_address"/>
+        <result property="jibunAddress" column="warehouse_jibun_address"/>
+        <result property="zipcode" column="warehouse_zipcode"/>
+        <result property="detailsAddress" column="warehouse_details_address"/>
     </resultMap>
 
     <select id="findById" resultType="allliveyoung.allliveinbound.domain.InboundRequest">
         SELECT * FROM INBOUND_REQUEST ir, INBOUND_REQUEST_PRODUCT irp WHERE ir.inbound_request_id = irp.inbound_request_id AND ir.inbound_request_id = #{id}
     </select>
 
-    <select id="findCompany" resultType="allliveyoung.allliveinbound.domain.Company" resultMap="CompanyResultMap">
+    <select id="findCompany" resultType="allliveyoung.allliveinbound.domain.Member" resultMap="CompanyResultMap">
         SELECT * FROM Company WHERE company_id = #{id}
     </select>
 
