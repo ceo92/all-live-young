@@ -38,5 +38,3 @@ out/
 
 # ignore application.properties
 application.properties
-
-build.gradle
