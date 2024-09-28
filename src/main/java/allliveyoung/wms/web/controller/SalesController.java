@@ -54,6 +54,13 @@ public class SalesController {
         return "redirect:/sales";
     }
 
+    @GetMapping("/{id}/update")
+    public String getSalesUpdateForm(@PathVariable(value = "id") Long id, Model model) {
+        model.addAttribute("salesUpdateDTO", salesService.findSales(id));
+        model.addAttribute("existSales", salesService.findSales(id));
+        return "/finance/sales-update";
+    }
+
     private static void printErrorLog(BindingResult result) {
         log.info("{}", "*".repeat(20));
         for (FieldError fieldError : result.getFieldErrors()) {

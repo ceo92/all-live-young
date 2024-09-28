@@ -65,6 +65,12 @@
         VALUES (#{sales.warehouse.id}, #{sales.salesDate}, #{sales.category}, #{sales.member.id, jdbcType=BIGINT}, #{sales.amount}, #{sales.description}, #{sales.regDate})
     </insert>
 
+    <update id="update">
+        UPDATE sales
+        SET sales_amount = #{sales.amount}, sales_description = #{sales.description}, mod_date = #{sales.modDate}
+        WHERE sales_id = #{sales.id}
+    </update>
+
     <select id="findById" resultMap="SalesResultMap">
         SELECT *
         FROM sales s

@@ -16,6 +16,8 @@ public interface SalesMapper {
 
     Long save(@Param("sales") Sales sales);
 
+    void update(@Param("sales") Sales sales);
+
     Integer count(@Param("requestDTO") SalesRequestDTO requestDTO);
 
 }

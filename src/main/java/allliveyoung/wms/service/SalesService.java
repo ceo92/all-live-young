@@ -5,6 +5,7 @@ import allliveyoung.wms.mapper.SalesMapper;
 import allliveyoung.wms.web.dto.SalesRequestDTO;
 import allliveyoung.wms.web.dto.SalesResponseDTO;
 import allliveyoung.wms.web.dto.SalesSaveDTO;
+import allliveyoung.wms.web.dto.SalesUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,5 +74,26 @@ public class SalesService {
                     .build());
         }
         return 1L;
+    }
+
+    /**
+     * 매출 수정
+     *
+     * @param salesUpdateDTO
+     */
+    @Transactional
+    public void updateSale(SalesUpdateDTO salesUpdateDTO) {
+        Sales sales = findSales(salesUpdateDTO.getId());
+        salesMapper.update(Sales.builder()
+                .id(sales.getId())
+                .warehouse(sales.getWarehouse())
+                .salesDate(sales.getSalesDate())
+                .category(sales.getCategory())
+                .member(sales.getMember())
+                .amount(salesUpdateDTO.getAmount())
+                .description(salesUpdateDTO.getDescription())
+                .regDate(sales.getRegDate())
+                .modDate(LocalDateTime.now())
+                .build());
     }
 }
