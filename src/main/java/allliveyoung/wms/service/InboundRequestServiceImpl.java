@@ -2,6 +2,8 @@ package allliveyoung.allliveinbound.service;
 
 import allliveyoung.allliveinbound.config.ModelMapperConfig;
 import allliveyoung.allliveinbound.domain.InboundRequest;
+import allliveyoung.allliveinbound.domain.InboundRequestProduct;
+import allliveyoung.allliveinbound.domain.Warehouse;
 import allliveyoung.allliveinbound.mapper.InboundRequestMapper;
 import allliveyoung.allliveinbound.web.dto.InboundRequestDTO;
 import allliveyoung.allliveinbound.web.dto.InboundRequestSaveDTO;
@@ -37,15 +39,15 @@ public class InboundRequestServiceImpl implements InboundRequestService {
     }
 
     @Override
-    public Long saveInbound(InboundRequestSaveDTO inboundRequestSaveDTO) {
-        Long iId = inboundRequestMapper.save(inboundRequestSaveDTO);
+    public Long saveInbound(InboundRequestSaveDTO inboundRequestSaveDTO, List<InboundRequestProduct> inboundRequestProducts) {
+        Long iId = inboundRequestMapper.save(inboundRequestSaveDTO, inboundRequestProducts);
         return iId;
     }
 
 
     @Override
-    public void updateInbound(InboundRequestUpdateDTO inboundRequestUpdateDTO) {
-        inboundRequestMapper.update(inboundRequestUpdateDTO);
+    public void updateInbound(InboundRequestUpdateDTO inboundRequestUpdateDTO , List<InboundRequestProduct> inboundRequestProducts) {
+        inboundRequestMapper.update(inboundRequestUpdateDTO, inboundRequestProducts);
     }
 
     @Override

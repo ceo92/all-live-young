@@ -3,19 +3,17 @@ package allliveyoung.allliveinbound.domain;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InboundRequest {
+public class InboundInspection {
     private Long id;
-    private String code;
     private Company company;
-    private Warehouse warehouse;
-    private String status;
+    private Boolean isFault;
+    private String rejectionNote;
+    private String code;
     private LocalDateTime regDate;
-    private LocalDateTime modDate;
 }

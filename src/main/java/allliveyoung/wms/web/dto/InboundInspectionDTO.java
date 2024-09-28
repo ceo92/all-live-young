@@ -1,7 +1,7 @@
 package allliveyoung.allliveinbound.web.dto;
 
+import allliveyoung.allliveinbound.domain.InboundRequest;
 import allliveyoung.allliveinbound.domain.Company;
-import allliveyoung.allliveinbound.domain.Warehouse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,9 +11,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InboundRequestSaveDTO {
-    private Long id;
-    private String code;
+public class InboundInspectionDTO {
+    private InboundRequest inboundRequest;
     private Company company;
-    private Warehouse warehouse;
+    private Boolean isFault;
+    private String rejectNote;
+    private String code;
 }

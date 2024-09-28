@@ -40,15 +40,25 @@
         </association>
     </resultMap>
 
+    <resultMap id="CompanyResultMap" type="allliveyoung.allliveinbound.domain.Company">
+        <id property="id" column="company_id"/>
+        <result property="businessNumber" column="business_number"/>
+    </resultMap>
+
+    <resultMap id="WarehouseResultMap" type="allliveyoung.allliveinbound.domain.Warehouse">
+        <id property="id" column="warehouse_id"/>
+        <result property="name" column="warehouse_name"/>
+    </resultMap>
+
     <select id="findById" resultType="allliveyoung.allliveinbound.domain.InboundRequest">
         SELECT * FROM INBOUND_REQUEST ir, INBOUND_REQUEST_PRODUCT irp WHERE ir.inbound_request_id = irp.inbound_request_id AND ir.inbound_request_id = #{id}
     </select>
 
-    <select id="findCompany" resultType="allliveyoung.allliveinbound.domain.Company">
+    <select id="findCompany" resultType="allliveyoung.allliveinbound.domain.Company" resultMap="CompanyResultMap">
         SELECT * FROM Company WHERE company_id = #{id}
     </select>
 
-    <select id="findWarehouse" resultType="allliveyoung.allliveinbound.domain.Warehouse">
+    <select id="findWarehouse" resultType="allliveyoung.allliveinbound.domain.Warehouse" resultMap="WarehouseResultMap">
         SELECT * FROM Warehouse WHERE warehouse_id = #{id}
     </select>
 

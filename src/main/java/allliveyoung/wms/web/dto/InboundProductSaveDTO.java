@@ -1,6 +1,7 @@
 package allliveyoung.allliveinbound.web.dto;
 
 import allliveyoung.allliveinbound.domain.InboundRequest;
+import allliveyoung.allliveinbound.domain.Company;
 import allliveyoung.allliveinbound.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,5 +20,5 @@ public class InboundProductSaveDTO {
     private String expDate;
     private InboundRequest inboundRequest;
     private Product product;
-    private Member member;
+    private Company company;
 }
