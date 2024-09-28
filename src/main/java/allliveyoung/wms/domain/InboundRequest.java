@@ -3,6 +3,7 @@ package allliveyoung.allliveinbound.domain;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @ToString
@@ -12,9 +13,9 @@ import java.time.LocalDateTime;
 public class InboundRequest {
     private Long id;
     private String code;
+    private List<InboundRequestProduct> inboundRequestProducts;
     private Member member;
     private Warehouse warehouse;
     private enum status {
     }
-    private String note;
 }
