@@ -1,5 +1,7 @@
 package allliveyoung.wms.web.controller;
 
+import allliveyoung.wms.constant.ProductType;
+import allliveyoung.wms.constant.StoreTemperature;
 import allliveyoung.wms.domain.Stock;
 import allliveyoung.wms.service.StockService;
 import allliveyoung.wms.web.dto.StockSearch;
