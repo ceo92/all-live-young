@@ -14,6 +14,8 @@ public interface ExpenseMapper {
 
     Long save(@Param("expense") Expense expense);
 
+    void update(@Param("expense") Expense expense);
+
     Optional<Expense> findById(@Param("id") Long id);
 
     Integer count(@Param("requestDTO") ExpenseRequestDTO requestDTO);

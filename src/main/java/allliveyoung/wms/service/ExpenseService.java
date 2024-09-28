@@ -6,6 +6,7 @@ import allliveyoung.wms.mapper.ExpenseMapper;
 import allliveyoung.wms.web.dto.ExpenseRequestDTO;
 import allliveyoung.wms.web.dto.ExpenseResponseDTO;
 import allliveyoung.wms.web.dto.ExpenseSaveDTO;
+import allliveyoung.wms.web.dto.ExpenseUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +59,26 @@ public class ExpenseService {
                 .amount(expenseSaveDTO.getAmount())
                 .description(expenseSaveDTO.getDescription())
                 .regDate(LocalDateTime.now())
+                .build());
+    }
+
+    /**
+     * 지출 수정
+     *
+     * @param expenseUpdateDTO
+     */
+    @Transactional
+    public void updateExpense(ExpenseUpdateDTO expenseUpdateDTO) {
+        Expense expense = findExpense(expenseUpdateDTO.getId());
+        expenseMapper.update(Expense.builder()
+                .id(expense.getId())
+                .warehouse(expense.getWarehouse())
+                .expenseDate(expense.getExpenseDate())
+                .category(expenseUpdateDTO.getCategory())
+                .amount(expenseUpdateDTO.getAmount())
+                .description(expenseUpdateDTO.getDescription())
+                .regDate(expense.getRegDate())
+                .modDate(LocalDateTime.now())
                 .build());
     }
 }

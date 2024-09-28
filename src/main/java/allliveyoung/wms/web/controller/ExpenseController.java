@@ -51,6 +51,12 @@ public class ExpenseController {
         return "redirect:/expenses";
     }
 
+    @GetMapping("/{id}/update")
+    public String getExpenseUpdateForm(@PathVariable(value = "id") Long id, Model model) {
+        model.addAttribute("expenseUpdateDTO", expenseService.findExpense(id));
+        return "/finance/expense-update";
+    }
+
     private static void printErrorLog(BindingResult result) {
         log.info("{}", "*".repeat(20));
         for (FieldError fieldError : result.getFieldErrors()) {

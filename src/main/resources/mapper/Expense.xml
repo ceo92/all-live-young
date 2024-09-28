@@ -31,6 +31,12 @@
         VALUES (#{expense.warehouse.id}, #{expense.expenseDate}, #{expense.category}, #{expense.amount}, #{expense.description}, #{expense.regDate})
     </insert>
 
+    <update id="update">
+        UPDATE expense
+        SET expense_category = #{expense.category}, expense_amount = #{expense.amount}, expense_description = #{expense.description}, mod_date = #{expense.modDate}
+        WHERE expense_id = #{expense.id}
+    </update>
+
     <select id="findById" resultMap="ExpenseResultMap">
         SELECT *
         FROM expense e
