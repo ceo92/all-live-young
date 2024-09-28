@@ -6,7 +6,6 @@ import allliveyoung.wms.domain.RoleType;
 import allliveyoung.wms.exception.InvalidTokenException;
 import allliveyoung.wms.exception.MemberNotFoundException;
 import allliveyoung.wms.mapper.MemberMapper;
-//import allliveyoung.wms.service.EmailService;
 import allliveyoung.wms.web.dto.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +22,18 @@ public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
     private final ModelMapper modelMapper;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final EmailServiceImpl emailServiceImpl;
 //    private final EmailService emailService;
 
     @Autowired
-    public MemberServiceImpl(MemberMapper memberMapper, ModelMapper modelMapper
+    public MemberServiceImpl(MemberMapper memberMapper, ModelMapper modelMapper,
 //                             ,EmailService emailService
-    ) {
+                             EmailServiceImpl emailServiceImpl) {
         this.memberMapper = memberMapper;
         this.modelMapper = modelMapper;
         this.passwordEncoder = new BCryptPasswordEncoder();
 //        this.emailService = emailService;
+        this.emailServiceImpl = emailServiceImpl;
     }
 
     // 회원가입
@@ -85,7 +86,7 @@ public class MemberServiceImpl implements MemberService {
             String resetToken = generateResetToken(); // 토큰 생성 메서드
             // 토큰을 저장하거나 캐시에 저장하는 로직 추가 필요
             String resetLink = "https://yourdomain.com/reset-password?token=" + resetToken;
-            emailService.sendPasswordResetEmail(member.getEmail(), resetLink);
+            emailServiceImpl.sendPasswordResetEmail(member.getEmail(), resetLink);
         } else {
             throw new MemberNotFoundException("일치하는 회원 정보를 찾을 수 없습니다.");
         }
@@ -109,10 +110,9 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    // 토큰 검증 메서드 예시
+
     private boolean validateResetToken(String email, String token) {
-        // 실제 구현에서는 토큰 저장소나 데이터베이스를 조회하여 토큰의 유효성을 검사합니다.
-        // 여기서는 예시로 항상 true를 반환합니다.
+
         return true;
     }
 
@@ -198,9 +198,9 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    // 비밀번호 재설정 토큰 생성 메서드 (예시)
+    // 비밀번호 재설정 토큰 생성 메서드
     private String generateResetToken() {
-        // 실제 구현에서는 UUID나 JWT 등을 사용
+
         return java.util.UUID.randomUUID().toString();
     }
 
