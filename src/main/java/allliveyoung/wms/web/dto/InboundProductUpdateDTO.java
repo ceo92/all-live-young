@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InboundRequestSaveDTO {
+public class InboundProductUpdateDTO {
     private Long id;
-    private String code;
-    private Member member;
-    private Warehouse warehouse;
+    private int palletQuantity;
+    private int boxQuantity;
+    private String manufactureNum;
+    private String expDate;
 }
