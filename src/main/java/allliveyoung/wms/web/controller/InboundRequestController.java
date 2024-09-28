@@ -1,12 +1,14 @@
-package allliveyoung.allliveinbound.web.controller;
+package allliveyoung.wms.web.controller;
 
-import allliveyoung.allliveinbound.service.InboundRequestService;
+import allliveyoung.wms.service.InboundRequestService;
+import allliveyoung.wms.web.dto.PageRequestDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,12 +32,12 @@ public class InboundRequestController {
     ///inbound-requests/{id}/update-status
     //url 경로 위에서부터 적어줘야함
     @GetMapping()
-    public void getInboundRequests() {
+    public void getInboundRequests(@Validated PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model) {
 
     }
 
     @GetMapping("/{id}")
-    public void getInboundRequest() {
+    public void getInboundRequest(Long id, Model model, PageRequestDTO pageRequestDTO) {
 
     }
 

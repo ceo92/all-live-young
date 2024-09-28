@@ -1,9 +1,7 @@
-package allliveyoung.allliveinbound.service;
+package allliveyoung.wms.service;
 
 import allliveyoung.allliveinbound.config.ModelMapperConfig;
 import allliveyoung.allliveinbound.domain.InboundRequest;
-import allliveyoung.allliveinbound.domain.InboundRequestProduct;
-import allliveyoung.allliveinbound.domain.Warehouse;
 import allliveyoung.allliveinbound.mapper.InboundRequestMapper;
 import allliveyoung.allliveinbound.web.dto.*;
 import lombok.RequiredArgsConstructor;
