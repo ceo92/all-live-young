@@ -60,6 +60,14 @@
         </association>
     </resultMap>
 
+    <select id="findById" resultMap="SalesResultMap">
+        SELECT *
+        FROM sales s
+                 JOIN warehouse w ON s.warehouse_id = w.warehouse_id
+                 LEFT JOIN member m ON s.member_id = m.member_id
+        WHERE sales_id = #{id}
+    </select>
+
     <select id="findAll" resultMap="SalesResultMap">
         SELECT *
         FROM sales s

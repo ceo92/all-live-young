@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -22,5 +23,11 @@ public class SalesController {
     public String getSales(SalesRequestDTO salesRequestDTO, Model model) {
         model.addAttribute("salesList", salesService.findSales(salesRequestDTO));
         return "/finance/sales-list";
+    }
+
+    @GetMapping("/{id}")
+    public String getSale(@PathVariable(value = "id") Long id, Model model) {
+        model.addAttribute("sales", salesService.findSales(id));
+        return "/finance/sales-details";
     }
 }
