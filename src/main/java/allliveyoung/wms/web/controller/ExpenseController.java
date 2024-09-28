@@ -3,6 +3,7 @@ package allliveyoung.wms.web.controller;
 import allliveyoung.wms.service.ExpenseService;
 import allliveyoung.wms.web.dto.ExpenseRequestDTO;
 import allliveyoung.wms.web.dto.ExpenseSaveDTO;
+import allliveyoung.wms.web.dto.ExpenseUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -55,6 +56,18 @@ public class ExpenseController {
     public String getExpenseUpdateForm(@PathVariable(value = "id") Long id, Model model) {
         model.addAttribute("expenseUpdateDTO", expenseService.findExpense(id));
         return "/finance/expense-update";
+    }
+
+    @PostMapping("/{id}/update")
+    public String postExpenseUpdateForm(@PathVariable(value = "id") Long id,
+                                        @ModelAttribute @Validated ExpenseUpdateDTO expenseUpdateDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            printErrorLog(bindingResult);
+            return "/finance/expense-update";
+        }
+        expenseService.updateExpense(expenseUpdateDTO);
+        log.info("{}번 지출 내역 수정 완료", id);
+        return "redirect:/expenses";
     }
 
     private static void printErrorLog(BindingResult result) {
