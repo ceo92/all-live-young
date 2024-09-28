@@ -3,6 +3,7 @@ package allliveyoung.wms.web.controller;
 import allliveyoung.wms.service.SalesService;
 import allliveyoung.wms.web.dto.SalesRequestDTO;
 import allliveyoung.wms.web.dto.SalesSaveDTO;
+import allliveyoung.wms.web.dto.SalesUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -59,6 +60,20 @@ public class SalesController {
         model.addAttribute("salesUpdateDTO", salesService.findSales(id));
         model.addAttribute("existSales", salesService.findSales(id));
         return "/finance/sales-update";
+    }
+
+    @PostMapping("/{id}/update")
+    public String postSalesUpdateForm(@PathVariable(value = "id") Long id, Model model,
+                                      @ModelAttribute @Validated SalesUpdateDTO salesUpdateDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("salesUpdateDTO", salesUpdateDTO);
+            model.addAttribute("existSales", salesService.findSales(id));
+            printErrorLog(bindingResult);
+            return "/finance/sales-update";
+        }
+        salesService.updateSale(salesUpdateDTO);
+        log.info("{}번 매출 내역 수정 완료", id);
+        return "redirect:/sales";
     }
 
     private static void printErrorLog(BindingResult result) {
