@@ -26,6 +26,11 @@
         </association>
     </resultMap>
 
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO expense (warehouse_id, expense_date, expense_category, expense_amount, expense_description, reg_date)
+        VALUES (#{expense.warehouse.id}, #{expense.expenseDate}, #{expense.category}, #{expense.amount}, #{expense.description}, #{expense.regDate})
+    </insert>
+
     <select id="findById" resultMap="ExpenseResultMap">
         SELECT *
         FROM expense e

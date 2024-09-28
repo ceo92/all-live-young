@@ -2,6 +2,7 @@ package allliveyoung.wms.web.controller;
 
 import allliveyoung.wms.service.ExpenseService;
 import allliveyoung.wms.web.dto.ExpenseRequestDTO;
+import allliveyoung.wms.web.dto.ExpenseSaveDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -28,5 +29,11 @@ public class ExpenseController {
     public String getExpense(@PathVariable(value = "id") Long id, Model model) {
         model.addAttribute("expense", expenseService.findExpense(id));
         return "/finance/expense-details";
+    }
+
+    @GetMapping("/save")
+    public String getExpenseSaveForm(Model model) {
+        model.addAttribute("expenseSaveDTO", new ExpenseSaveDTO());
+        return "/finance/expense-form";
     }
 }

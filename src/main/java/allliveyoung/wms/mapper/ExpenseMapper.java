@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface ExpenseMapper {
     List<Expense> findAll(@Param("requestDTO") ExpenseRequestDTO requestDTO);
 
+    Long save(@Param("expense") Expense expense);
+
     Optional<Expense> findById(@Param("id") Long id);
 
     Integer count(@Param("requestDTO") ExpenseRequestDTO requestDTO);
