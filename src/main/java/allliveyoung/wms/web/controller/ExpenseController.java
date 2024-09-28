@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -21,5 +22,11 @@ public class ExpenseController {
     public String getExpenses(ExpenseRequestDTO expenseRequestDTO, Model model) {
         model.addAttribute("expenseList", expenseService.findExpenses(expenseRequestDTO));
         return "finance/expense-list";
+    }
+
+    @GetMapping("/{id}")
+    public String getExpense(@PathVariable(value = "id") Long id, Model model) {
+        model.addAttribute("expense", expenseService.findExpense(id));
+        return "/finance/expense-details";
     }
 }
