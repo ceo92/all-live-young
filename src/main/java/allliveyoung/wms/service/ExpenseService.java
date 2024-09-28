@@ -81,4 +81,14 @@ public class ExpenseService {
                 .modDate(LocalDateTime.now())
                 .build());
     }
+
+    /**
+     * 지출 삭제
+     *
+     * @param id
+     */
+    @Transactional
+    public void deleteExpense(Long id) {
+        expenseMapper.delete(id);
+    }
 }

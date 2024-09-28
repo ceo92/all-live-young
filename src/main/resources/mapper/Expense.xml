@@ -37,6 +37,11 @@
         WHERE expense_id = #{expense.id}
     </update>
 
+    <delete id="delete">
+        DELETE FROM expense
+        WHERE expense_id = #{id}
+    </delete>
+
     <select id="findById" resultMap="ExpenseResultMap">
         SELECT *
         FROM expense e

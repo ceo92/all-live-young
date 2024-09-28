@@ -18,5 +18,7 @@ public interface ExpenseMapper {
 
     Optional<Expense> findById(@Param("id") Long id);
 
+    void delete(@Param("id") Long id);
+
     Integer count(@Param("requestDTO") ExpenseRequestDTO requestDTO);
 }
