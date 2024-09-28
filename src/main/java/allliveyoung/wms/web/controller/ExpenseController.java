@@ -25,7 +25,7 @@ public class ExpenseController {
     @GetMapping
     public String getExpenses(ExpenseRequestDTO expenseRequestDTO, Model model) {
         model.addAttribute("expenseList", expenseService.findExpenses(expenseRequestDTO));
-        return "finance/expense-list";
+        return "/finance/expense-list";
     }
 
     @GetMapping("/{id}")
@@ -41,7 +41,7 @@ public class ExpenseController {
     }
 
     @PostMapping("/save")
-    public String postExpenseSaveForm(@AuthenticationPrincipal UserDetailsDTO user,
+    public String postExpenseSaveForm(@AuthenticationPrincipal UserDetailsDTO user, Model model,
                                       @ModelAttribute @Validated ExpenseSaveDTO expenseSaveDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             printErrorLog(bindingResult);
@@ -55,13 +55,16 @@ public class ExpenseController {
     @GetMapping("/{id}/update")
     public String getExpenseUpdateForm(@PathVariable(value = "id") Long id, Model model) {
         model.addAttribute("expenseUpdateDTO", expenseService.findExpense(id));
+        model.addAttribute("existExpense", expenseService.findExpense(id));
         return "/finance/expense-update";
     }
 
     @PostMapping("/{id}/update")
-    public String postExpenseUpdateForm(@PathVariable(value = "id") Long id,
+    public String postExpenseUpdateForm(@PathVariable(value = "id") Long id, Model model,
                                         @ModelAttribute @Validated ExpenseUpdateDTO expenseUpdateDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("expenseUpdateDTO", expenseUpdateDTO);
+            model.addAttribute("existExpense", expenseService.findExpense(id));
             printErrorLog(bindingResult);
             return "/finance/expense-update";
         }

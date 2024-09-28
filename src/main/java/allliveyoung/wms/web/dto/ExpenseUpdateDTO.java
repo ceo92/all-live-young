@@ -8,8 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,8 +15,6 @@ import java.time.LocalDate;
 public class ExpenseUpdateDTO {
 
     private Long id;
-
-    private LocalDate expenseDate;
 
     private String category;
 
@@ -28,6 +24,4 @@ public class ExpenseUpdateDTO {
     private Integer amount;
 
     private String description;
-
-    private Warehouse warehouse;
 }
