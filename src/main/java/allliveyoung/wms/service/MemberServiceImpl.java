@@ -42,7 +42,7 @@ public class MemberServiceImpl implements MemberService {
     public void registerMember(MemberSaveDTO memberSaveDTO) {
         Member member = modelMapper.map(memberSaveDTO, Member.class);
         member.setPassword(passwordEncoder.encode(member.getPassword()));
-        member.setAccountStatus(AccountStatus.PENDING); // 승인 대기 상태로 저장
+        member.setAccountStatus(AccountStatus.WAITING_APPROVAL); // 승인 대기 상태로 저장
         member.setJoinDate(LocalDateTime.now());
         member.setAgreeDate(LocalDateTime.now());
         member.setIsAgree(true);
@@ -154,7 +154,7 @@ public class MemberServiceImpl implements MemberService {
     public void requestWithdrawal(Long memberId) {
         Member member = memberMapper.selectMemberById(memberId);
         if (member != null) {
-            member.setAccountStatus(AccountStatus.DEACTIVATION_PENDING); // 탈퇴 대기로 상태 변경
+            member.setAccountStatus(AccountStatus.WAITING_CANCEL); // 탈퇴 대기로 상태 변경
             memberMapper.updateMember(member);
         } else {
             throw new MemberNotFoundException("회원 정보를 찾을 수 없습니다.");

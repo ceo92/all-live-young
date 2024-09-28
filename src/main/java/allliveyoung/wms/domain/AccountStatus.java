@@ -1,8 +1,15 @@
 package allliveyoung.wms.domain;
 
 public enum AccountStatus {
-    PENDING,                // 승인 대기
-    ACTIVE,                 // 활성
-    DEACTIVATION_PENDING,   // 탈퇴 대기
-    INACTIVE                // 비활성
+    WAITING_APPROVAL,               // 승인 대기
+    ACTIVATION,                 // 활성
+    WAITING_CANCEL,   // 탈퇴 대기
+    INACTIVATION             // 비활성
+
+
+
+
+
+
 }
+
