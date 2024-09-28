@@ -60,6 +60,11 @@
         </association>
     </resultMap>
 
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sales (warehouse_id, sales_date, sales_category, member_id, sales_amount, sales_description, reg_date)
+        VALUES (#{sales.warehouse.id}, #{sales.salesDate}, #{sales.category}, #{sales.member.id, jdbcType=BIGINT}, #{sales.amount}, #{sales.description}, #{sales.regDate})
+    </insert>
+
     <select id="findById" resultMap="SalesResultMap">
         SELECT *
         FROM sales s

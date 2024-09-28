@@ -14,6 +14,8 @@ public interface SalesMapper {
 
     Optional<Sales> findById(@Param("id") Long id);
 
+    Long save(@Param("sales") Sales sales);
+
     Integer count(@Param("requestDTO") SalesRequestDTO requestDTO);
 
 }

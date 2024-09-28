@@ -2,6 +2,7 @@ package allliveyoung.wms.web.controller;
 
 import allliveyoung.wms.service.SalesService;
 import allliveyoung.wms.web.dto.SalesRequestDTO;
+import allliveyoung.wms.web.dto.SalesSaveDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -29,5 +30,12 @@ public class SalesController {
     public String getSale(@PathVariable(value = "id") Long id, Model model) {
         model.addAttribute("sales", salesService.findSales(id));
         return "/finance/sales-details";
+    }
+
+    @GetMapping("/save")
+    public String getSalesSaveForm(Model model) {
+        model.addAttribute("salesSaveDTO", new SalesSaveDTO());
+        model.addAttribute("members", memberService.getCompanies());
+        return "/finance/sales-form";
     }
 }
