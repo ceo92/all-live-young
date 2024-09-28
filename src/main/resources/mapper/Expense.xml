@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.all_live_young_wms_local.mapper.ExpenseMapper">
+    <resultMap id="ExpenseResultMap" type="com.all_live_young_wms_local.domain.Expense">
+        <id property="id" column="expense_id"/>
+        <result property="expenseDate" column="expense_date"/>
+        <result property="category" column="expense_category"/>
+        <result property="amount" column="expense_amount"/>
+        <result property="description" column="expense_description"/>
+        <result property="regDate" column="reg_date"/>
+        <result property="modDate" column="mod_date"/>
+
+        <association property="warehouse" javaType="com.all_live_young_wms_local.domain.Warehouse">
+            <id property="id" column="warehouse_id"/>
+            <result property="name" column="warehouse_name"/>
+            <result property="code" column="warehouse_code"/>
+
+            <association property="warehouseAddress" javaType="com.all_live_young_wms_local.domain.Address">
+                <result property="roadNameAddress" column="warehouse_road_address"/>
+                <result property="jibunAddress" column="warehouse_jibun_address"/>
+                <result property="zipCode" column="warehouse_zipcode"/>
+                <result property="detailsAddress" column="warehouse_details_address"/>
+            </association>
+        </association>
+    </resultMap>
+
+    <select id="findAll" resultMap="ExpenseResultMap">
+        SELECT *
+        FROM expense e
+        JOIN warehouse w ON e.warehouse_id = w.warehouse_id
+
+        <if test="requestDTO.keyword != ''">
+            <if test="requestDTO.type == 'category'">
+                WHERE expense_category LIKE CONCAT ('%', #{requestDTO.keyword} '%')
+            </if>
+            <if test="requestDTO.type == 'warehouse'">
+                WHERE warehouse_name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+            </if>
+        </if>
+
+        <if test="requestDTO.dateFrom != null and requestDTO.dateTo != null">
+            <![CDATA[
+                WHERE expense_date >= #{requestDTO.dateFrom}
+                 AND expense_date <= #{requestDTO.dateTo}
+            ]]>
+        </if>
+        ORDER BY expense_id DESC
+        LIMIT #{requestDTO.offset}, #{requestDTO.size}
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(expense_id)
+        FROM expense e
+        JOIN warehouse w ON e.warehouse_id = w.warehouse_id
+
+        <if test="requestDTO.keyword != ''">
+            <if test="requestDTO.type == 'category'">
+                WHERE expense_category LIKE CONCAT ('%', #{requestDTO.keyword} '%')
+            </if>
+            <if test="requestDTO.type == 'warehouse'">
+                WHERE warehouse_name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+            </if>
+        </if>
+
+        <if test="requestDTO.dateFrom != null and requestDTO.dateTo != null">
+            <![CDATA[
+                WHERE expense_date >= #{requestDTO.dateFrom}
+                 AND expense_date <= #{requestDTO.dateTo}
+            ]]>
+        </if>
+    </select>
+</mapper>
