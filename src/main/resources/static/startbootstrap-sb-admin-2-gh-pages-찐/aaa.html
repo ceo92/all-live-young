@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>All Live Young: 로그인</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="../../../../../../kyungmin-wms/src/main/resources/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="../../../../../../kyungmin-wms/src/main/resources/static/css/sb-admin-2.min.css" rel="stylesheet">
+
+
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+  <!-- 네비게이션 바 START -->
+  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+      <div class="sidebar-brand-icon">
+        <img src="../../../../../../kyungmin-wms/src/main/resources/static/img/logo.png" width="80px">
+      </div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- 대시보드 -->
+    <li class="nav-item">
+      <a class="nav-link" href="index.html">
+        <i class="fas fa-fw fa-laugh-wink"></i>
+        <span>대시보드</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+      입·출고
+    </div>
+
+    <!-- 입고 -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#inboundBar"
+         aria-expanded="true" aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-cog"></i>
+        <span>입고관리</span>
+      </a>
+      <div id="inboundBar" class="collapse" aria-labelledby="headingInboundBar" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">입고관리</h6>
+          <a class="collapse-item" href="buttons.html">입고요청</a>
+          <a class="collapse-item" href="cards.html">검수조서</a>
+        </div>
+      </div>
+    </li>
+
+    <!-- 출고 -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#outboundBar"
+         aria-expanded="true" aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-cogs"></i>
+        <span>출고관리</span>
+      </a>
+      <div id="outboundBar" class="collapse" aria-labelledby="headingOutboundBar" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">출고관리</h6>
+          <a class="collapse-item" href="buttons.html">출고요청</a>
+          <a class="collapse-item" href="cards.html">검수조서</a>
+          <a class="collapse-item" href="cards.html">운송장</a>
+        </div>
+      </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+      운영·자산
+    </div>
+
+    <!-- 창고 -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#warehouseBar"
+         aria-expanded="true" aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-search"></i>
+        <span>창고관리</span>
+      </a>
+      <div id="warehouseBar" class="collapse" aria-labelledby="headingWarehouseBar" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">창고관리</h6>
+          <a class="collapse-item" href="buttons.html">창고목록</a>
+        </div>
+      </div>
+    </li>
+
+    <!-- 재고 -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#stockBar"
+         aria-expanded="true" aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-table"></i>
+        <span>재고관리</span>
+      </a>
+      <div id="stockBar" class="collapse" aria-labelledby="headingStockBar" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">재고관리</h6>
+          <a class="collapse-item" href="buttons.html">재고 목록</a>
+          <a class="collapse-item" href="cards.html">재고 실사</a>
+        </div>
+      </div>
+    </li>
+
+    <!-- 재무 -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#financeBar"
+         aria-expanded="true" aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-donate"></i>
+        <span>재무관리</span>
+      </a>
+      <div id="financeBar" class="collapse" aria-labelledby="headingFinanceBar" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">재무관리</h6>
+          <a class="collapse-item" href="buttons.html">지출 목록</a>
+          <a class="collapse-item" href="cards.html">매출 목록</a>
+        </div>
+      </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+      고객 서비스
+    </div>
+
+    <!-- 회원 -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#memberBar"
+         aria-expanded="true" aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-user"></i>
+        <span>회원관리</span>
+      </a>
+      <div id="memberBar" class="collapse" aria-labelledby="headingMemberBar" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">회원관리</h6>
+          <a class="collapse-item" href="buttons.html">회원 목록</a>
+        </div>
+      </div>
+    </li>
+
+    <!-- 고객센터 -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#customerBar"
+         aria-expanded="true" aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-envelope"></i>
+        <span>고객센터</span>
+      </a>
+      <div id="customerBar" class="collapse" aria-labelledby="headingcustomerBar" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">고객센터</h6>
+          <a class="collapse-item" href="buttons.html">공지사항</a>
+          <a class="collapse-item" href="cards.html">1:1문의 목록</a>
+        </div>
+      </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+      분석
+    </div>
+
+    <!-- 통계 -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#chartBar"
+         aria-expanded="true" aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-chart-area"></i>
+        <span>통계</span>
+      </a>
+      <div id="chartBar" class="collapse" aria-labelledby="headingChartBar" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">통계</h6>
+          <a class="collapse-item" href="buttons.html">입·출고 통계</a>
+          <a class="collapse-item" href="cards.html">재고 통계</a>
+          <a class="collapse-item" href="cards.html">재무 통계</a>
+        </div>
+      </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+      <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+  </ul>
+  <!-- 네비게이션 바 END -->
+
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
