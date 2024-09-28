@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="allliveyoung.allliveinbound.mapper.InboundRequestMapper">
+
+    <sql id="search">
+        <where>
+            <if test="statuses != null and statuses.length > 0">
+                AND (
+                <foreach collection="statuses" item="status" open="" close="" separator=" OR ">
+                    status = #{status}
+                </foreach>
+                )
+            </if>
+        </where>
+    </sql>
+
+    <select id="findAll" resultMap="InboundRequestResultMap">
+        SELECT * FROM INBOUND_REQUEST <!--WHERE
+
+            <if test="warehouseId != null">
+                warehouse_id = #{warehouseId}
+            </if>
+            <if test="userId != null">
+                user_id = #{userId}
+            </if>-->
+
+    </select>
+
+    <resultMap id="InboundRequestResultMap" type="allliveyoung.allliveinbound.domain.InboundRequest">
+        <id property="id" column="inbound_request_id"/>
+        <result property="code" column="inbound_request_code"/>
+        <result property="status" column="inbound_request_status"/>
+        <result property="regDate" column="reg_date"/>
+        <result property="modDate" column="mod_date"/>
+        <association property="company" javaType="allliveyoung.allliveinbound.domain.Company" column="company_id" select="allliveyoung.allliveinbound.mapper.InboundRequestMapper.findCompany">
+        </association>
+        <association property="warehouse" javaType="allliveyoung.allliveinbound.domain.Warehouse" column="warehouse_id" select="allliveyoung.allliveinbound.mapper.InboundRequestMapper.findWarehouse">
+        </association>
+    </resultMap>
+
+    <select id="findById" resultType="allliveyoung.allliveinbound.domain.InboundRequest">
+        SELECT * FROM INBOUND_REQUEST ir, INBOUND_REQUEST_PRODUCT irp WHERE ir.inbound_request_id = irp.inbound_request_id AND ir.inbound_request_id = #{id}
+    </select>
+
+    <select id="findCompany" resultType="allliveyoung.allliveinbound.domain.Company">
+        SELECT * FROM Company WHERE company_id = #{id}
+    </select>
+
+    <select id="findWarehouse" resultType="allliveyoung.allliveinbound.domain.Warehouse">
+        SELECT * FROM Warehouse WHERE warehouse_id = #{id}
+    </select>
+
+
+    <insert id="save">
+        INSERT INTO inbound_request (warehouse_id, user_id, status, reg_date, mod_date)
+        VALUES (#{warehouseId}, #{userId}, #{status}, NOW(), NOW())
+
+        <foreach collection="products" item="product" separator=";">
+            INSERT INTO INBOUND_REQUEST_PRODUCT (inbound_request_id, product_id, pallet_quantity, bproduct.boxQuantityox_quantity, manufacture_number, expiration_date)
+            VALUES (#{inboundRequestId}, #{product.productId}, #{product.palletQuantity}, #{}, #{product.manufactureNumber}, #{product.expirationDate})
+        </foreach>
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM INBOUND_REQUEST_PRODUCT WHERE inbound_request_id = #{inbound_request_id}
+        DELETE FROM INBOUND_REQUEST WHERE inbound_request_id = #{inbound_request_id}
+    </delete>
+
+    <update id="update" parameterType="InboundRequest">
+        UPDATE INBOUND_REQUEST
+        SET mod_date = NOW()
+        WHERE inbound_request_id = #{inboundRequestId}
+
+        <foreach collection="products" item="product" separator=";">
+            UPDATE INBOUND_REQUEST_PRODUCT
+            SET pallet_quantity = #{product.palletQuantity},
+            box_quantity = #{product.boxQuantity},
+            manufacture_number = #{product.manufactureNumber},
+            expiration_date = #{product.expirationDate}
+            WHERE inbound_product_id = #{product.inboundProductId}
+        </foreach>
+    </update>
+
+    <select id="updateStatus">
+        UPDATE INBOUND_REQUEST SET inbound_request_status = #{status} WHERE inbound_request_id = #{id}
+    </select>
+</mapper>
+
