@@ -5,11 +5,13 @@ import allliveyoung.wms.web.dto.ExpenseRequestDTO;
 import allliveyoung.wms.web.dto.ExpenseSaveDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,5 +37,25 @@ public class ExpenseController {
     public String getExpenseSaveForm(Model model) {
         model.addAttribute("expenseSaveDTO", new ExpenseSaveDTO());
         return "/finance/expense-form";
+    }
+
+    @PostMapping("/save")
+    public String postExpenseSaveForm(@AuthenticationPrincipal UserDetailsDTO user,
+                                      @ModelAttribute @Validated ExpenseSaveDTO expenseSaveDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            printErrorLog(bindingResult);
+            return "/finance/expense-form";
+        }
+        expenseService.saveExpense(expenseSaveDTO, user.getMember().getWarehouse());
+        log.info("지출 등록 완료 | 등록자: {}", user.getMember().getName());
+        return "redirect:/expenses";
+    }
+
+    private static void printErrorLog(BindingResult result) {
+        log.info("{}", "*".repeat(20));
+        for (FieldError fieldError : result.getFieldErrors()) {
+            log.error("{}: {}", fieldError.getField(), fieldError.getDefaultMessage());
+        }
+        log.info("{}", "*".repeat(20));
     }
 }
