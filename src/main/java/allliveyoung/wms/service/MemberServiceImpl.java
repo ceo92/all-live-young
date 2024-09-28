@@ -72,24 +72,24 @@ public class MemberServiceImpl implements MemberService {
         return null;
     }
 
-    // 비밀번호 재설정 요청 (이메일 발송)
-//    @Override
-//    @Transactional
-//    public void requestPasswordReset(PasswordResetRequestDTO passwordResetRequestDTO) throws Exception {
-//        Member member = memberMapper.selectMemberByNamePhoneAndBusinessNumber(
-//                passwordResetRequestDTO.getName(),
-//                passwordResetRequestDTO.getPhoneNumber(),
-//                passwordResetRequestDTO.getBusinessNumber()
-//        );
-//        if (member != null) {
-//            String resetToken = generateResetToken(); // 토큰 생성 메서드
-//            // 토큰을 저장하거나 캐시에 저장하는 로직 추가 필요
-//            String resetLink = "https://yourdomain.com/reset-password?token=" + resetToken;
-//            emailService.sendPasswordResetEmail(member.getEmail(), resetLink);
-//        } else {
-//            throw new MemberNotFoundException("일치하는 회원 정보를 찾을 수 없습니다.");
-//        }
-//    }
+//     비밀번호 재설정 요청 (이메일 발송)
+    @Override
+    @Transactional
+    public void requestPasswordReset(PasswordResetRequestDTO passwordResetRequestDTO) throws Exception {
+        Member member = memberMapper.selectMemberByNamePhoneAndBusinessNumber(
+                passwordResetRequestDTO.getName(),
+                passwordResetRequestDTO.getPhoneNumber(),
+                passwordResetRequestDTO.getBusinessNumber()
+        );
+        if (member != null) {
+            String resetToken = generateResetToken(); // 토큰 생성 메서드
+            // 토큰을 저장하거나 캐시에 저장하는 로직 추가 필요
+            String resetLink = "https://yourdomain.com/reset-password?token=" + resetToken;
+            emailService.sendPasswordResetEmail(member.getEmail(), resetLink);
+        } else {
+            throw new MemberNotFoundException("일치하는 회원 정보를 찾을 수 없습니다.");
+        }
+    }
 
     @Override
     @Transactional

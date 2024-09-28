@@ -18,7 +18,7 @@ public interface MemberService {
     String findEmailByNameAndPhone(String name, String phoneNumber);
 
     // 비밀번호 재설정 요청 (이메일 발송)
-//    void requestPasswordReset(PasswordResetRequestDTO passwordResetRequestDTO) throws Exception;
+    void requestPasswordReset(PasswordResetRequestDTO passwordResetRequestDTO) throws Exception;
 
     // 비밀번호 재설정 처리
     void resetPassword(PasswordResetDTO passwordResetDTO);
