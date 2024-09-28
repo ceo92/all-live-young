@@ -4,29 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="allliveyoung.allliveinbound.mapper.InboundRequestMapper">
 
-    <sql id="search">
-        <where>
-            <if test="statuses != null and statuses.length > 0">
-                AND (
-                <foreach collection="statuses" item="status" open="" close="" separator=" OR ">
-                    status = #{status}
-                </foreach>
-                )
-            </if>
-        </where>
-    </sql>
-
-    <select id="findAll" resultMap="InboundRequestResultMap">
-        SELECT * FROM INBOUND_REQUEST <!--WHERE
-
-            <if test="warehouseId != null">
-                warehouse_id = #{warehouseId}
-            </if>
-            <if test="userId != null">
-                user_id = #{userId}
-            </if>-->
-
-    </select>
+    <!-- _________________________________ resultMap _________________________________ -->
 
     <resultMap id="InboundRequestResultMap" type="allliveyoung.allliveinbound.domain.InboundRequest">
         <id property="id" column="inbound_request_id"/>
@@ -71,50 +49,86 @@
         <result property="detailsAddress" column="warehouse_details_address"/>
     </resultMap>
 
-    <select id="findById" resultType="allliveyoung.allliveinbound.domain.InboundRequest">
-        SELECT * FROM INBOUND_REQUEST ir, INBOUND_REQUEST_PRODUCT irp WHERE ir.inbound_request_id = irp.inbound_request_id AND ir.inbound_request_id = #{id}
-    </select>
+    <!-- _________________________________ resultMap Select _________________________________ -->
 
-    <select id="findCompany" resultType="allliveyoung.allliveinbound.domain.Member" resultMap="CompanyResultMap">
-        SELECT * FROM Company WHERE company_id = #{id}
+    <select id="findMember" resultType="allliveyoung.allliveinbound.domain.Member" resultMap="MemberResultMap">
+        SELECT * FROM Member WHERE Member_id = #{id}
     </select>
 
     <select id="findWarehouse" resultType="allliveyoung.allliveinbound.domain.Warehouse" resultMap="WarehouseResultMap">
         SELECT * FROM Warehouse WHERE warehouse_id = #{id}
     </select>
 
+    <!-- _________________________________ SQL _________________________________ -->
 
-    <insert id="save">
-        INSERT INTO inbound_request (warehouse_id, user_id, status, reg_date, mod_date)
-        VALUES (#{warehouseId}, #{userId}, #{status}, NOW(), NOW())
+    <sql id="search">
+        <where>
+            <if test="statuses != null and statuses.length > 0">
+                AND (
+                <foreach collection="statuses" item="status" open="" close="" separator=" OR ">
+                    status = #{status}
+                </foreach>
+                )
+            </if>
+        </where>
+    </sql>
 
-        <foreach collection="products" item="product" separator=";">
-            INSERT INTO INBOUND_REQUEST_PRODUCT (inbound_request_id, product_id, pallet_quantity, bproduct.boxQuantityox_quantity, manufacture_number, expiration_date)
-            VALUES (#{inboundRequestId}, #{product.productId}, #{product.palletQuantity}, #{}, #{product.manufactureNumber}, #{product.expirationDate})
+    <select id="findAll" resultMap="InboundRequestResultMap">
+        SELECT * FROM INBOUND_REQUEST <!--WHERE
+
+            <if test="warehouseId != null">
+                warehouse_id = #{warehouseId}
+            </if>
+            <if test="userId != null">
+                user_id = #{userId}
+            </if>-->
+
+    </select>
+
+    <select id="findById" resultMap="InboundRequestResultMap">
+        SELECT * FROM INBOUND_REQUEST ir, INBOUND_REQUEST_PRODUCT irp WHERE ir.inbound_request_id = irp.inbound_request_id AND ir.inbound_request_id = #{id}
+    </select>
+
+    <insert id="save" parameterType="allliveyoung.allliveinbound.web.dto.InboundRequestSaveDTO">
+        INSERT INTO inbound_request (warehouse_id, member_id, inbound_request_code, reg_date, mod_date)
+        VALUES (#{warehouseId}, #{memberId}, #{code}, NOW(), NOW())
+    </insert>
+
+    <insert id="saveProducts" parameterType="java.util.List">
+        INSERT INTO INBOUND_REQUEST_PRODUCT
+        (pallet_quantity, box_quantity, manufacture_number, expiration_date, inbound_request_id, product_id)
+        VALUES
+        <foreach collection="inboundProductSaveDTOList" item="product" separator=",">
+            (#{product.palletQuantity}, #{product.boxQuantity}, #{product.manufactureNum}, #{product.expDate}, LAST_INSERT_ID(), #{product.productId})
         </foreach>
     </insert>
 
     <delete id="delete">
-        DELETE FROM INBOUND_REQUEST_PRODUCT WHERE inbound_request_id = #{inbound_request_id}
-        DELETE FROM INBOUND_REQUEST WHERE inbound_request_id = #{inbound_request_id}
+        DELETE ir, irp
+    FROM INBOUND_REQUEST ir
+    LEFT JOIN INBOUND_REQUEST_PRODUCT irp ON ir.inbound_request_id = irp.inbound_request_id
+    WHERE ir.inbound_request_id = #{id}
     </delete>
 
     <update id="update" parameterType="InboundRequest">
         UPDATE INBOUND_REQUEST
         SET mod_date = NOW()
-        WHERE inbound_request_id = #{inboundRequestId}
+        WHERE inbound_request_id = #{id}
+    </update>
 
-        <foreach collection="products" item="product" separator=";">
+    <update id="updateProducts" parameterType="java.util.List">
+        <foreach collection="inboundProductUpdateDTOList" item="product" separator=";">
             UPDATE INBOUND_REQUEST_PRODUCT
             SET pallet_quantity = #{product.palletQuantity},
             box_quantity = #{product.boxQuantity},
-            manufacture_number = #{product.manufactureNumber},
-            expiration_date = #{product.expirationDate}
-            WHERE inbound_product_id = #{product.inboundProductId}
+            manufacture_number = #{product.manufactureNum},
+            expiration_date = #{product.expDate}
+            WHERE inbound_product_id = #{product.id}
+            AND inbound_request_id = #{product.inboundRequestId}
         </foreach>
     </update>
 
-    <select id="updateStatus">
+    <select id="updateStatus" parameterType="map">
         UPDATE INBOUND_REQUEST SET inbound_request_status = #{status} WHERE inbound_request_id = #{id}
     </select>
 </mapper>

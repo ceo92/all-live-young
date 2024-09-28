@@ -1,5 +1,6 @@
 package allliveyoung.allliveinbound.web.dto;
 
+import allliveyoung.allliveinbound.domain.Member;
 import allliveyoung.allliveinbound.domain.Warehouse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,4 +20,6 @@ public class InboundRequestDTO {
     private Warehouse warehouse;
     private String status;
     private LocalDateTime regDate;
+    private LocalDateTime modDate;
+    private String rejectionNote;
 }

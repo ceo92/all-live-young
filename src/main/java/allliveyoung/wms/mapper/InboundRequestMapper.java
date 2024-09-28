@@ -3,13 +3,11 @@ package allliveyoung.allliveinbound.mapper;
 import allliveyoung.allliveinbound.domain.InboundRequest;
 import allliveyoung.allliveinbound.domain.InboundRequestProduct;
 import allliveyoung.allliveinbound.domain.Warehouse;
-import allliveyoung.allliveinbound.web.dto.InboundRequestDTO;
-import allliveyoung.allliveinbound.web.dto.InboundRequestSaveDTO;
-import allliveyoung.allliveinbound.web.dto.InboundRequestUpdateDTO;
+import allliveyoung.allliveinbound.web.dto.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Mapper
 public interface InboundRequestMapper {
@@ -17,11 +15,15 @@ public interface InboundRequestMapper {
 
     Optional<InboundRequest> findById(Long id);
 
-    Long save(InboundRequestSaveDTO inboundRequestSaveDTO, List<InboundRequestProduct> inboundRequestProducts);
+    void save(InboundRequestSaveDTO inboundRequestSaveDTO);
 
-    void update(InboundRequestUpdateDTO inboundRequestUpdateDTO, List<InboundRequestProduct> inboundRequestProducts);
+    void saveProducts(List<InboundProductSaveDTO> inboundProductSaveDTOList);
+
+    void update(Long id);
+
+    void updateProducts(List<InboundProductUpdateDTO> inboundProductUpdateDTOList);
 
     void delete(Long id);
 
-    void updateStatus(Long id, String status);
+    void updateStatus(Map<String, Object> map);
 }

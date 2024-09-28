@@ -3,9 +3,7 @@ package allliveyoung.allliveinbound.service;
 import allliveyoung.allliveinbound.domain.InboundRequest;
 import allliveyoung.allliveinbound.domain.InboundRequestProduct;
 import allliveyoung.allliveinbound.domain.Warehouse;
-import allliveyoung.allliveinbound.web.dto.InboundRequestDTO;
-import allliveyoung.allliveinbound.web.dto.InboundRequestSaveDTO;
-import allliveyoung.allliveinbound.web.dto.InboundRequestUpdateDTO;
+import allliveyoung.allliveinbound.web.dto.*;
 
 import java.util.List;
 
@@ -14,9 +12,9 @@ public interface InboundRequestService {
 
     InboundRequestDTO findInbound(Long id);
 
-    Long saveInbound(InboundRequestSaveDTO inboundRequestSaveDTO, List<InboundRequestProduct> inboundRequestProducts);
+    Long saveInbound(InboundRequestSaveDTO inboundRequestSaveDTO, List<InboundProductSaveDTO> inboundProductSaveDTOList);
 
-    void updateInbound(InboundRequestUpdateDTO inboundRequestUpdateDTO, List<InboundRequestProduct> inboundRequestProducts);
+    void updateInbound(InboundRequestUpdateDTO inboundRequestUpdateDTO, List<InboundProductUpdateDTO> inboundRequestProducts);
 
     void deleteInbound(Long id);
 

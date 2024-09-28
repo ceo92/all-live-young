@@ -9,7 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 public class Warehouse {
     private Long id;
-    private Long memberId;
     private String name;
     private String code;
     private String roadAddress;

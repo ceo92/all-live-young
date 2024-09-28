@@ -19,4 +19,50 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class InboundRequestController {
 
     private final InboundRequestService inboundRequestService;
+
+    ///inbound-requests
+    //"/inbound-requests/{id}
+    ///inbound-requests/{id}/update"
+    ///inbound-requests/save
+    ///inbound-requests/save
+    ///inbound-requests/{id}/delete
+    ///inbound-requests/{id}/update
+    ///inbound-requests/{id}/update-status
+    //url 경로 위에서부터 적어줘야함
+    @GetMapping()
+    public void getInboundRequests() {
+
+    }
+
+    @GetMapping("/{id}")
+    public void getInboundRequest() {
+
+    }
+
+    @GetMapping("/save")
+    public void getInboundRequestSaveForm() {
+
+    }
+
+    @PostMapping("/save")
+    public void postInboundRequestSaveForm() {
+
+    }
+
+    @PostMapping( "/{id}/delete")
+    public void postInboundRequestDelete() {
+
+    }
+
+    @PostMapping("/{id}/update")
+    public void postInboundRequestUpdateForm() {
+
+    }
+
+    @PostMapping("/{id}/update-status")
+    public void PostRequestUpdateStatus() {
+
+    }
+
+
 }
