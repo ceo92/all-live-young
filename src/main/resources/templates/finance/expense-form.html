@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+<section>
+    <head>
+        <title>All Live Young: Expense</title>
+        <link href="../css/expense.css" rel="stylesheet">
+    </head>
+    <body>
+    <h1 class="h3 mb-4 text-gray-800"></h1>
+    <div class="card shadow">
+        <div class="card-body">
+            <h5>지출 등록</h5>
+            <p></p>
+            <form method="post" th:action th:object="${expenseSaveDTO}">
+                <div class="form-group">
+                    <label for="expenseDate">지출일자</label>
+                    <input type="date" class="form-control" id="expenseDate" th:field="*{expenseDate}">
+                    <div class="errorMessage" th:errors="*{expenseDate}"></div>
+                </div>
+                <div class="form-group">
+                    <label for="category">지출분류</label>
+                    <select class="form-control" id="category" th:field="*{category}">
+                        <option value="입고비용">입고비용</option>
+                        <option value="출고비용">출고비용</option>
+                        <option value="보관비용">보관비용</option>
+                        <option value="유지보수비">유지보수비</option>
+                        <option value="운영 인건비">운영 인건비</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="amount">지출액</label>
+                    <input type="number" class="form-control" id="amount" th:field="*{amount}">
+                    <div class="errorMessage" th:errors="*{amount}"></div>
+                </div>
+                <div class="form-group">
+                    <label for="description">설명</label>
+                    <input type="text" class="form-control" id="description" th:field="*{description}">
+                </div>
+                <button type="submit" class="btn btn-primary" th:text="등록"></button>
+                <a th:href="@{/expenses}" class="btn btn-secondary" th:text="취소"
+                   style="margin-left: 0.3rem"></a>
+            </form>
+        </div>
+    </div>
+    </body>
+</section>
+</html>
