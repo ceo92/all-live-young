@@ -1,7 +1,7 @@
-package allliveyoung.wms.web.controller;
+package allliveyoung.allliveinbound.web.controller;
 
-import allliveyoung.wms.service.InboundRequestService;
-import allliveyoung.wms.web.dto.PageRequestDTO;
+import allliveyoung.allliveinbound.service.InboundRequestService;
+import allliveyoung.allliveinbound.web.dto.PageRequestDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,6 +22,15 @@ public class InboundRequestController {
 
     private final InboundRequestService inboundRequestService;
 
+    ///inbound-requests
+    //"/inbound-requests/{id}
+    ///inbound-requests/{id}/update"
+    ///inbound-requests/save
+    ///inbound-requests/save
+    ///inbound-requests/{id}/delete
+    ///inbound-requests/{id}/update
+    ///inbound-requests/{id}/update-status
+    //url 경로 위에서부터 적어줘야함
     @GetMapping()
     public void getInboundRequests(@Validated PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model) {
 

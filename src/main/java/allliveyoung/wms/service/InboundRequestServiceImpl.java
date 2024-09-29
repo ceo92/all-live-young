@@ -1,7 +1,9 @@
-package allliveyoung.wms.service;
+package allliveyoung.allliveinbound.service;
 
 import allliveyoung.allliveinbound.config.ModelMapperConfig;
 import allliveyoung.allliveinbound.domain.InboundRequest;
+import allliveyoung.allliveinbound.domain.InboundRequestProduct;
+import allliveyoung.allliveinbound.domain.Warehouse;
 import allliveyoung.allliveinbound.mapper.InboundRequestMapper;
 import allliveyoung.allliveinbound.web.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +32,10 @@ public class InboundRequestServiceImpl implements InboundRequestService {
 
     @Override
     public InboundRequestDTO findInbound(Long id) {
-        Optional<InboundRequest> request = inboundRequestMapper.findById(id);
+        /*Optional<InboundRequest> request = inboundRequestMapper.findById(id);
         InboundRequestDTO inboundRequest = modelMapper.map(request.orElseThrow(),InboundRequestDTO.class);
-        return inboundRequest;
+        return inboundRequest;*/
+        return null;
     }
 
     @Override

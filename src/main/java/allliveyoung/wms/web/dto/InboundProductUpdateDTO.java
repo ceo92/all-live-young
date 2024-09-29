@@ -1,4 +1,4 @@
-package allliveyoung.wms.web.dto;
+package allliveyoung.allliveinbound.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

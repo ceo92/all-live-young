@@ -1,6 +1,9 @@
-package allliveyoung.wms.service;
+package allliveyoung.allliveinbound.service;
 
-import allliveyoung.wms.web.dto.*;
+import allliveyoung.allliveinbound.domain.InboundRequest;
+import allliveyoung.allliveinbound.domain.InboundRequestProduct;
+import allliveyoung.allliveinbound.domain.Warehouse;
+import allliveyoung.allliveinbound.web.dto.*;
 
 import java.util.List;
 

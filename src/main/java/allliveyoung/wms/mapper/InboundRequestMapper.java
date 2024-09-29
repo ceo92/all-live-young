@@ -1,10 +1,11 @@
-package package allliveyoung.wms.mapper;
+package allliveyoung.allliveinbound.mapper;
 
-import allliveyoung.wms.domain.InboundRequest;
-import allliveyoung.wms.web.dto.InboundProductSaveDTO;
-import allliveyoung.wms.web.dto.InboundProductUpdateDTO;
-import allliveyoung.wms.web.dto.InboundRequestSaveDTO;
+import allliveyoung.allliveinbound.domain.InboundRequest;
+import allliveyoung.allliveinbound.domain.InboundRequestProduct;
+import allliveyoung.allliveinbound.domain.Warehouse;
+import allliveyoung.allliveinbound.web.dto.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.*;
 
@@ -12,7 +13,7 @@ import java.util.*;
 public interface InboundRequestMapper {
     List<InboundRequest> findAll();
 
-    Optional<InboundRequest> findById(Long id);
+    List<InboundRequestProduct> findById(@Param("id") Long id);
 
     void save(InboundRequestSaveDTO inboundRequestSaveDTO);
 

@@ -49,6 +49,28 @@
         <result property="detailsAddress" column="warehouse_details_address"/>
     </resultMap>
 
+    <resultMap id="InboundRequestProductResultMap" type="allliveyoung.allliveinbound.domain.InboundRequestProduct">
+        <id property="id" column="inbound_request_product_id"/>
+        <result property="palletQuantity" column="pallet_quantity"/>
+        <result property="boxQuantity" column="box_quantity"/>
+        <result property="manufactureNum" column="manufacture_number"/>
+        <result property="expDate" column="expiration_date"/>
+        <association property="inboundRequest" javaType="allliveyoung.allliveinbound.domain.InboundRequest" column="inbound_request_id" select="allliveyoung.allliveinbound.mapper.InboundRequestMapper.findInboundRequest">
+        </association>
+        <association property="product" javaType="allliveyoung.allliveinbound.domain.Product" column="product_id" select="allliveyoung.allliveinbound.mapper.InboundRequestMapper.findProduct">
+        </association>
+    </resultMap>
+
+    <resultMap id="ProductResultMap" type="allliveyoung.allliveinbound.domain.Product">
+        <id property="id" column="product_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="name" column="product_name"/>
+        <result property="storeTemperature" column="store_temperature"/>
+        <result property="type" column="product_type"/>
+        <result property="licenseDate" column="product_license_date"/>
+        <result property="licenseNum" column="product_license_num"/>
+    </resultMap>
+
     <!-- _________________________________ resultMap Select _________________________________ -->
 
     <select id="findMember" resultType="allliveyoung.allliveinbound.domain.Member" resultMap="MemberResultMap">
@@ -57,6 +79,14 @@
 
     <select id="findWarehouse" resultType="allliveyoung.allliveinbound.domain.Warehouse" resultMap="WarehouseResultMap">
         SELECT * FROM Warehouse WHERE warehouse_id = #{id}
+    </select>
+
+    <select id="findInboundRequest" resultType="allliveyoung.allliveinbound.domain.InboundRequest" resultMap="InboundRequestResultMap">
+        SELECT * FROM INBOUND_REQUEST WHERE inbound_request_id = #{id}
+    </select>
+
+    <select id="findProduct" resultType="allliveyoung.allliveinbound.domain.Product" resultMap="ProductResultMap">
+        SELECT * FROM PRODUCT WHERE product_id = #{id}
     </select>
 
     <!-- _________________________________ SQL _________________________________ -->
@@ -85,8 +115,8 @@
 
     </select>
 
-    <select id="findById" resultMap="InboundRequestResultMap">
-        SELECT * FROM INBOUND_REQUEST ir, INBOUND_REQUEST_PRODUCT irp WHERE ir.inbound_request_id = irp.inbound_request_id AND ir.inbound_request_id = #{id}
+    <select id="findById" resultMap="InboundRequestProductResultMap">
+        SELECT * FROM INBOUND_REQUEST_PRODUCT WHERE inbound_request_id = #{id}
     </select>
 
     <insert id="save" parameterType="allliveyoung.allliveinbound.web.dto.InboundRequestSaveDTO">
