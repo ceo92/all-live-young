@@ -1,4 +1,4 @@
-package allliveyoung.allliveinbound.domain;
+package allliveyoung.wms.domain;
 
 import lombok.*;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -17,5 +17,5 @@ public class InboundRequestProduct {
     private String manufactureNum;
     private LocalDateTime expDate;
     private InboundRequest inboundRequest;
-    private Product product;
+    private allliveyoung.allliveinbound.domain.Product product;
 }

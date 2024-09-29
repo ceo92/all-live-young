@@ -1,9 +1,12 @@
-package allliveyoung.allliveinbound.mapper;
+package allliveyoung.wms.mapper;
 
-import allliveyoung.allliveinbound.domain.InboundRequest;
-import allliveyoung.allliveinbound.domain.InboundRequestProduct;
-import allliveyoung.allliveinbound.domain.Warehouse;
-import allliveyoung.allliveinbound.web.dto.*;
+
+import allliveyoung.wms.domain.InboundRequest;
+import allliveyoung.wms.domain.InboundRequestProduct;
+import allliveyoung.wms.web.dto.InboundPageRequestDTO;
+import allliveyoung.wms.web.dto.InboundProductSaveDTO;
+import allliveyoung.wms.web.dto.InboundProductUpdateDTO;
+import allliveyoung.wms.web.dto.InboundRequestSaveDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

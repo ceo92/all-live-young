@@ -1,11 +1,9 @@
-package allliveyoung.allliveinbound.service;
+package allliveyoung.wms.service;
 
-import allliveyoung.allliveinbound.config.ModelMapperConfig;
-import allliveyoung.allliveinbound.domain.InboundRequest;
-import allliveyoung.allliveinbound.domain.InboundRequestProduct;
-import allliveyoung.allliveinbound.domain.Warehouse;
-import allliveyoung.allliveinbound.mapper.InboundRequestMapper;
-import allliveyoung.allliveinbound.web.dto.*;
+
+import allliveyoung.wms.domain.InboundRequestProduct;
+import allliveyoung.wms.mapper.InboundRequestMapper;
+import allliveyoung.wms.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

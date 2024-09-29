@@ -1,4 +1,4 @@
-package allliveyoung.allliveinbound.domain;
+package allliveyoung.wms.domain;
 
 import lombok.*;
 
@@ -13,7 +13,7 @@ public class InboundRequest {
     private Long id;
     private String code;
     private Member member;
-    private Warehouse warehouse;
+    private allliveyoung.allliveinbound.domain.Warehouse warehouse;
     private String status;
     private LocalDateTime regDate;
     private LocalDateTime modDate;

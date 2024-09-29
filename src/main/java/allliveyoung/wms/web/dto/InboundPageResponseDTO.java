@@ -1,4 +1,4 @@
-package allliveyoung.allliveinbound.web.dto;
+package allliveyoung.wms.web.dto;
 
 import lombok.Builder;
 import lombok.Getter;
