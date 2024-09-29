@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+
+<section>
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">입고 요청서</h1>
+        <p class="mb-4">입고 요청 설명서를 작성해주세요</p>
+
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">입고 요청 리스트</h6>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right animated--fade-in" aria-labelledby="navbarDropdown"> <!--창고 선택 dropbox -->
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="inputTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>의약품</th>
+                            <th>파레트 수량</th>
+                            <th>박스 수량</th>
+                            <th>제조번호</th>
+                            <th>유효기간</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                <select name="option1[]">
+                                    <option value="A">타이레놀</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="option2[]">
+                                    <option value="X">10</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="option3[]">
+                                    <option value="1">50</option>
+                                </select>
+                            </td>
+                            <td><input type="text" name="textInput[]"></td>
+                            <td><input type="date" name="date[]"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="form-container">
+                        <button id="addRowBtn">+ 열 추가</button>
+                        <button class="Cancel" type="button">취소</button>
+                        <button class="submit" type="submit">등록</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</html>

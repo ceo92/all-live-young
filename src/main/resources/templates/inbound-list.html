@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+
+<section>
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">입고 요청</h1>
+        <p class="mb-4">입고 요청 설명</p>
+
+        <div class="card shadow mb-4 p-3">
+            <div class="mt-2">
+                <form action="" method="get">
+                    <input type="hidden" name="size" value="${inboundPageRequestDTO.size}">
+                    <div class="ml-1">
+                        <input type="checkbox" name="types" value="w"> 처리 대기중
+                        <input type="checkbox" name="types" value="a"> 승인
+                        <input type="checkbox" name="types" value="r"> 반려
+                    </div>
+                    <button class="btn btn-primary" type="submit">조회</button>
+                </form>
+                <div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">입고 요청 리스트</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="onlyTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>입고요청코드</th>
+                            <th>등록일자</th>
+                            <th>상태</th>
+                            <th>날리거나 살리거나</th>
+                            <th>날리거나 살리거나</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="dto : ${responseDTO.dtoList}">
+                            <th scope="row" th:text="${dto.id}"></th>
+                            <td th:text="${dto.id}"></td>
+                            <td th:text="${dto.code}"></td>
+                            <td th:text="${dto.status}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <ul class="pagination flex-wrap mb-0">
+                            <th:block th:if="${responseDTO.prev}">
+                                <li class="page-item">
+                                    <a class="page-link" th:attr="data-num=${responseDTO.start - 1}">Previous</a>
+                                </li>
+                            </th:block>
+
+                            <th:block th:each="num : ${#numbers.sequence(responseDTO.start, responseDTO.end)}">
+                                <li class="page-item" th:classappend="${responseDTO.page == num} ? 'active' : ''">
+                                    <a class="page-link" th:attr="data-num=${num}" th:text="${num}"></a>
+                                </li>
+                            </th:block>
+
+                            <th:block th:if="${responseDTO.next}">
+                                <li class="page-item">
+                                    <a class="page-link" th:attr="data-num=${responseDTO.end + 1}">Next</a>
+                                </li>
+                            </th:block>
+                        </ul>
+
+                        <button class="submit btn btn-primary" type="submit">등록</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+
+<section>
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">입고 요청서</h1>
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>입고 요청 정보</h5>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>회사</th>
+                        <td>00제약</td>
+                    </tr>
+                    <tr>
+                        <th>창고</th>
+                        <td>서울창고</td>
+                    </tr>
+                    <tr>
+                        <th>입고요청코드</th>
+                        <td>ib-rq-001</td>
+                    </tr>
+                    <tr>
+                        <th>등록일자</th>
+                        <td>2024-09-26</td>
+                    </tr>
+                    <tr>
+                        <th>입고요청상태</th>
+                        <td>요청 대기중</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">입고 요청 리스트</h6>
+
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="inputTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>의약품</th>
+                            <th>파레트 수량</th>
+                            <th>박스 수량</th>
+                            <th>제조번호</th>
+                            <th>유효기간</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>번호</th>
+                            <th>의약품</th>
+                            <th>파레트 수량</th>
+                            <th>박스 수량</th>
+                            <th>제조번호</th>
+                            <th>유효기간</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                <select name="option1[]" disabled>
+                                    <option value="A">타이레놀</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="option2[]" disabled>
+                                    <option value="X">10</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="option3[]" disabled>
+                                    <option value="1">50</option>
+                                </select>
+                            </td>
+                            <td><input type="text" name="textInput[]" value="mdd-001" disabled></td>
+                            <td><input type="date" name="date[]" value="2024-09-26" disabled></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="form-container">
+                        <button class="Cancel" type="button">취소</button>
+                        <button class="Cancel" type="button">반려</button>
+                        <button class="submit" type="submit">승인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</html>
