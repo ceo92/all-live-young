@@ -12,11 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ExpenseUpdateDTO {
+public class SalesUpdateDTO {
 
     private Long id;
-
-    private String category;
 
     @NotNull(message = "지출액수는 필수 입력 값입니다.")
     @Positive(message = "양수만 가능합니다.")

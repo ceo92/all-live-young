@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+<section>
+    <head>
+        <title>All Live Young: Sales</title>
+        <link href="../css/expense.css" rel="stylesheet">
+    </head>
+
+    <body id="page-top">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800"></h1>
+    <div class="card shadow">
+        <div class="card-body">
+            <h5>매출 등록</h5>
+            <p></p>
+            <form method="post" th:action th:object="${salesSaveDTO}" onchange="selectedContact()">
+                <div class="form-group">
+                    <label for="expenseDate">매출일자</label>
+                    <input type="date" class="form-control" id="expenseDate" th:field="*{salesDate}">
+                    <div class="errorMessage" th:errors="*{salesDate}"></div>
+                </div>
+                <div class="form-group">
+                    <label for="category">매출분류</label>
+                    <select class="form-control" id="category" th:field="*{category}">
+                        <option value="계약비용">계약비용</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="selectCompany">
+                    <label for="company">회사</label>
+                    <select class="form-control" id="company" th:field="*{memberName}">
+                        <option th:each="member : ${members}"
+                                th:value="${member.name}"
+                                th:text="${member.name}"/>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">매출액</label>
+                    <input type="number" class="form-control" id="amount" th:field="*{amount}">
+                    <div class="errorMessage" th:errors="*{amount}"></div>
+                </div>
+                <div class="form-group">
+                    <label for="description">설명</label>
+                    <input type="text" class="form-control" id="description" th:field="*{description}">
+                </div>
+                <button type="submit" class="btn btn-primary" th:text="등록"></button>
+                <a th:href="@{/sales}" class="btn btn-secondary" th:text="취소"
+                   style="margin-left: 0.3rem"></a>
+
+                <script>
+                    function selectedContact() {
+                        const category = document.getElementById('category').value;
+                        const selectCompany = document.getElementById('selectCompany');
+                        const company = document.getElementById('company');
+
+                        if (category === '계약비용') {
+                            selectCompany.style.display = 'block';
+                        } else {
+                            selectCompany.style.display = 'none';
+                        }
+                    }
+                </script>
+            </form>
+        </div>
+    </div>
+    </body>
+</section>
+</html>
