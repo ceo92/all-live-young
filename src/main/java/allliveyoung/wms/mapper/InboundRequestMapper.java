@@ -22,6 +22,7 @@ public interface InboundRequestMapper {
     void update(Long id);
 
     void updateProducts(List<InboundProductUpdateDTO> inboundProductUpdateDTOList);
+    //void updateProducts(InboundProductUpdateDTO inboundProductUpdateDTO);
 
     void delete(Long id);
 

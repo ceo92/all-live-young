@@ -146,15 +146,37 @@
         WHERE inbound_request_id = #{id}
     </update>
 
+    <!-- mysql에서 여러 sql문을 ;로 구분하여 한 번에 실행하는 것이 불가능. 해당 방식은 단일 update문에서 루프 처리가 가능하다 -->
     <update id="updateProducts" parameterType="java.util.List">
-        <foreach collection="inboundProductUpdateDTOList" item="product" separator=";">
-            UPDATE INBOUND_REQUEST_PRODUCT
-            SET pallet_quantity = #{product.palletQuantity},
-            box_quantity = #{product.boxQuantity},
-            manufacture_number = #{product.manufactureNum},
-            expiration_date = #{product.expDate}
-            WHERE inbound_product_id = #{product.id}
-            AND inbound_request_id = #{product.inboundRequestId}
+        UPDATE INBOUND_REQUEST_PRODUCT
+        SET
+        pallet_quantity = CASE
+        <foreach collection="list" item="item">
+            WHEN inbound_request_product_id = #{item.id} AND inbound_request_id = #{item.inboundRequestId}
+            THEN #{item.palletQuantity}
+        </foreach>
+        ELSE pallet_quantity END,
+        box_quantity = CASE
+        <foreach collection="list" item="item">
+            WHEN inbound_request_product_id = #{item.id} AND inbound_request_id = #{item.inboundRequestId}
+            THEN #{item.boxQuantity}
+        </foreach>
+        ELSE box_quantity END,
+        manufacture_number = CASE
+        <foreach collection="list" item="item">
+            WHEN inbound_request_product_id = #{item.id} AND inbound_request_id = #{item.inboundRequestId}
+            THEN #{item.manufactureNum}
+        </foreach>
+        ELSE manufacture_number END,
+        expiration_date = CASE
+        <foreach collection="list" item="item">
+            WHEN inbound_request_product_id = #{item.id} AND inbound_request_id = #{item.inboundRequestId}
+            THEN #{item.expDate}
+        </foreach>
+        ELSE expiration_date END
+        WHERE inbound_request_product_id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
         </foreach>
     </update>
 

@@ -49,7 +49,7 @@ public class InboundRequestServiceImpl implements InboundRequestService {
     @Override
     public void updateInbound(InboundRequestUpdateDTO inboundRequestUpdateDTO , List<InboundProductUpdateDTO> inboundRequestProducts) {
         inboundRequestMapper.update(inboundRequestUpdateDTO.getId());
-        inboundRequestMapper.updateProducts(inboundRequestProducts);
+        /*inboundRequestMapper.updateProducts(inboundRequestProducts.get((1)));*/
     }
 
     @Override
