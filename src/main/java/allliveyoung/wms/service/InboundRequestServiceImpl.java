@@ -25,9 +25,16 @@ public class InboundRequestServiceImpl implements InboundRequestService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<InboundRequestDTO> findInbounds() {
-        List<InboundRequestDTO> requests = inboundRequestMapper.findAll().stream().map(request -> modelMapper.map(request,InboundRequestDTO.class)).collect(Collectors.toList());
-        return requests;
+    public InboundPageResponseDTO<InboundRequestDTO> findInbounds(InboundPageRequestDTO inboundPageRequestDTO) {
+        List<InboundRequestDTO> requests = inboundRequestMapper.findAll(inboundPageRequestDTO).stream()
+                .map(request -> modelMapper.map(request,InboundRequestDTO.class)).collect(Collectors.toList());
+
+        int total = inboundRequestMapper.getCount(inboundPageRequestDTO);
+
+        InboundPageResponseDTO<InboundRequestDTO> responseDTO = InboundPageResponseDTO.<InboundRequestDTO>withAll()
+                .dtoList(requests).total(total).inboundPageRequestDTO(inboundPageRequestDTO).build();
+
+        return responseDTO;
     }
 
     @Override

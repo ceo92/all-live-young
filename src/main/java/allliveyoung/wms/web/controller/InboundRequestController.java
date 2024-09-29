@@ -2,7 +2,6 @@ package allliveyoung.allliveinbound.web.controller;
 
 import allliveyoung.allliveinbound.service.InboundRequestService;
 import allliveyoung.allliveinbound.web.dto.*;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -12,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -25,18 +25,19 @@ public class InboundRequestController {
     private final InboundRequestService inboundRequestService;
 
     @GetMapping
-    public String getInboundRequests(@Validated PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model) {
-        log.info(pageRequestDTO);
+    public String getInboundRequests(@RequestParam(required = false) List<String> types, @Validated InboundPageRequestDTO inboundPageRequestDTO, BindingResult bindingResult, Model model) {
+        log.info(inboundPageRequestDTO);
         if(bindingResult.hasErrors()) {
-            pageRequestDTO = PageRequestDTO.builder().build();
+            inboundPageRequestDTO = InboundPageRequestDTO.builder().build();
         }
+        inboundPageRequestDTO.setTypes(types);
 
-        model.addAttribute("responseDTO", inboundRequestService.findInbounds());
+        model.addAttribute("responseDTO", inboundRequestService.findInbounds(inboundPageRequestDTO));
         return null;
     }
 
     @GetMapping("/{id}")
-    public String getInboundRequest(Long id, Model model, PageRequestDTO pageRequestDTO) {
+    public String getInboundRequest(Long id, Model model, InboundPageRequestDTO inboundPageRequestDTO) {
         log.info(id);
         model.addAttribute("inboundRequest", inboundRequestService.findInbound(id));
 
@@ -63,18 +64,18 @@ public class InboundRequestController {
     }
 
     @PostMapping( "/{id}/delete")
-    public String postInboundRequestDelete(Long id, PageRequestDTO pageRequestDTO, RedirectAttributes redirectAttributes) {
+    public String postInboundRequestDelete(Long id, InboundPageRequestDTO inboundPageRequestDTO, RedirectAttributes redirectAttributes) {
         log.info("delete..........");
         inboundRequestService.deleteInbound(id);
 
         redirectAttributes.addAttribute("page", 1);
-        redirectAttributes.addAttribute("size", pageRequestDTO.getSize());
+        redirectAttributes.addAttribute("size", inboundPageRequestDTO.getSize());
 
         return "redirect:/inbound-requests";
     }
 
     @PostMapping("/{id}/update")
-    public String postInboundRequestUpdateForm(@Validated InboundRequestUpdateDTO inboundRequestUpdateDTO, List<InboundProductUpdateDTO> inboundProductUpdateDTO,PageRequestDTO pageRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String postInboundRequestUpdateForm(@Validated InboundRequestUpdateDTO inboundRequestUpdateDTO, List<InboundProductUpdateDTO> inboundProductUpdateDTO, InboundPageRequestDTO inboundPageRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             log.info("has error..........");
             redirectAttributes.addFlashAttribute("error",bindingResult.getAllErrors());

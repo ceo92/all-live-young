@@ -8,7 +8,7 @@ import allliveyoung.allliveinbound.web.dto.*;
 import java.util.List;
 
 public interface InboundRequestService {
-    List<InboundRequestDTO> findInbounds();
+    InboundPageResponseDTO<InboundRequestDTO> findInbounds(InboundPageRequestDTO inboundPageRequestDTO);
 
     List<InboundProductDTO> findInbound(Long id);
 

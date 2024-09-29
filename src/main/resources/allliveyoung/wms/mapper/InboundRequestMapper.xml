@@ -93,18 +93,31 @@
 
     <sql id="search">
         <where>
-            <if test="statuses != null and statuses.length > 0">
+            <if test="hasTypes()">
                 AND (
-                <foreach collection="statuses" item="status" open="" close="" separator=" OR ">
-                    status = #{status}
+                <foreach collection="types" item="type" separator=" OR ">
+                    <choose>
+                        <when test="type == 'w'">
+                            status = '처리대기중'
+                        </when>
+                        <when test="type == 'a'">
+                            status = '승인'
+                        </when>
+                        <when test="type == 'r'">
+                            status = '반려'
+                        </when>
+                    </choose>
                 </foreach>
                 )
             </if>
         </where>
     </sql>
 
-    <select id="findAll" resultMap="InboundRequestResultMap">
-        SELECT * FROM INBOUND_REQUEST <!--WHERE
+    <select id="findAll" resultMap="InboundRequestResultMap" parameterType="allliveyoung.allliveinbound.web.dto.InboundPageRequestDTO">
+        SELECT * FROM INBOUND_REQUEST
+        <include refid="search"></include>
+                 ORDER BY inbound_request_id DESC limit #{skip}, #{size}
+        <!--WHERE
 
             <if test="warehouseId != null">
                 warehouse_id = #{warehouseId}
@@ -182,6 +195,10 @@
 
     <select id="updateStatus" parameterType="map">
         UPDATE INBOUND_REQUEST SET inbound_request_status = #{status} WHERE inbound_request_id = #{id}
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(inbound_request_id) from inbound_request
     </select>
 </mapper>
 

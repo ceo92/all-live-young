@@ -11,7 +11,7 @@ import java.util.*;
 
 @Mapper
 public interface InboundRequestMapper {
-    List<InboundRequest> findAll();
+    List<InboundRequest> findAll(InboundPageRequestDTO inboundPageRequestDTO);
 
     List<InboundRequestProduct> findById(@Param("id") Long id);
 
@@ -27,4 +27,6 @@ public interface InboundRequestMapper {
     void delete(Long id);
 
     void updateStatus(Map<String, Object> map);
+
+    int getCount(InboundPageRequestDTO inboundPageRequestDTO);
 }
