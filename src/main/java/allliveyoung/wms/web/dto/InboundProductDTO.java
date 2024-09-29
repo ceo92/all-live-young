@@ -2,7 +2,6 @@ package allliveyoung.wms.web.dto;
 
 
 import allliveyoung.wms.domain.InboundRequest;
-import allliveyoung.wms.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

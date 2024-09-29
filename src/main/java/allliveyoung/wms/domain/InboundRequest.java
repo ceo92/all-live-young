@@ -13,7 +13,7 @@ public class InboundRequest {
     private Long id;
     private String code;
     private Member member;
-    private allliveyoung.allliveinbound.domain.Warehouse warehouse;
+    private Warehouse warehouse;
     private String status;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
