@@ -25,7 +25,7 @@ public class InboundRequestController {
     private final InboundRequestService inboundRequestService;
 
     @GetMapping
-    public String getInboundRequests(@RequestParam(required = false) List<String> types, @Validated InboundPageRequestDTO inboundPageRequestDTO, BindingResult bindingResult, Model model) {
+    public String getInboundRequests(@RequestParam(required = false) String[] types, @Validated InboundPageRequestDTO inboundPageRequestDTO, BindingResult bindingResult, Model model) {
         log.info(inboundPageRequestDTO);
         if(bindingResult.hasErrors()) {
             inboundPageRequestDTO = InboundPageRequestDTO.builder().build();

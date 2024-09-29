@@ -91,20 +91,21 @@
 
     <!-- _________________________________ SQL _________________________________ -->
 
+
     <sql id="search">
         <where>
-            <if test="hasTypes()">
+            <if test="types != null and types.length > 0">
                 AND (
                 <foreach collection="types" item="type" separator=" OR ">
                     <choose>
-                        <when test="type == 'w'">
-                            status = '처리대기중'
+                        <when test="type == 'w'.toString()">
+                            inbound_request_status = '처리대기중'
                         </when>
-                        <when test="type == 'a'">
-                            status = '승인'
+                        <when test="type == 'a'.toString()">
+                            inbound_request_status = '승인'
                         </when>
-                        <when test="type == 'r'">
-                            status = '반려'
+                        <when test="type == 'r'.toString()">
+                            inbound_request_status = '반려'
                         </when>
                     </choose>
                 </foreach>
@@ -115,7 +116,7 @@
 
     <select id="findAll" resultMap="InboundRequestResultMap" parameterType="allliveyoung.allliveinbound.web.dto.InboundPageRequestDTO">
         SELECT * FROM INBOUND_REQUEST
-        <include refid="search"></include>
+        <include refid="search" />
                  ORDER BY inbound_request_id DESC limit #{skip}, #{size}
         <!--WHERE
 
