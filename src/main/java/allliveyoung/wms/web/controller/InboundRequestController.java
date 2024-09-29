@@ -11,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -25,15 +24,14 @@ public class InboundRequestController {
     private final InboundRequestService inboundRequestService;
 
     @GetMapping
-    public String getInboundRequests(@RequestParam(required = false) String[] types, @Validated InboundPageRequestDTO inboundPageRequestDTO, BindingResult bindingResult, Model model) {
+    public String getInboundRequests(@Validated InboundPageRequestDTO inboundPageRequestDTO, BindingResult bindingResult, Model model) {
         log.info(inboundPageRequestDTO);
         if(bindingResult.hasErrors()) {
             inboundPageRequestDTO = InboundPageRequestDTO.builder().build();
         }
-        inboundPageRequestDTO.setTypes(types);
 
         model.addAttribute("responseDTO", inboundRequestService.findInbounds(inboundPageRequestDTO));
-        return null;
+        return "inbound/inbound-list";
     }
 
     @GetMapping("/{id}")
@@ -41,7 +39,7 @@ public class InboundRequestController {
         log.info(id);
         model.addAttribute("inboundRequest", inboundRequestService.findInbound(id));
 
-        return null;
+        return "inbound-detail";
     }
 
     @GetMapping("/save")
