@@ -31,11 +31,12 @@ public class InboundRequestServiceImpl implements InboundRequestService {
     }
 
     @Override
-    public InboundRequestDTO findInbound(Long id) {
-        /*Optional<InboundRequest> request = inboundRequestMapper.findById(id);
-        InboundRequestDTO inboundRequest = modelMapper.map(request.orElseThrow(),InboundRequestDTO.class);
-        return inboundRequest;*/
-        return null;
+    public List<InboundProductDTO> findInbound(Long id) {
+        List<InboundRequestProduct> inboundRequestProducts = inboundRequestMapper.findById(id);
+        List<InboundProductDTO> inboundProductDTOList = inboundRequestProducts.stream()
+                .map(inboundRequestProduct -> modelMapper.map(inboundRequestProduct,InboundProductDTO.class)).collect(Collectors.toList());
+
+        return inboundProductDTOList;
     }
 
     @Override
@@ -49,7 +50,7 @@ public class InboundRequestServiceImpl implements InboundRequestService {
     @Override
     public void updateInbound(InboundRequestUpdateDTO inboundRequestUpdateDTO , List<InboundProductUpdateDTO> inboundRequestProducts) {
         inboundRequestMapper.update(inboundRequestUpdateDTO.getId());
-        /*inboundRequestMapper.updateProducts(inboundRequestProducts.get((1)));*/
+        inboundRequestMapper.updateProducts(inboundRequestProducts);
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.List;
 public interface InboundRequestService {
     List<InboundRequestDTO> findInbounds();
 
-    InboundRequestDTO findInbound(Long id);
+    List<InboundProductDTO> findInbound(Long id);
 
     Long saveInbound(InboundRequestSaveDTO inboundRequestSaveDTO, List<InboundProductSaveDTO> inboundProductSaveDTOList);
 
