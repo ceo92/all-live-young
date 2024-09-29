@@ -1,8 +1,7 @@
 package allliveyoung.wms.web.controller;
 
+
 import allliveyoung.wms.service.InboundRequestService;
-import allliveyoung.wms.web.dto.PageRequestDTO;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/inbound-requests")
 @Log4j2
@@ -22,40 +23,72 @@ public class InboundRequestController {
 
     private final InboundRequestService inboundRequestService;
 
-    @GetMapping()
-    public void getInboundRequests(@Validated PageRequestDTO pageRequestDTO, BindingResult bindingResult, Model model) {
+    @GetMapping
+    public String getInboundRequests(@Validated allliveyoung.allliveinbound.web.dto.InboundPageRequestDTO inboundPageRequestDTO, BindingResult bindingResult, Model model) {
+        log.info(inboundPageRequestDTO);
+        if(bindingResult.hasErrors()) {
+            inboundPageRequestDTO = allliveyoung.allliveinbound.web.dto.InboundPageRequestDTO.builder().build();
+        }
 
+        model.addAttribute("responseDTO", inboundRequestService.findInbounds(inboundPageRequestDTO));
+        return "inbound/inbound-list";
     }
 
     @GetMapping("/{id}")
-    public void getInboundRequest(Long id, Model model, PageRequestDTO pageRequestDTO) {
+    public String getInboundRequest(Long id, Model model, allliveyoung.allliveinbound.web.dto.InboundPageRequestDTO inboundPageRequestDTO) {
+        log.info(id);
+        model.addAttribute("inboundRequest", inboundRequestService.findInbound(id));
 
+        return "inbound-detail";
     }
 
     @GetMapping("/save")
-    public void getInboundRequestSaveForm() {
+    public String getInboundRequestSaveForm() {
+        log.info("getInboundRequestSaveForm..........");
 
+        return null;
     }
 
     @PostMapping("/save")
-    public void postInboundRequestSaveForm() {
+    public String postInboundRequestSaveForm(@Validated allliveyoung.allliveinbound.web.dto.InboundRequestSaveDTO inboundRequestSaveDTO, @Validated List<allliveyoung.allliveinbound.web.dto.InboundProductSaveDTO> inboundProductSaveDTOS, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            log.info("has error..........");
+            redirectAttributes.addFlashAttribute("error",bindingResult.getAllErrors());
+        }
 
+        inboundRequestService.saveInbound(inboundRequestSaveDTO, inboundProductSaveDTOS);
+
+        return "redirect:/inbound-requests/{id}";
     }
 
     @PostMapping( "/{id}/delete")
-    public void postInboundRequestDelete() {
+    public String postInboundRequestDelete(Long id, allliveyoung.allliveinbound.web.dto.InboundPageRequestDTO inboundPageRequestDTO, RedirectAttributes redirectAttributes) {
+        log.info("delete..........");
+        inboundRequestService.deleteInbound(id);
 
+        redirectAttributes.addAttribute("page", 1);
+        redirectAttributes.addAttribute("size", inboundPageRequestDTO.getSize());
+
+        return "redirect:/inbound-requests";
     }
 
     @PostMapping("/{id}/update")
-    public void postInboundRequestUpdateForm() {
+    public String postInboundRequestUpdateForm(@Validated allliveyoung.allliveinbound.web.dto.InboundRequestUpdateDTO inboundRequestUpdateDTO, List<allliveyoung.allliveinbound.web.dto.InboundProductUpdateDTO> inboundProductUpdateDTO, allliveyoung.allliveinbound.web.dto.InboundPageRequestDTO inboundPageRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            log.info("has error..........");
+            redirectAttributes.addFlashAttribute("error",bindingResult.getAllErrors());
+        }
 
+        inboundRequestService.updateInbound(inboundRequestUpdateDTO, inboundProductUpdateDTO);
+
+        return "redirect:/inbound-requests/{id}";
     }
 
     @PostMapping("/{id}/update-status")
-    public void PostRequestUpdateStatus() {
+    public String PostRequestUpdateStatus(Long id, String status, RedirectAttributes redirectAttributes) {
+        log.info("update status..........");
+        inboundRequestService.updateInboundStatus(id, status);
 
+        return "redirect:/inbound-requests/{id}";
     }
-
-
 }

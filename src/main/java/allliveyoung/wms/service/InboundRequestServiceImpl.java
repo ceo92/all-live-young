@@ -1,9 +1,9 @@
 package allliveyoung.wms.service;
 
-import allliveyoung.allliveinbound.config.ModelMapperConfig;
-import allliveyoung.allliveinbound.domain.InboundRequest;
-import allliveyoung.allliveinbound.mapper.InboundRequestMapper;
-import allliveyoung.allliveinbound.web.dto.*;
+
+import allliveyoung.wms.domain.InboundRequestProduct;
+import allliveyoung.wms.mapper.InboundRequestMapper;
+import allliveyoung.wms.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,16 +22,25 @@ public class InboundRequestServiceImpl implements InboundRequestService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<InboundRequestDTO> findInbounds() {
-        List<InboundRequestDTO> requests = inboundRequestMapper.findAll().stream().map(request -> modelMapper.map(request,InboundRequestDTO.class)).collect(Collectors.toList());
-        return requests;
+    public InboundPageResponseDTO<InboundRequestDTO> findInbounds(InboundPageRequestDTO inboundPageRequestDTO) {
+        List<InboundRequestDTO> requests = inboundRequestMapper.findAll(inboundPageRequestDTO).stream()
+                .map(request -> modelMapper.map(request,InboundRequestDTO.class)).collect(Collectors.toList());
+
+        int total = inboundRequestMapper.getCount(inboundPageRequestDTO);
+
+        InboundPageResponseDTO<InboundRequestDTO> responseDTO = InboundPageResponseDTO.<InboundRequestDTO>withAll()
+                .dtoList(requests).total(total).inboundPageRequestDTO(inboundPageRequestDTO).build();
+
+        return responseDTO;
     }
 
     @Override
-    public InboundRequestDTO findInbound(Long id) {
-        Optional<InboundRequest> request = inboundRequestMapper.findById(id);
-        InboundRequestDTO inboundRequest = modelMapper.map(request.orElseThrow(),InboundRequestDTO.class);
-        return inboundRequest;
+    public List<InboundProductDTO> findInbound(Long id) {
+        List<InboundRequestProduct> inboundRequestProducts = inboundRequestMapper.findById(id);
+        List<InboundProductDTO> inboundProductDTOList = inboundRequestProducts.stream()
+                .map(inboundRequestProduct -> modelMapper.map(inboundRequestProduct,InboundProductDTO.class)).collect(Collectors.toList());
+
+        return inboundProductDTOList;
     }
 
     @Override
