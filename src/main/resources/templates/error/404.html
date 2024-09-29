@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+<section>
+    <head>
+        <title>All Live Young: 404 Not Found</title>
+    </head>
+
+    <body id="page-top">
+    <!-- 404 Error Text -->
+    <div class="text-center">
+        <div class="error mx-auto" data-text="404">404</div>
+        <p class="lead text-gray-800 mb-5">Page Not Found</p>
+        <p class="text-gray-500 mb-0">페이지가 존재하지 않습니다.</p>
+        <a th:href="@{/}">&larr; 대시보드로 돌아가기</a>
+    </div>
+    </body>
+</section>
+</html>
