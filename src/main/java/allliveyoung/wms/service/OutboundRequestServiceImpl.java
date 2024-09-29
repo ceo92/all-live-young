@@ -1,14 +1,11 @@
 package allliveyoung.wms.service;
 
-import allliveyoung.wms.domain.Member;
 import allliveyoung.wms.domain.OutboundRequest;
-import allliveyoung.wms.domain.Status;
 import allliveyoung.wms.mapper.OutboundRequestMapper;
 import allliveyoung.wms.web.dto.OutboundRequestDTO;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +18,8 @@ public class OutboundRequestServiceImpl implements OutboundRequestService {
 
   @Override
   public Long saveOutboundRequest(OutboundRequestDTO outboundRequestDTO) {
-    OutboundRequest outboundRequest = modelMapper.map(outboundRequestDTO, OutboundRequest.class);
-    outboundRequestMapper.save(outboundRequest);
-    return outboundRequest.getId();
+    Long id = outboundRequestMapper.save(outboundRequestDTO);
+    return id;
   }
 
   @Override
@@ -41,12 +37,12 @@ public class OutboundRequestServiceImpl implements OutboundRequestService {
 
   @Override
   public void updateOutboundRequestByCompany(OutboundRequestDTO outboundRequestDTO) {
-    outboundRequestMapper.memberUpdate(modelMapper.map(outboundRequestDTO, OutboundRequest.class));
+    outboundRequestMapper.memberUpdate(outboundRequestDTO);
   }
 
   @Override
   public void updateOutboundRequestByManager(OutboundRequestDTO outboundRequestDTO) {
-    outboundRequestMapper.managerUpdate(modelMapper.map(outboundRequestDTO, OutboundRequest.class));
+    outboundRequestMapper.managerUpdate(outboundRequestDTO);
   }
 
   @Override

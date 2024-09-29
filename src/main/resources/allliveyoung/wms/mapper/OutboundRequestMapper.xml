@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="allliveyoung.wms.mapper.OutboundRequestMapper">
+
+  <!-- ResultMap 정의 -->
+  <resultMap id="OutboundRequestResultMap" type="allliveyoung.wms.domain.OutboundRequest">
+    <id property="id" column="outbound_request_id" />
+    <result property="code" column="outbound_request_code" />
+    <result property="status" column="outbound_request_status" />
+    <result property="quantity" column="order_quantity" />
+    <result property="recipientName" column="recipient_name" />
+    <result property="recipientContact" column="recipient_contact" />
+    <result property="isFault" column="is_fault" />
+    <result property="rejectionNote" column="rejection_note" />
+    <result property="regDate" column="reg_date" />
+    <result property="modDate" column="mod_date" />
+    <result property="note" column="outbound_request_note" />
+
+    <!-- Member 정보 매핑 -->
+    <association property="member" javaType="allliveyoung.wms.domain.Member">
+      <id property="id" column="member_id" />
+      <result property="name" column="name" />
+      <result property="email" column="email" />
+      <result property="phoneNumber" column="phone_number" />
+      <result property="roadNameAddress" column="road_name_address" />
+      <result property="detailsAddress" column="details_address" />
+    </association>
+
+    <!-- Stock 정보 매핑 -->
+    <association property="stock" javaType="allliveyoung.wms.domain.Stock">
+      <id property="id" column="stock_id" />
+      <result property="stockCode" column="stock_code" />
+      <association property="product" javaType="allliveyoung.wms.domain.Product">
+        <id property="id" column="product_id" />
+        <result property="productName" column="product_name" />
+        <result property="storeTemperature" column="store_temperature" />
+      </association>
+      <association property="warehouse" javaType="allliveyoung.wms.domain.Warehouse">
+        <id property="id" column="warehouse_id" />
+        <result property="warehouseName" column="warehouse_name" />
+        <result property="warehouseCode" column="warehouse_code" />
+        <result property="warehouseRoadAddress" column="warehouse_road_address" />
+        <result property="warehouseDetailsAddress" column="warehouse_details_address" />
+      </association>
+    </association>
+  </resultMap>
+
+
+  <select id="findAll" resultType="allliveyoung.wms.domain.OutboundRequest">
+    select *
+    from OUTBOUND_REQUEST
+    where (#{status} is null or outbound_request_status = #{status})
+    order by outbound_request_id desc
+  </select>
+
+
+  <select id="findById" resultType="allliveyoung.wms.domain.OutboundRequest">
+    select *
+    from OUTBOUND_REQUEST
+    where outbound_request_id = #{id}
+  </select>
+
+  <update id="memberUpdate">
+    update OUTBOUND_REQUEST
+    set stock_id = #{stock.id}, order_quantity = #{quantity},
+        recipient_name = #{recipientName},
+        recipient_address = CONCAT(#{address.roadNameAddress}, ' ', #{address.detailsAddress}),
+        recipient_contact = #{recipientContact}, outbound_request_note = #{note}
+    where outbound_request_id = #{id}
+  </update>
+
+  <update id="managerUpdate">
+    update OUTBOUND_REQUEST
+    set outbound_request_status = #{status}, is_fault = #{isFault},
+        rejection_note = #{rejectionNote}, outbound_request_note = #{note}
+    where outbound_request_id = #{id}
+  </update>
+
+  <insert id="save" useGeneratedKeys="true" keyProperty="id">
+    insert into OUTBOUND_REQUEST (member_id, stock_id, order_quantity, recipient_name, recipient_address, recipient_contact)
+    values (#{member.id}, #{stock.id}, #{quantity}, #{recipientName}, CONCAT(#{address.roadNameAddress}, ' ', #{address.detailsAddress}), #{recipientContact})
+  </insert>
+
+  <delete id="delete">
+    delete from OUTBOUND_REQUEST where outbound_request_id = #{id}
+  </delete>
+</mapper>

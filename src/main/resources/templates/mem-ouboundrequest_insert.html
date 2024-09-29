@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
@@ -82,9 +82,7 @@
             <div id="outboundBar" class="collapse" aria-labelledby="headingOutboundBar" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">출고관리</h6>
-                    <a class="collapse-item" href="mgr-outboundrequest.html">출고요청 관리</a>
-                    <a class="collapse-item" href="mgr-outbounding.html">진행중인 출고</a>
-                    <a class="collapse-item" href="mgr-outbounded.html">완료된 출고</a>
+                    <a class="collapse-item" th:href="@{outbound-requests}">출고요청</a>
                 </div>
             </div>
         </li>
@@ -360,7 +358,7 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">출고 요청서</h1>
-                    <p class="mb-4">출고 요청 설명서를 작성해주세요</p>
+                    <p class="mb-4">출고 요청서를 작성해주세요</p>
 
                     
                     <!-- DataTales Example -->
@@ -370,7 +368,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive table-scroll">
-                                <form action="/outbound-request/save" method="post">
+                                <form th:action="@{/outbound-request/save}" method="post">
                                 <p class="mb-4">* 는 필수입력사항입니다.</p>
                                 <table class="table table-bordered" id="outboundrequest_register" width="100%" cellspacing="0">
                                     <thead>
@@ -392,11 +390,12 @@
                                         <td>
                                             <select name="stockInfo[0]" class="form-control" required>
                                                 <option value="">선택</option>
-                                                <option value="stock1">재고 1</option>
-                                                <option value="stock2">재고 2</option>
-                                                <option value="stock3">재고 3</option>
+                                                <th:block th:each="stock : ${stockList}">
+                                                    <option th:value="${stock.id}" th:text="${stock.productName}"></option>
+                                                </th:block>
                                             </select>
                                         </td>
+
                                         <td><input type="text" name="availableStock[0]" class="form-control" readonly></td>
                                         <td><input type="number" name="quantity[0]" class="form-control" required min="1"></td>
                                         <td><input type="text" name="recipientName[0]" class="form-control" required></td>

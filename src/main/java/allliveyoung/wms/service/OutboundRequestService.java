@@ -15,6 +15,7 @@ public interface OutboundRequestService {
   OutboundRequest findOneOutboundRequest(Long id);
 
   void updateOutboundRequestByCompany(OutboundRequestDTO outboundRequestDTO);
+
   void updateOutboundRequestByManager(OutboundRequestDTO outboundRequestDTO);
 
   void deleteOutboundRequest(Long id);

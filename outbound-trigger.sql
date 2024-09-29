@@ -12,26 +12,26 @@ DELIMITER ;
 
 DELIMITER $$
 -- 출고요청 수정날짜 업데이트 트리거
-CREATE TRIGGER after_outbound_request_updated
-after UPDATE ON outbound_request
+CREATE TRIGGER before_outbound_request_updated
+BEFORE UPDATE ON outbound_request
 FOR EACH ROW
 BEGIN
-   insert outbound_request (mod_date) values (now());
+    SET NEW.mod_date = NOW();
 END $$
 
 DELIMITER ;
 
 DELIMITER $$
 -- 출고요청 이상유무 -> 상태변경 트리거
-CREATE TRIGGER outbound_request_isfault_updated
-after UPDATE ON outbound_request
+CREATE TRIGGER before_outbound_request_isfault_updated
+BEFORE UPDATE ON outbound_request
 FOR EACH ROW
 BEGIN
-	IF NEW.is_fault = 1 THEN 
-		insert outbound_request (outbound_request_status) values('승인');
+    IF NEW.is_fault = 1 THEN 
+        SET NEW.outbound_request_status = '승인';
     ELSEIF NEW.is_fault = 0 THEN
-		insert outbound_request (outbound_request_status) values('반려');
-	END IF;
+        SET NEW.outbound_request_status = '반려';
+    END IF;
 END $$
 
 DELIMITER ;

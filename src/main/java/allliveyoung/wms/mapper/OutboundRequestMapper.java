@@ -9,15 +9,15 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface OutboundRequestMapper {
 
-  Long save(OutboundRequest outboundRequest);
+  Long save(OutboundRequestDTO outboundRequestDTO);
 
   List<OutboundRequest> findAll(OutboundRequestDTO outboundRequestDTO);
 
   Optional<OutboundRequest> findById(Long id);
 
-  void memberUpdate(OutboundRequest outboundRequest);
+  void memberUpdate(OutboundRequestDTO outboundRequestDTO);
 
-  void managerUpdate(OutboundRequest outboundRequest);
+  void managerUpdate(OutboundRequestDTO outboundRequestDTO);
 
   void delete(Long id);
 }

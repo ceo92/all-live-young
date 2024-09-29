@@ -1,22 +1,28 @@
 package allliveyoung.wms.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
-@Builder
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-@ToString
+@AllArgsConstructor
+@Builder
 public class Member {
-  private Long id;
+  private Long memberId;
+  private String name;
+  private String password;
+  private String phoneNumber;
   private String email;
-
-  public Member(Long id) {
-    this.id = id;
-  }
-
+  private String roadNameAddress;
+  private String detailsAddress;
+  private AccountStatus accountStatus;
+  private LocalDateTime joinDate;
+  private LocalDateTime lastLoginDate;
+  private RoleType roleType;
+  private String businessNumber;
+  private Long warehouseId;
+  private Boolean isAgree;
+  private LocalDateTime agreeDate;
 }

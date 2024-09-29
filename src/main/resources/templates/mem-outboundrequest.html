@@ -12,13 +12,13 @@
     <title>All Live Young: Dashboard</title>
 
     <!-- Custom fonts for this template-->
-    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
@@ -33,7 +33,7 @@
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
             <div class="sidebar-brand-icon">
-                <img src="../img/logo.png" width="80px">
+                <img src="/img/logo.png" width="80px">
             </div>
         </a>
 
@@ -81,9 +81,7 @@
             <div id="outboundBar" class="collapse" aria-labelledby="headingOutboundBar" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">출고관리</h6>
-                    <a class="collapse-item" href="mgr-outboundrequest.html">출고요청 관리</a>
-                    <a class="collapse-item" href="mgr-outbounding.html">진행중인 출고</a>
-                    <a class="collapse-item" href="mgr-outbounded.html">완료된 출고</a>
+                    <a class="collapse-item" th:href="@{outbound-requests}">출고요청</a>
                 </div>
             </div>
         </li>
@@ -332,7 +330,7 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">  이경민</span>
                             <img class="img-profile rounded-circle"
-                                 src="../img/undraw_profile.svg">
+                                 src="/img/undraw_profile.svg">
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -358,23 +356,26 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">출고요청관리</h1>
+                    <div class="container-fluid">
 
-                    <div class="card shadow mb-4 p-3">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <label class="mb-0">검색</label>
-                            <input type="search" class="form-control form-control-sm w-50 ml-3" placeholder="Search" aria-controls="dataTable">
-                        </div>
-                        <div class="mt-2">
-                            <label>
-                                <input type="checkbox" name="선택1" id="선택1"> 조건1
-                            </label>
-                            <label class="ml-2">
-                                <input type="checkbox" name="선택2" id="선택2"> 조건2
-                            </label>
-                            <label class="ml-2">
-                                <input type="checkbox" name="선택3" id="선택3"> 조건3
-                            </label>
+                        <!-- Page Heading -->
+                        <h1 class="h3 mb-2 text-gray-800">출고 요청</h1>
+                        <p class="mb-4">출고 요청 설명</p>
+
+                        <div class="card shadow mb-4 p-3" >
+                            <div class="mt-2">
+                                <form id="filterForm" th:action="@{outbound-requests}" method="post">
+                                    <div class="ml-1">
+                                        <input type="checkbox" name="types" value="waiting" id="waiting"> 처리 대기중
+                                        <input type="checkbox" name="types" value="approved" id="approved"> 승인
+                                        <input type="checkbox" name="types" value="rejected" id="rejected"> 반려
+                                    </div>
+                                    <button class="btn btn-primary" type="submit">조회</button>
+                                </form>
+                                <form id="saveForm" th:action="@{outbound-request/save}" method="get">
+                                    <button class="btn btn-primary" id="registerBtn" type="submit">등록</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
 
@@ -403,12 +404,18 @@
                                             <th>비고</th>
                                         </tr>
                                     </thead>
-                                    
+
                                     <tbody>
 
                                     <tr th:each="outboundRequest : ${outboundRequestList}">
-                                        <td th:text="${outboundRequest.id}"></td>
-                                        <td th:text="${outboundRequest.code}"></td>
+                                        <div th:if="${outboundRequest != null}">
+                                            <span th:text="${outboundRequest.id}"></span>
+                                        </div>
+                                        <td>
+                                            <a th:href="@{outbound-requests/{id}(id=${outboundRequest.id})}">
+                                                <span th:text="${outboundRequest.code}"></span>
+                                            </a>
+                                        </td>
                                         <td th:text="${outboundRequest.status}"></td>
                                         <td th:text="${outboundRequest.member.id}"></td>
                                         <td th:text="${outboundRequest.stock.id}"></td>
@@ -479,23 +486,23 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="../vendor/jquery/jquery.min.js"></script>
-    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="../js/sb-admin-2.min.js"></script>
+    <script src="/js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="../js/demo/datatables-demo.js"></script>
+    <script src="/js/demo/datatables-demo.js"></script>
 
-    <script src="../js/demo/outbound-demo.js"></script>
+    <script src="/js/demo/outbound-demo.js"></script>
 
 
 </body>
