@@ -26,6 +26,22 @@
         </association>
     </resultMap>
 
+    <resultMap id="sumExpenses" type="com.all_live_young_wms_local.web.dto.SumExpensesDTO">
+        <result property="year" column="YEAR(expense_date)"/>
+        <result property="month" column="MONTH(expense_date)"/>
+        <result property="sumAmount" column="SUM(expense_amount)"/>
+    </resultMap>
+
+    <resultMap id="sumExpensesCategory" type="com.all_live_young_wms_local.web.dto.SumExpensesCategoryDTO">
+        <result property="category" column="expense_category"/>
+        <result property="sumAmount" column="SUM(expense_amount)"/>
+    </resultMap>
+
+    <resultMap id="netProfit" type="com.all_live_young_wms_local.web.dto.NetProfitDTO">
+        <result property="year" column="ey"/>
+        <result property="netProfit" column="net_profit"/>
+    </resultMap>
+
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO expense (warehouse_id, expense_date, expense_category, expense_amount, expense_description, reg_date)
         VALUES (#{expense.warehouse.id}, #{expense.expenseDate}, #{expense.category}, #{expense.amount}, #{expense.description}, #{expense.regDate})
@@ -94,4 +110,41 @@
             ]]>
         </if>
     </select>
+
+    <select id="findSumExpenses" resultMap="sumExpenses">
+        SELECT YEAR(expense_date), MONTH(expense_date), SUM(expense_amount)
+        FROM expense
+        WHERE YEAR(expense_date) = #{year}
+        GROUP BY DATE_FORMAT(expense_date, '%Y-%m')
+        ORDER BY YEAR(expense_date), MONTH(expense_date);
+    </select>
+
+    <select id="findSumExpensesCategory" resultMap="sumExpensesCategory">
+        SELECT expense_category, SUM(expense_amount)
+        FROM expense
+        WHERE YEAR(expense_date) = #{year}
+        GROUP BY expense_category;
+    </select>
+
+    <select id="findNetProfit" resultMap="netProfit">
+        WITH sum_expense AS (
+            SELECT YEAR(expense_date) AS ey, SUM(expense_amount) AS es
+            FROM expense
+            GROUP BY YEAR(expense_date)
+        ),
+             sum_sales AS (
+                 SELECT YEAR(sales_date) AS sy, SUM(sales_amount) AS ss
+                 FROM sales
+                 GROUP BY YEAR(sales_date)
+             ), result AS (
+            SELECT *, (ss - es) AS net_profit
+            FROM sum_expense
+                     JOIN sum_sales ON ey = sy
+            ORDER BY ey DESC
+            LIMIT 5
+        ) SELECT ey, net_profit
+        FROM result
+        ORDER BY ey
+    </select>
+
 </mapper>

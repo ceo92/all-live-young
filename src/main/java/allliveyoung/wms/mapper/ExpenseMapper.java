@@ -2,6 +2,9 @@ package allliveyoung.wms.mapper;
 
 import allliveyoung.wms.domain.Expense;
 import allliveyoung.wms.web.dto.ExpenseRequestDTO;
+import allliveyoung.wms.web.dto.NetProfitDTO;
+import allliveyoung.wms.web.dto.SumExpensesCategoryDTO;
+import allliveyoung.wms.web.dto.SumExpensesDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,4 +24,10 @@ public interface ExpenseMapper {
     void delete(@Param("id") Long id);
 
     Integer count(@Param("requestDTO") ExpenseRequestDTO requestDTO);
+
+    List<SumExpensesDTO> findSumExpenses(Integer year);
+
+    List<SumExpensesCategoryDTO> findSumExpensesCategory(Integer year);
+
+    List<NetProfitDTO> findNetProfit();
 }
