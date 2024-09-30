@@ -37,17 +37,17 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="product, iterStat : ${matchedProductDTO}">
+                        <tr>
                             <td th:text="${iterStat.index + 1}"></td>
                             <td>
-                                <select name="inboundProductSaveDTOList[${iterStat.index}].productId">
+                                <select th:name="'inboundProductSaveDTOList[' + ${iterStat.index} + '].productId'">
                                     <option th:each="p : ${matchedProductDTO}" th:value="${p.id}" th:text="${p.name}"></option>
                                 </select>
                             </td>
-                            <td><input type="number" th:name="palletQuantity"></td>
-                            <td><input type="number" th:name="boxQuantity"></td>
-                            <td><input type="text" th:name="manufactureNum"></td>
-                            <td><input type="date" th:name="expDate"></td>
+                            <td><input type="number" th:name="'inboundProductSaveDTOList[' + ${iterStat.index} + '].palletQuantity'"></td>
+                            <td><input type="number" th:name="'inboundProductSaveDTOList[' + ${iterStat.index} + '].boxQuantity'"></td>
+                            <td><input type="text" th:name="'inboundProductSaveDTOList[' + ${iterStat.index} + '].manufactureNum'"></td>
+                            <td><input type="date" th:name="'inboundProductSaveDTOList[' + ${iterStat.index} + '].expDate'"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -63,7 +63,7 @@
 
     </div>
 
-    <script th:inline="javascript">
+    <!--<script th:inline="javascript">
         var matchedProductDTO = /*[[${matchedProductDTO}]]*/ [];
 
         function createProductSelect(name) {
@@ -146,7 +146,7 @@
 
             tableBody.appendChild(newRow);
         });
-    </script>
+    </script>-->
 </section>
 
 </html>

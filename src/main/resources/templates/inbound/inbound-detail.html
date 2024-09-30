@@ -69,8 +69,14 @@
                         <button class="Cancel" type="button">취소</button>
                         <button class="Cancel" type="button">반려</button>
                         <button class="submit" type="submit">승인</button>
-                        <!--<button class="Cancel" type="button">수정</button>
-                        <button class="submit" type="submit">삭제</button>-->
+                        <button class="Cancel" type="button">수정</button>
+                        <form id="form5" th:action="@{/inbound-requests/{id}/delete(i d=${responseDTO.get(0).inboundRequest.id})}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <input type="hidden" name="id" value="${responseDTO.inboundRequest.id}" readonly>
+                            <div>
+                                <button type="submit">삭제</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

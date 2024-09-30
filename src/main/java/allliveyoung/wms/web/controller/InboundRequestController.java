@@ -61,12 +61,13 @@ public class InboundRequestController {
     }
 
     @PostMapping("/save")
-    public String postInboundRequestSaveForm(@ModelAttribute InboundRequestSaveDTO inboundRequestSaveDTO, ArrayList<InboundProductSaveDTO> inboundProductSaveDTOS, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String postInboundRequestSaveForm(@ModelAttribute InboundRequestSaveDTO inboundRequestSaveDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             log.info("has error..........");
             redirectAttributes.addFlashAttribute("error",bindingResult.getAllErrors());
         }
 
+        inboundRequestSaveDTO.setMemberId(1L); //시큐리티 전 테스트
         inboundRequestService.saveInbound(inboundRequestSaveDTO);
 
         return "redirect:/inbound-requests/{id}";
