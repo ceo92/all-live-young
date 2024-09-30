@@ -3,12 +3,81 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="allliveyoung.wms.mapper.StockMapper">
 
-  <select id="findById" resultType="Stock">
+  <update id="update">
+    UPDATE INBOUND_REQUEST_PRODUCT i , STOCK s
+    SET i.pallet_quantity = #{inboundRequestProduct.palletQuantity}  , i.box_quantity = #{inboundRequestProduct.boxQuantity} , s.mod_date = NOW()
+    WHERE i.inbound_request_product_id = #{inboundRequestProduct.id} AND s.stock_id=#{stockId};
+  </update>
+
+
+
+
+  <select id="findById" resultMap="stock">
     SELECT *
-    FROM Stock where id = #{id}
+    FROM STOCK s
+    JOIN PRODUCT p
+    ON s.product_id = p.product_id
+    JOIN MEMBER m
+    ON p.member_id = m.member_id
+    JOIN PALLET pa
+    ON pa.pallet_id = s.pallet_id
+    JOIN INBOUND_REQUEST_PRODUCT i
+    ON i.inbound_request_product_id = pa.inbound_request_product_id
+    JOIN WAREHOUSE w
+    ON s.warehouse_id = w.warehouse_id
+    JOIN SECTION sec
+    ON pa.section_id = sec.section_id
+    <where>
+      s.stock_id = #{id}
+    </where>
   </select>
 
-  <resultMap id="stocksp" type="Stock">
+
+  <resultMap id="stock" type="Stock">
+    <id column="stock_id" property="id"/>
+    <result column="stock_code" property="stockCode"/>
+    <result column="reg_date" property="regDate"/>
+    <result column="mod_date" property="modDate"/>
+    <association property="warehouse" javaType="Warehouse">
+      <id column="warehouse_id" property="id"/>
+      <result column="warehouse_name" property="name"/>
+      <result column="warehouse_code" property="code"/>
+    </association>
+
+    <association property="product" javaType="Product">
+      <id column="product_id" property="id"/>
+      <result column="product_name" property="productName"/>
+      <result column="store_temperature" property="storeTemperature"/>
+      <result column="product_type" property="productType"/>
+      <association property="member" javaType="Member">
+        <id column="member_id" property="id"/>
+        <result column="name" property="name"/>
+      </association>
+    </association>
+
+    <association property="pallet" javaType="Pallet">
+      <id column="pallet_id" property="id"/>
+      <association property="inboundRequestProduct" javaType="InboundRequestProduct">
+        <id column="inbound_request_product_id" property="id"/>
+        <result property="expirationDate" column="expiration_date"/>
+        <result property="manufactureNumber" column="manufacture_number"/>
+        <result property="palletQuantity" column="pallet_quantity"/>
+        <result property="boxQuantity" column="box_quantity"/>
+      </association>
+
+      <association property="section" javaType="Section">
+        <id column="section_id" property="id"/>
+        <result property="sectionCode" column="section_code"/>
+        <result property="sectionCapacity" column="section_capacity"/>
+
+      </association>
+    </association>
+  </resultMap>
+
+
+
+
+  <resultMap id="stocks" type="Stock">
     <id column="stock_id" property="id"/>
     <result column="stock_code" property="stockCode"/>
     <association property="product" javaType="Product">
@@ -33,7 +102,7 @@
 
 
   <!--연관관계 바꾸기 , 연관관계 맺고 있는 테이블의 위치 ㅇㅇ-->
-  <select id="findAll" resultMap="stocksp">
+  <select id="findAll" resultMap="stocks">
     SELECT *
     FROM STOCK s
     JOIN PRODUCT p
@@ -48,7 +117,7 @@
     ON s.warehouse_id = w.warehouse_id
     <where>
       <if test="stockSearch.stockCode != null and !stockSearch.stockCode.equals('')">
-        and s.stock_code = #{stockSearch.stockCode}
+        and s.stock_code like concat('%' , #{stockSearch.stockCode} , '%')
       </if>
 
       <if test="stockSearch.storeTemperatures != null and stockSearch.storeTemperatures.size() > 0">
@@ -66,10 +135,17 @@
         </foreach>
       </if>
 
+      <if test="stockSearch.productName != null and !stockSearch.productName.equals('')">
+        and p.product_name like concat('%' , #{stockSearch.productName} , '%')
+      </if>
 
+      <if test="stockSearch.companyName != null and !stockSearch.companyName.equals('')">
+        and m.name like concat('%' , #{stockSearch.companyName} , '%')
+      </if>
 
-
-
+      <if test="stockSearch.expirationDate != null and !stockSearch.expirationDate.equals('')">
+        and i.expiration_date &lt; #{stockSearch.expirationDate}
+      </if>
 
       <!--<if test="member.roleType == @local.kyungmin_wms.constant.RoleType@ADMIN">
         and w.warehouse_code = #{stockSearch.warehouseCode}
@@ -78,191 +154,10 @@
 
 
     </where>
-
-
-
-
-
-
-
-    <!--<where>
-      <if test="stockSearch.stockCode != null and !stockSearch.stockCode.equals('')">
-        and s.stock_code = #{stockSearch.stockCode}
-      </if>
-
-      <if test="member.roleType == @local.kyungmin_wms.constant.RoleType@ADMIN">
-        and w.warehouse_code = #{stockSearch.warehouseCode}
-        and w.warehouse_name = #{stockSearch.warehouseName}
-      </if>
-
-      &lt;!&ndash;<foreach collection="stockSearch.storeTemperatures" item="storeTemperature" open="(" separator="," close=")" > &lt;!&ndash; 문제 확인해보자&ndash;&gt;
-        <if test="storeTemperature != null and !storeTemperature.equals('')">
-          and p.store_temperature = #{storeTemperature}
-        </if>
-      </foreach>
-
-      <foreach collection="stockSearch.productTypes" item="productType" open="(" separator="," close=")" >
-        <if test="productType != null and !productType.equals('')">
-          and p.product_type = #{productType}
-        </if>
-      </foreach>&ndash;&gt;
-
-      <if test="stockSearch.productName != null and !stockSearch.productName.equals('')">
-        and p.product_name = #{stockSearch.productName}
-      </if>
-
-      <if test="stockSearch.companyName != null and !stockSearch.companyName.equals('')">
-        and m.name = #{stockSearch.companyName}
-      </if>
-
-      <if test="stockSearch.expirationDate != null and !stockSearch.expirationDate.equals('')">
-        and i.expiration_date &lt; #{stockSearch.expirationDate}
-      </if>
-    </where>-->
   </select>
 
-
-
-  <resultMap id="stocks" type="Stock">
-    <id column="stock_id" property="id"/>
-    <!-- column : 테이블의 칼럼명 , property : 자바 도메인의 필드명-->
-    <result column="stock_code" property="stockCode"/>
-    <result column="reg_date" property="regDate"/>
-    <result column="mod_date" property="modDate"/>
-
-    <association property="product" javaType="Product" column="product_id">
-      <id property="id" column="product_id"/>
-      <result column="product_name" property="productName"/>
-
-      <result column="store_temperature" property="storeTemperature"/>
-      <result column="product_type" property="productType"/>
-      <result column="product_license_date" property="productLicenseDate"/>
-      <result column="product_license_num" property="productLicenseNum"/>
-
-      <association property="member" javaType="Member" column="member_id">
-        <id column="member_id" property="id"/>
-        <result column="name" property="name"/>
-        <result column="phone_number" property="phoneNumber"/>
-        <result column="email" property="email"/>
-        <result column="account_status" property="accountStatus"/>
-        <result column="join_date" property="joinDate"/>
-        <result column="last_login_date" property="lastLoginDate"/>
-        <result column="business_number" property="businessNumber"/>
-        <result column="is_agree" property="isAgree"/>
-        <result column="agree_date" property="agreeDate"/>
-        <result column="role_type" property="roleType"/>
-        <association property="warehouse" javaType="Warehouse" column="warehouse_id">
-          <id column="warehouse_id" property="id"/>
-          <result column="warehouse_name" property="name"/>
-          <result column="warehouse_code" property="code"/>
-
-          <association property="address" javaType="Address">
-            <result column="warehouse_road_address" property="roadNameAddress"/>
-            <result column="warehouse_jibun_address" property="jibunAddress"/>
-            <result column="warehouse_zipcode" property="zipcode"/>
-            <result column="warehouse_details_address" property="detailsAddress"/>
-          </association>
-        </association>
-
-
-        <association property="address" javaType="Address">
-          <result column="road_address" property="roadNameAddress"/>
-          <result column="details_address" property="detailsAddress"/>
-        </association>
-      </association>
-
-    </association>
-
-    <association property="pallet" javaType="Pallet" column="pallet_id">
-      <id column="pallet_id" property="id"/>
-      <association property="inboundRequestProduct" javaType="InboundRequestProduct" column="inbound_request_product_id">
-        <id column="inbound_request_product_id" property="id"/>
-        <result column="expiration_date" property="expirationDate"/>
-        <result column="pallet_quantity" property="palletQuantity"/>
-        <result column="box_quantity" property="boxQuantity"/>
-        <result column="manufacture_number" property="manufactureNumber"/>
-        <result column="expiration_date" property="expirationDate"/>
-
-        <association property="product" javaType="Product" column="product_id">
-          <id property="id" column="product_id"/>
-          <result column="product_name" property="productName"/>
-          <result column="store_temperature" property="storeTemperature"/>
-          <result column="product_type" property="productType"/>
-          <result column="product_license_date" property="productLicenseDate"/>
-          <result column="product_license_num" property="productLicenseNum"/>
-          <association property="member" javaType="Member" column="member_id">
-            <id column="member_id" property="id"/>
-            <result column="name" property="name"/>
-            <result column="phone_number" property="phoneNumber"/>
-            <result column="email" property="email"/>
-            <result column="account_status" property="accountStatus"/>
-            <result column="join_date" property="joinDate"/>
-            <result column="last_login_date" property="lastLoginDate"/>
-            <result column="business_number" property="businessNumber"/>
-            <result column="is_agree" property="isAgree"/>
-            <result column="agree_date" property="agreeDate"/>
-            <result column="role_type" property="roleType"/>
-            <association property="warehouse" javaType="Warehouse" column="warehouse_id">
-              <id column="warehouse_id" property="id"/>
-              <result column="warehouse_name" property="name"/>
-              <result column="warehouse_code" property="code"/>
-
-              <association property="address" javaType="Address">
-                <result column="warehouse_road_address" property="roadNameAddress"/>
-                <result column="warehouse_jibun_address" property="jibunAddress"/>
-                <result column="warehouse_zipcode" property="zipcode"/>
-                <result column="warehouse_details_address" property="detailsAddress"/>
-              </association>
-            </association>
-
-
-            <association property="address" javaType="Address">
-              <result column="road_address" property="roadNameAddress"/>
-              <result column="details_address" property="detailsAddress"/>
-            </association>
-          </association>
-
-        </association>
-
-
-      </association>
-      <association property="section" javaType="Section" column="section_id">
-        <id column="section_id" property="id"/>
-        <result column="store_temperature" property="storeTemperature"/> <!--이 부분도 다 바꿔줘야 하네-->
-        <result column="product_type" property="productType"/>
-        <result column="section_capacity" property="sectionCapacity"/>
-      </association>
-
-    </association>
-
-    <association property="warehouse" javaType="Warehouse" column="warehouse_id">
-      <id column="warehouse_id" property="id"/>
-      <result column="warehouse_name" property="name"/>
-      <result column="warehouse_code" property="code"/>
-
-      <association property="address" javaType="Address">
-        <result column="warehouse_road_address" property="roadNameAddress"/>
-        <result column="warehouse_jibun_address" property="jibunAddress"/>
-        <result column="warehouse_zipcode" property="zipcode"/>
-        <result column="warehouse_details_address" property="detailsAddress"/>
-      </association>
-    </association>
-  </resultMap>
-
-
-
-
-
-
   <!--누가 상품 등록했는지는 나중에 , 로그인까지 구현해야됨-->
-  <update id="update">
-    update Stock
-    set quantity = #{stock.quantity}  , mod_date = #{LocalDateTime.now()}
-    where id = #{id}
-  </update>
 
 
 
 </mapper>
-  <!-- 그냥 조인만 하면 전부 다 가져오므로 member_id가 #{id}인 즉 한 회원정보만 가져오게-->
-  <!--왜 Item일까 그냥 리턴값  하나하나가 Itemdㅣㄴ가 -->
