@@ -2,6 +2,7 @@ package allliveyoung.wms.mapper;
 
 import allliveyoung.wms.domain.Sales;
 import allliveyoung.wms.web.dto.SalesRequestDTO;
+import allliveyoung.wms.web.dto.SumSalesDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,4 +23,5 @@ public interface SalesMapper {
 
     Integer count(@Param("requestDTO") SalesRequestDTO requestDTO);
 
+    List<SumSalesDTO> findSumSales(Integer year);
 }

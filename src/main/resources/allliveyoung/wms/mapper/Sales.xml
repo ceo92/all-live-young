@@ -60,6 +60,12 @@
         </association>
     </resultMap>
 
+    <resultMap id="sumSales" type="com.all_live_young_wms_local.web.dto.SumSalesDTO">
+        <result property="year" column="YEAR(sales_date)"/>
+        <result property="month" column="MONTH(sales_date)"/>
+        <result property="sumAmount" column="SUM(sales_amount)"/>
+    </resultMap>
+
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO sales (warehouse_id, sales_date, sales_category, member_id, sales_amount, sales_description, reg_date)
         VALUES (#{sales.warehouse.id}, #{sales.salesDate}, #{sales.category}, #{sales.member.id, jdbcType=BIGINT}, #{sales.amount}, #{sales.description}, #{sales.regDate})
@@ -136,5 +142,13 @@
                  AND sales_date <= #{requestDTO.dateTo}
             ]]>
         </if>
+    </select>
+
+    <select id="findSumSales" resultMap="sumSales">
+        SELECT YEAR(sales_date), MONTH(sales_date), SUM(sales_amount)
+        FROM sales
+        WHERE YEAR(sales_date) = #{year}
+        GROUP BY DATE_FORMAT(sales_date, '%Y-%m')
+        ORDER BY YEAR(sales_date), MONTH(sales_date)
     </select>
 </mapper>
