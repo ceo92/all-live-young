@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="allliveyoung.wms.mapper.StockMapper">
+
+  <update id="update">
+    UPDATE INBOUND_REQUEST_PRODUCT i , STOCK s
+    SET i.pallet_quantity = #{inboundRequestProduct.palletQuantity}  , i.box_quantity = #{inboundRequestProduct.boxQuantity} , s.mod_date = NOW()
+    WHERE i.inbound_request_product_id = #{inboundRequestProduct.id} AND s.stock_id=#{stockId};
+  </update>
+
+
+
+
+  <select id="findById" resultMap="stock">
+    SELECT *
+    FROM STOCK s
+    JOIN PRODUCT p
+    ON s.product_id = p.product_id
+    JOIN MEMBER m
+    ON p.member_id = m.member_id
+    JOIN PALLET pa
+    ON pa.pallet_id = s.pallet_id
+    JOIN INBOUND_REQUEST_PRODUCT i
+    ON i.inbound_request_product_id = pa.inbound_request_product_id
+    JOIN WAREHOUSE w
+    ON s.warehouse_id = w.warehouse_id
+    JOIN SECTION sec
+    ON pa.section_id = sec.section_id
+    <where>
+      s.stock_id = #{id}
+    </where>
+  </select>
+
+
+  <resultMap id="stock" type="Stock">
+    <id column="stock_id" property="id"/>
+    <result column="stock_code" property="stockCode"/>
+    <result column="reg_date" property="regDate"/>
+    <result column="mod_date" property="modDate"/>
+    <association property="warehouse" javaType="Warehouse">
+      <id column="warehouse_id" property="id"/>
+      <result column="warehouse_name" property="name"/>
+      <result column="warehouse_code" property="code"/>
+    </association>
+
+    <association property="product" javaType="Product">
+      <id column="product_id" property="id"/>
+      <result column="product_name" property="productName"/>
+      <result column="store_temperature" property="storeTemperature"/>
+      <result column="product_type" property="productType"/>
+      <association property="member" javaType="Member">
+        <id column="member_id" property="id"/>
+        <result column="name" property="name"/>
+      </association>
+    </association>
+
+    <association property="pallet" javaType="Pallet">
+      <id column="pallet_id" property="id"/>
+      <association property="inboundRequestProduct" javaType="InboundRequestProduct">
+        <id column="inbound_request_product_id" property="id"/>
+        <result property="expirationDate" column="expiration_date"/>
+        <result property="manufactureNumber" column="manufacture_number"/>
+        <result property="palletQuantity" column="pallet_quantity"/>
+        <result property="boxQuantity" column="box_quantity"/>
+      </association>
+
+      <association property="section" javaType="Section">
+        <id column="section_id" property="id"/>
+        <result property="sectionCode" column="section_code"/>
+        <result property="sectionCapacity" column="section_capacity"/>
+
+      </association>
+    </association>
+  </resultMap>
+
+
+
+
+  <resultMap id="stocks" type="Stock">
+    <id column="stock_id" property="id"/>
+    <result column="stock_code" property="stockCode"/>
+    <association property="product" javaType="Product">
+      <id column="product_id" property="id"/>
+      <result column="product_name" property="productName"/>
+      <result column="store_temperature" property="storeTemperature"/>
+      <result column="product_type" property="productType"/>
+      <association property="member" javaType="Member">
+        <id column="member_id" property="id"/>
+        <result column="name" property="name"/>
+      </association>
+    </association>
+
+    <association property="pallet" javaType="Pallet">
+      <id column="pallet_id" property="id"/>
+      <association property="inboundRequestProduct" javaType="InboundRequestProduct">
+        <id column="inbound_request_product_id" property="id"/>
+        <result property="expirationDate" column="expiration_date"/>
+      </association>
+    </association>
+  </resultMap>
+
+
+  <!--연관관계 바꾸기 , 연관관계 맺고 있는 테이블의 위치 ㅇㅇ-->
+  <select id="findAll" resultMap="stocks">
+    SELECT *
+    FROM STOCK s
+    JOIN PRODUCT p
+    ON s.product_id = p.product_id
+    JOIN MEMBER m
+    ON p.member_id = m.member_id
+    JOIN PALLET a
+    ON a.pallet_id = s.pallet_id
+    JOIN INBOUND_REQUEST_PRODUCT i
+    ON i.inbound_request_product_id = a.inbound_request_product_id
+    JOIN WAREHOUSE w
+    ON s.warehouse_id = w.warehouse_id
+    <where>
+      <if test="stockSearch.stockCode != null and !stockSearch.stockCode.equals('')">
+        and s.stock_code like concat('%' , #{stockSearch.stockCode} , '%')
+      </if>
+
+      <if test="stockSearch.storeTemperatures != null and stockSearch.storeTemperatures.size() > 0">
+        and p.store_temperature IN
+        <foreach collection="stockSearch.storeTemperatures" item="storeTemperature" open="(" separator="," close=")">
+          #{storeTemperature}
+        </foreach>
+      </if>
+
+
+      <if test="stockSearch.productTypes != null and stockSearch.productTypes.size() > 0">
+        and p.product_type IN
+        <foreach collection="stockSearch.productTypes" item="productType" open="(" separator="," close=")">
+          #{productType}
+        </foreach>
+      </if>
+
+      <if test="stockSearch.productName != null and !stockSearch.productName.equals('')">
+        and p.product_name like concat('%' , #{stockSearch.productName} , '%')
+      </if>
+
+      <if test="stockSearch.companyName != null and !stockSearch.companyName.equals('')">
+        and m.name like concat('%' , #{stockSearch.companyName} , '%')
+      </if>
+
+      <if test="stockSearch.expirationDate != null and !stockSearch.expirationDate.equals('')">
+        and i.expiration_date &lt; #{stockSearch.expirationDate}
+      </if>
+
+      <!--<if test="member.roleType == @local.kyungmin_wms.constant.RoleType@ADMIN">
+        and w.warehouse_code = #{stockSearch.warehouseCode}
+        and w.warehouse_name = #{stockSearch.warehouseName}
+      </if>-->
+
+
+    </where>
+  </select>
+
+  <!--누가 상품 등록했는지는 나중에 , 로그인까지 구현해야됨-->
+
+
+
+</mapper>

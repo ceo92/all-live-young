@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>공지사항</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>내용</th>
+            <th>작성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="announcement : ${announcements}">
+            <td>
+                <a th:href="@{/announcements/{id}(id=${announcement.announcementId})}" th:text="${announcement.content}"></a>
+            </td>
+            <td th:text="${#temporals.format(announcement.writeDate, 'yyyy-MM-dd')}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <!-- 관리자에게만 표시 -->
+    <div th:if="${session.loginMember != null and (session.loginMember.roleType == 'ADMIN' or session.loginMember.roleType == '')}">
+        <a th:href="@{/announcements/save}">공지사항 작성</a>
+    </div>
+</section>
+</body>
+</html>

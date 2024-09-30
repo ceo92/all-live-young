@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<section>
+    <head>
+        <title>All Live Young: Expense</title>
+    </head>
+    <body>
+    <h1 class="h3 mb-4 text-gray-800"></h1>
+    <div class="card shadow">
+        <div class="card-body">
+            <h5>지출 내역</h5>
+            <p></p>
+            <table class="table table-bordered">
+                <tr>
+                    <th>창고명</th>
+                    <td th:text="${expense.warehouse.name}"></td>
+                </tr>
+                <tr>
+                    <th>지출일자</th>
+                    <td th:text="${{expense.expenseDate}}"></td>
+                </tr>
+                <tr>
+                    <th>지출분류</th>
+                    <td th:text="${expense.category}"></td>
+                </tr>
+                <tr>
+                    <th>지출액</th>
+                    <td th:text="${{expense.amount}}"></td>
+                </tr>
+                <tr>
+                    <th>지출 설명</th>
+                    <td th:text="${expense.description}"></td>
+                </tr>
+                <tr>
+                    <th>등록일자</th>
+                    <td th:text="${{expense.regDate}}"></td>
+                </tr>
+                <tr>
+                    <th>수정일자</th>
+                    <td th:text="${{expense.modDate}}"></td>
+                </tr>
+            </table>
+            <div style="display: flex; align-items: center;">
+                <a th:href="@{/expenses/{id}/update(id=${expense.id})}" class="btn btn-primary" sec:authorize="hasRole('ROLE_MANAGER')" th:text="수정"></a>
+                <form method="post" th:action="@{/expenses/{id}/delete(id=${expense.id})}">
+                    <button type="submit" class="btn btn-danger" style="margin-left: 0.3rem" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')" th:text="삭제"/>
+                </form>
+                <a th:href="@{/expenses}" class="btn btn-secondary" th:text="목록" style="margin-left: 0.3rem"></a>
+            </div>
+        </div>
+    </div>
+    </body>
+</section>
+</html>

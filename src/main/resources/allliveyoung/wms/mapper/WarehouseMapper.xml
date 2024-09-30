@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="allliveyoung.wms.mapper.WarehouseMapper">
+
+  <insert id="save" keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO WAREHOUSE(warehouse_name , warehouse_road_address , warehouse_jibun_address , warehouse_zipcode , warehouse_details_address)
+    values(#{name}  , #{address.roadNameAddress} , #{address.jibunAddress} , #{address.zipcode}, #{address.detailsAddress});
+  </insert>
+
+
+  <update id="update">
+    UPDATE WAREHOUSE
+    SET warehouse_name=#{name} , warehouse_road_address=#{address.roadNameAddress} ,
+    warehouse_jibun_address=#{address.jibunAddress} , warehouse_zipcode = #{address.zipcode} ,
+    warehouse_details_address = #{address.detailsAddress}
+    WHERE warehouse_id = #{id}
+  </update>
+
+
+  <select id="findById" resultMap="warehouseResultMap">
+    SELECT *
+    FROM WAREHOUSE
+    WHERE warehouse_id = #{id}
+  </select>
+
+  <resultMap id="warehouseResultMap" type="Warehouse">
+    <id column="warehouse_id" property="id"/>
+    <result column="warehouse_name" property="name"/>
+    <result column="warehouse_code" property="code"/>
+    <association property="address" javaType="Address">
+      <result column="warehouse_road_address" property="roadNameAddress"/>
+      <result column="warehouse_jibun_address" property="jibunAddress"/>
+      <result column="warehouse_details_address" property="detailsAddress"/>
+      <result column="warehouse_zipcode" property="zipcode"/>
+
+    </association>
+  </resultMap>
+
+
+
+  <select id="findAll" resultMap="warehouseResultMap">
+    SELECT *
+    FROM WAREHOUSE
+    <where>
+      <if test="warehouseName != null and !warehouseName.equals('')">
+        and warehouse_name like concat('%' , #{warehouseName} , '%')
+      </if>
+
+      <if test="warehouseRoadAddress != null and !warehouseRoadAddress.equals('')">
+        and warehouse_road_address like concat('%' , #{warehouseRoadAddress} , '%')
+      </if>
+    </where>
+  </select>
+
+  <delete id="delete">
+    DELETE FROM WAREHOUSE;
+  </delete>
+
+
+
+</mapper>

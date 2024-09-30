@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>공지사항 목록</h2>
+
+    <!-- 성공 메시지 표시 -->
+    <div th:if="${message}" class="success">
+        <p th:text="${message}"></p>
+    </div>
+
+    <!-- 공지사항 검색 폼 (필요 시) -->
+    <form th:action="@{/announcements}" method="get">
+        <label for="keyword">검색어:</label>
+        <input type="text" id="keyword" name="keyword" th:value="${searchCriteria.keyword}">
+        <button type="submit">검색</button>
+    </form>
+
+    <!-- 공지사항 목록 테이블 -->
+    <table>
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+            <th>액션</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="announcement : ${announcements}">
+            <td th:text="${announcement.title}"></td>
+            <td th:text="${announcement.managerName}"></td>
+            <td th:text="${#temporals.format(announcement.writeDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td>
+                <a th:href="@{/announcements/{id}(id=${announcement.announcementId})}">상세보기</a>
+                <!-- 관리자 권한이 있는 경우에만 수정 및 삭제 버튼 표시 -->
+                <span th:if="${#session.getAttribute('loginMember') != null and
+                                     (#session.getAttribute('loginMember').roleType == 'ADMIN' or
+                                      #session.getAttribute('loginMember').roleType == '')}" >
+                            | <a th:href="@{/announcements/{id}/update(id=${announcement.announcementId})}">수정</a>
+                            |
+                            <form th:action="@{/announcements/{id}/delete(id=${announcement.announcementId})}" method="post" style="display:inline;">
+                                <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+                            </form>
+                        </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 관리자 권한이 있는 경우에만 공지사항 작성 버튼 표시 -->
+    <div th:if="${#session.getAttribute('loginMember') != null and
+                     (#session.getAttribute('loginMember').roleType == 'ADMIN' or
+                      #session.getAttribute('loginMember').roleType == '')}" >
+        <a th:href="@{/announcements/save}">공지사항 작성</a>
+    </div>
+</section>
+</body>
+</html>

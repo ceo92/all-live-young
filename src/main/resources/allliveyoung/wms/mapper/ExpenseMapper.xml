@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="allliveyoung.wms.mapper.ExpenseMapper">
+    <resultMap id="ExpenseResultMap" type="allliveyoung.wms.domain.Expense">
+        <id property="id" column="expense_id"/>
+        <result property="expenseDate" column="expense_date"/>
+        <result property="category" column="expense_category"/>
+        <result property="amount" column="expense_amount"/>
+        <result property="description" column="expense_description"/>
+        <result property="regDate" column="reg_date"/>
+        <result property="modDate" column="mod_date"/>
+
+        <association property="warehouse" javaType="allliveyoung.wms.domain.Warehouse">
+            <id property="id" column="warehouse_id"/>
+            <result property="name" column="warehouse_name"/>
+            <result property="code" column="warehouse_code"/>
+
+            <association property="address" javaType="allliveyoung.wms.domain.Address">
+                <result property="roadNameAddress" column="warehouse_road_address"/>
+                <result property="jibunAddress" column="warehouse_jibun_address"/>
+                <result property="zipCode" column="warehouse_zipcode"/>
+                <result property="detailsAddress" column="warehouse_details_address"/>
+            </association>
+        </association>
+    </resultMap>
+
+    <resultMap id="sumExpenses" type="allliveyoung.wms.web.dto.SumExpensesDTO">
+        <result property="year" column="YEAR(expense_date)"/>
+        <result property="month" column="MONTH(expense_date)"/>
+        <result property="sumAmount" column="SUM(expense_amount)"/>
+    </resultMap>
+
+    <resultMap id="sumExpensesCategory" type="allliveyoung.wms.web.dto.SumExpensesCategoryDTO">
+        <result property="category" column="expense_category"/>
+        <result property="sumAmount" column="SUM(expense_amount)"/>
+    </resultMap>
+
+    <resultMap id="netProfit" type="allliveyoung.wms.web.dto.NetProfitDTO">
+        <result property="year" column="ey"/>
+        <result property="netProfit" column="net_profit"/>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO expense (warehouse_id, expense_date, expense_category, expense_amount, expense_description, reg_date)
+        VALUES (#{expense.warehouse.id}, #{expense.expenseDate}, #{expense.category}, #{expense.amount}, #{expense.description}, #{expense.regDate})
+    </insert>
+
+    <update id="update">
+        UPDATE expense
+        SET expense_category = #{expense.category}, expense_amount = #{expense.amount}, expense_description = #{expense.description}, mod_date = #{expense.modDate}
+        WHERE expense_id = #{expense.id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM expense
+        WHERE expense_id = #{id}
+    </delete>
+
+    <select id="findById" resultMap="ExpenseResultMap">
+        SELECT *
+        FROM expense e
+                 JOIN warehouse w ON e.warehouse_id = w.warehouse_id
+        WHERE e.expense_id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="ExpenseResultMap">
+        SELECT *
+        FROM expense e
+        JOIN warehouse w ON e.warehouse_id = w.warehouse_id
+
+        <where>
+            <if test="warehouse_id != 0">
+                e.warehouse_id = #{warehouse_id}
+            </if>
+            <if test="requestDTO.keyword != ''">
+                <if test="requestDTO.type == 'category'">
+                    AND expense_category LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+                </if>
+                <if test="requestDTO.type == 'warehouse'">
+                    AND warehouse_name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+                </if>
+            </if>
+
+            <if test="requestDTO.dateFrom != null and requestDTO.dateTo != null">
+                <![CDATA[
+                    AND expense_date >= #{requestDTO.dateFrom}
+                     AND expense_date <= #{requestDTO.dateTo}
+                ]]>
+            </if>
+        </where>
+        ORDER BY expense_id DESC
+        LIMIT #{requestDTO.offset}, #{requestDTO.size}
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(expense_id)
+        FROM expense e
+        JOIN warehouse w ON e.warehouse_id = w.warehouse_id
+
+        <where>
+            <if test="warehouse_id != 0">
+                e.warehouse_id = #{warehouse_id}
+            </if>
+            <if test="requestDTO.keyword != ''">
+                <if test="requestDTO.type == 'category'">
+                    AND expense_category LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+                </if>
+                <if test="requestDTO.type == 'warehouse'">
+                    AND warehouse_name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+                </if>
+            </if>
+
+            <if test="requestDTO.dateFrom != null and requestDTO.dateTo != null">
+                <![CDATA[
+                    AND expense_date >= #{requestDTO.dateFrom}
+                     AND expense_date <= #{requestDTO.dateTo}
+                ]]>
+            </if>
+        </where>
+    </select>
+
+    <select id="findSumExpenses" resultMap="sumExpenses">
+        SELECT YEAR(expense_date), MONTH(expense_date), SUM(expense_amount)
+        FROM expense
+        WHERE YEAR(expense_date) = #{year}
+        GROUP BY DATE_FORMAT(expense_date, '%Y-%m')
+        ORDER BY YEAR(expense_date), MONTH(expense_date);
+    </select>
+
+    <select id="findSumExpensesCategory" resultMap="sumExpensesCategory">
+        SELECT expense_category, SUM(expense_amount)
+        FROM expense
+        WHERE YEAR(expense_date) = #{year}
+        GROUP BY expense_category;
+    </select>
+
+    <select id="findNetProfit" resultMap="netProfit">
+        WITH sum_expense AS (
+            SELECT YEAR(expense_date) AS ey, SUM(expense_amount) AS es
+            FROM expense
+            GROUP BY YEAR(expense_date)
+        ),
+             sum_sales AS (
+                 SELECT YEAR(sales_date) AS sy, SUM(sales_amount) AS ss
+                 FROM sales
+                 GROUP BY YEAR(sales_date)
+             ), result AS (
+            SELECT *, (ss - es) AS net_profit
+            FROM sum_expense
+                     JOIN sum_sales ON ey = sy
+            ORDER BY ey DESC
+            LIMIT 5
+        ) SELECT ey, net_profit
+        FROM result
+        ORDER BY ey
+    </select>
+
+</mapper>
