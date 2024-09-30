@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+
+<section>
+  <div class="container-fluid" style="margin-top:30px;">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">출고요청</h1>
+    <!-- Content Row -->
+    <div class="row">
+      <!-- Profile Information -->
+      <div class="col-lg-6">
+        <!-- Profile Card -->
+        <div class="card shadow mb-4">
+          <!-- Card Header -->
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary"><출고요청코드><br th:text="${outboundRequest.code}"></br></h6>
+          </div>
+          <!-- Card Body -->
+          <div class="card-body">
+            <form>
+              <div class="form-group">
+                <label for="status">처리상태</label>
+                <input type="text" class="form-control" id="status" th:value="${outboundRequest.status}" disabled>
+              </div>
+              <div class="form-group">
+                <label for="memberID">주문자ID</label>
+                <input type="email" class="form-control" id="memberID" th:value="${outboundRequest.member.email}" disabled>
+              </div>
+              <div class="form-group">
+                <label for="stockCode">재고번호</label>
+                <input type="text" class="form-control editable" id="stockCode" th:value="${outboundRequest.stock.stockCode}" disabled>
+              </div>
+              <div class="form-group">
+                <label for="quantity">주문수량</label>
+                <input type="number" class="form-control" id="quantity" th:value="${outboundRequest.quantity}" disabled>
+              </div>
+              <div class="form-group">
+                <label for="recipientName">수령인이름</label>
+                <input type="text" class="form-control" id="recipientName" th:value="${outboundRequest.recipientName}" disabled>
+              </div>
+              <div class="form-group">
+                <label for="recipientAddress">수령인주소</label>
+                <input type="text" class="form-control" id="recipientAddress" th:value="${outboundRequest.address.fullAddress}" disabled>
+              </div>
+              <div class="form-group">
+                <label for="recipientContact">수령인연락처</label>
+                <input type="tel" class="form-control" id="recipientContact" th:value="${outboundRequest.recipientContact}" disabled>
+              </div>
+              <div class="form-group">
+                <label for="note">비고</label>
+                <input type="text" class="form-control" id="note" th:value="${outboundRequest.note}" disabled>
+              </div>
+              <!-- 수정 버튼 -->
+              <form th:action="@{/outbound-request/{id}/update(id=${outboundRequest.id})}" method="GET">
+                <button id="modifyBtn" type="submit" class="btn btn-primary">수정</button>
+              </form>
+
+              <!-- 저장 버튼 -->
+              <form th:action="@{/outbound-request/{id}/update(id=${outboundRequest.id})}" method="POST" onsubmit="return confirm('저장하시겠습니까?');">
+                <button type="submit" class="btn btn-success" id="saveBtn" style="display: none;">저장</button>
+              </form>
+
+              <!-- 삭제 버튼 -->
+              <form th:action="@{/outbound-request/{id}/delete(id=${outboundRequest.id})}" method="POST" onsubmit="return confirm('정말로 삭제하시겠습니까?');">
+                <button type="submit" class="btn btn-primary">삭제</button>
+              </form>
+
+              <!-- 목록으로 버튼 -->
+              <a href="/outbound-requests" class="btn btn-primary">목록으로</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End of Content Row -->
+  </div>
+</section>
+
+</html>
