@@ -2,7 +2,7 @@ package allliveyoung.wms.web.dto;
 
 import allliveyoung.wms.constant.RequestStatus;
 import allliveyoung.wms.domain.Member;
-import allliveyoung.wms.domain.Status;
+import allliveyoung.wms.constant.RequestStatus;
 import allliveyoung.wms.domain.Stock;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
