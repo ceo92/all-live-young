@@ -1,4 +1,4 @@
-package allliveyoung.allliveinbound.web.dto;
+package allliveyoung.wms.web.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

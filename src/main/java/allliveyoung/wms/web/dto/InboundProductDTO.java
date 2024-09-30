@@ -1,7 +1,6 @@
-package allliveyoung.allliveinbound.web.dto;
+package allliveyoung.wms.web.dto;
 
 import allliveyoung.allliveinbound.domain.InboundRequest;
-import allliveyoung.allliveinbound.domain.Member;
 import allliveyoung.allliveinbound.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

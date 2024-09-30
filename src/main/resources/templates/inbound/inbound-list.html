@@ -46,7 +46,7 @@
                         <tbody>
                         <tr th:each="dto : ${responseDTO.dtoList}">
                             <th scope="row" th:text="${dto.id}"></th>
-                            <td th:text="${dto.code}"></td>
+                            <td><a th:text="${dto.code}" th:href="@{/inbound-requests/{id}(id=${dto.id})}"></a></td>
                             <td th:text="${dto.warehouse.name}"></td>
                             <td th:text="${dto.status}"></td>
                             <td th:text="${dto.member.name}"></td>
@@ -76,7 +76,9 @@
                             </th:block>
                         </ul>
 
-                        <button class="submit btn btn-primary" type="submit">등록</button>
+                        <form th:action="@{/inbound-requests/save}" method="get">
+                            <button class="submit btn btn-primary" type="submit">등록</button>
+                        </form>
                     </div>
                 </div>
             </div>

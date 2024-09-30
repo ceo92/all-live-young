@@ -1,8 +1,10 @@
-package allliveyoung.allliveinbound.web.controller;
+package package allliveyoung.wms.web.controller;
 
-import allliveyoung.allliveinbound.domain.Member;
 import allliveyoung.allliveinbound.service.InboundRequestService;
-import allliveyoung.allliveinbound.web.dto.*;
+import allliveyoung.wms.web.dto.InboundPageRequestDTO;
+import allliveyoung.wms.web.dto.InboundProductUpdateDTO;
+import allliveyoung.wms.web.dto.InboundRequestSaveDTO;
+import allliveyoung.wms.web.dto.InboundRequestUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -12,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -50,6 +51,7 @@ public class InboundRequestController {
 
         model.addAttribute("warehouseDTO", inboundRequestService.getWarehouseList());
         model.addAttribute("matchedProductDTO", inboundRequestService.getMatchedProductList(1L));
+        model.addAttribute("memberId", 1);
         return "inbound-register";
     }
 
@@ -61,15 +63,19 @@ public class InboundRequestController {
     }
 
     @PostMapping("/save")
-    public String postInboundRequestSaveForm(@ModelAttribute InboundRequestSaveDTO inboundRequestSaveDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            log.info("has error..........");
-            redirectAttributes.addFlashAttribute("error",bindingResult.getAllErrors());
-        }
+    public String postInboundRequestSaveForm(@RequestBody InboundRequestSaveDTO inboundRequestSaveDTO,
+                                             BindingResult bindingResult,
+                                             RedirectAttributes redirectAttributes,
+                                             Model model) {
 
-        inboundRequestSaveDTO.setMemberId(1L); //시큐리티 전 테스트
-        inboundRequestService.saveInbound(inboundRequestSaveDTO);
+        Long savedId = inboundRequestService.saveInbound(inboundRequestSaveDTO);
+        log.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        log.info("inboundRequestSaveDTO = " + inboundRequestSaveDTO);
+        log.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
+        redirectAttributes.addAttribute("id", savedId);
+
+        // 리다이렉트 URL에 플레이스홀더 대신 실제 값 사용
         return "redirect:/inbound-requests/{id}";
     }
 

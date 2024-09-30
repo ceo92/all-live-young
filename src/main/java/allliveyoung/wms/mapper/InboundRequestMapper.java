@@ -1,7 +1,10 @@
-package allliveyoung.allliveinbound.mapper;
+package allliveyoung.wms.mapper;
 
-import allliveyoung.allliveinbound.domain.*;
-import allliveyoung.allliveinbound.web.dto.*;
+
+import allliveyoung.wms.web.dto.InboundPageRequestDTO;
+import allliveyoung.wms.web.dto.InboundProductSaveDTO;
+import allliveyoung.wms.web.dto.InboundProductUpdateDTO;
+import allliveyoung.wms.web.dto.InboundRequestSaveDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -9,11 +12,11 @@ import java.util.*;
 
 @Mapper
 public interface InboundRequestMapper {
-    List<InboundRequest> findAll(InboundPageRequestDTO inboundPageRequestDTO);
+    List<allliveyoung.allliveinbound.domain.InboundRequest> findAll(InboundPageRequestDTO inboundPageRequestDTO);
 
-    List<InboundRequestProduct> findById(@Param("id") Long id);
+    List<allliveyoung.allliveinbound.domain.InboundRequestProduct> findById(@Param("id") Long id);
 
-    void save(InboundRequestSaveDTO inboundRequestSaveDTO);
+    Long save(InboundRequestSaveDTO inboundRequestSaveDTO);
 
     void saveProducts(List<InboundProductSaveDTO> inboundProductSaveDTOList);
 
@@ -30,5 +33,5 @@ public interface InboundRequestMapper {
 
     List<Warehouse> getWarehouseList();
 
-    List<Product> getMatchedProductList(Long id);
+    List<allliveyoung.allliveinbound.domain.Product> getMatchedProductList(Long id);
 }

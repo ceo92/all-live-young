@@ -1,4 +1,4 @@
-package allliveyoung.allliveinbound.domain;
+package allliveyoung.wms.domain;
 
 import lombok.*;
 

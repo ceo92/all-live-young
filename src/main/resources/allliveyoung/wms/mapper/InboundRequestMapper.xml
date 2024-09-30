@@ -141,7 +141,7 @@
         SELECT * FROM PRODUCT WHERE member_id = #{memberId}
     </select>
 
-    <insert id="save" parameterType="allliveyoung.allliveinbound.web.dto.InboundRequestSaveDTO">
+    <insert id="save" parameterType="allliveyoung.allliveinbound.web.dto.InboundRequestSaveDTO" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO inbound_request (warehouse_id, member_id, inbound_request_code, reg_date, mod_date)
         VALUES (#{warehouseId}, #{memberId}, null, NOW(), NOW())
     </insert>
@@ -204,6 +204,10 @@
 
     <select id="updateStatus" parameterType="map">
         UPDATE INBOUND_REQUEST SET inbound_request_status = #{status} WHERE inbound_request_id = #{id}
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(inbound_request_id) from inbound_request
     </select>
 
 </mapper>

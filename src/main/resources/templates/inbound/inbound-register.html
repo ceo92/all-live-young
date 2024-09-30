@@ -2,6 +2,13 @@
 <html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
 
 <section>
+    <style>
+        .form-container {
+            display: flex;
+            gap: 10px; /* Optional: Add some space between buttons */
+        }
+    </style>
+
     <div class="container-fluid">
 
         <!-- Page Heading -->
@@ -15,11 +22,11 @@
                 <h6 class="m-0 font-weight-bold text-primary">입고 요청 리스트</h6>
                 <li class="nav-item dropdown">
                     <div class="dropdown" aria-labelledby="navbarDropdown">
-                        <form method="post" action="/inbound-requests/save">
-                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> <!-- csrf 토큰 -->
-                        <select name="warehouse"> <!--창고  dropbox css 적용하기 -->
-                            <option th:each="warehouse : ${warehouseDTO}" th:value="${warehouse.id}" th:text="${warehouse.name}" th:name="warehouseId"></option>
-                        </select>
+                        <form id="inboundRequestForm">
+                            <select id="warehouseSelect" name="warehouse">
+                                <option th:each="warehouse : ${warehouseDTO}" th:value="${warehouse.id}" th:text="${warehouse.name}"></option>
+                            </select>
+                        </form>
                     </div>
                 </li>
             </div>
@@ -37,24 +44,14 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td th:text="${iterStat.index + 1}"></td>
-                            <td>
-                                <select th:name="'inboundProductSaveDTOList[' + ${iterStat.index} + '].productId'">
-                                    <option th:each="p : ${matchedProductDTO}" th:value="${p.id}" th:text="${p.name}"></option>
-                                </select>
-                            </td>
-                            <td><input type="number" th:name="'inboundProductSaveDTOList[' + ${iterStat.index} + '].palletQuantity'"></td>
-                            <td><input type="number" th:name="'inboundProductSaveDTOList[' + ${iterStat.index} + '].boxQuantity'"></td>
-                            <td><input type="text" th:name="'inboundProductSaveDTOList[' + ${iterStat.index} + '].manufactureNum'"></td>
-                            <td><input type="date" th:name="'inboundProductSaveDTOList[' + ${iterStat.index} + '].expDate'"></td>
-                        </tr>
                         </tbody>
                     </table>
                     <div class="form-container">
                         <button id="addRowBtn">+ 열 추가</button>
-                        <button class="Cancel" type="button">취소</button>
-                        <button class="submit" type="submit">등록</button>
+                        <form th:action="@{/inbound-requests}" method="get">
+                            <button class="submit btn btn-primary" type="submit">취소</button>
+                        </form>
+                        <button id="submitBtn" class="submit" type="button">등록</button>
                     </div>
                     </form>
                 </div>
@@ -63,8 +60,9 @@
 
     </div>
 
-    <!--<script th:inline="javascript">
+    <script th:inline="javascript">
         var matchedProductDTO = /*[[${matchedProductDTO}]]*/ [];
+        var memberId = /*[[${responseDTO}]]*/ null;
 
         function createProductSelect(name) {
 
@@ -91,6 +89,7 @@
         document.getElementById('addRowBtn').addEventListener('click', function() {
             //post 요청 방지
             event.preventDefault();
+            event.stopPropagation();
 
             var tableBody = document.getElementById('inputTable').getElementsByTagName('tbody')[0];
             var rowCount = tableBody.getElementsByTagName('tr').length;
@@ -146,7 +145,52 @@
 
             tableBody.appendChild(newRow);
         });
-    </script>-->
+
+        document.getElementById('submitBtn').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            var tableBody = document.getElementById('inputTable').getElementsByTagName('tbody')[0];
+            var rows = tableBody.getElementsByTagName('tr');
+            var products = [];
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName('td');
+                products.push({
+                    productId: cells[1].getElementsByTagName('select')[0].value,
+                    palletQuantity: cells[2].getElementsByTagName('select')[0].value,
+                    boxQuantity: cells[3].getElementsByTagName('select')[0].value,
+                    manufactureNum: cells[4].getElementsByTagName('input')[0].value,
+                    expDate: cells[5].getElementsByTagName('input')[0].value
+                });
+            }
+
+            var warehouseId = document.getElementById('warehouseSelect').value;
+
+            var data = {
+                warehouseId: warehouseId,
+                inboundProductSaveDTOList: products,
+                memberId: 1
+            };
+
+            fetch('/inbound-requests/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    window.location.href = '/inbound-requests';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // 에러 처리 로직 추가
+                });
+        });
+    </script>
 </section>
 
 </html>
