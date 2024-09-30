@@ -18,4 +18,6 @@ public interface AnnouncementMapper {
     Announcement selectAnnouncementById(@Param("announcementId") Long announcementId);
 
     List<Announcement> selectAllAnnouncements();
+
+    
 }
