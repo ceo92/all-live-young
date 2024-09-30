@@ -1,5 +1,6 @@
 package allliveyoung.wms.web.dto;
 
+import allliveyoung.wms.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
