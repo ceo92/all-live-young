@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="allliveyoung.wms.mapper.WarehouseMapper">
+
+    <resultMap id="WarehouseResultMap" type="allliveyoung.wms.domain.Warehouse">
+        <id property="warehouseId" column="warehouse_id"/>
+        <result property="warehouseManagerId" column="_id"/>
+        <result property="warehouseName" column="warehouse_name"/>
+        <result property="warehouseCode" column="warehouse_code"/>
+        <result property="warehouseRoadAddress" column="warehouse_road_address"/>
+        <result property="warehouseJibunAddress" column="warehouse_jibun_address"/>
+        <result property="warehouseZipcode" column="warehouse_zipcode"/>
+        <result property="warehouseDetailsAddress" column="warehouse_details_address"/>
+    </resultMap>
+
+    <!-- 창고 삽입 -->
+    <insert id="insertWarehouse">
+        INSERT INTO WAREHOUSE (
+            _id,
+            warehouse_name,
+            warehouse_code,
+            warehouse_road_address,
+            warehouse_jibun_address,
+            warehouse_zipcode,
+            warehouse_details_address
+        ) VALUES (
+                     #{warehouseManagerId},
+                     #{warehouseName},
+                     #{warehouseCode},
+                     #{warehouseRoadAddress},
+                     #{warehouseJibunAddress},
+                     #{warehouseZipcode},
+                     #{warehouseDetailsAddress}
+                 )
+    </insert>
+
+    <!-- 창고 업데이트 -->
+    <update id="updateWarehouse">
+        UPDATE WAREHOUSE
+        SET
+            _id = #{warehouseManagerId},
+            warehouse_name = #{warehouseName},
+            warehouse_code = #{warehouseCode},
+            warehouse_road_address = #{warehouseRoadAddress},
+            warehouse_jibun_address = #{warehouseJibunAddress},
+            warehouse_zipcode = #{warehouseZipcode},
+            warehouse_details_address = #{warehouseDetailsAddress}
+        WHERE warehouse_id = #{warehouseId}
+    </update>
+
+    <!-- 창고 삭제 -->
+    <delete id="deleteWarehouse">
+        DELETE FROM WAREHOUSE WHERE warehouse_id = #{warehouseId}
+    </delete>
+
+    <!-- 창고 ID로 조회 -->
+    <select id="selectWarehouseById" resultMap="WarehouseResultMap">
+        SELECT * FROM WAREHOUSE WHERE warehouse_id = #{warehouseId}
+    </select>
+
+    <!-- 모든 창고 목록 조회 -->
+    <select id="selectAllWarehouses" resultMap="WarehouseResultMap">
+        SELECT * FROM WAREHOUSE
+    </select>
+
+</mapper>
