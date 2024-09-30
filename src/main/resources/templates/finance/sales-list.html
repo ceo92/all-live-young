@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<section>
+    <head>
+        <title>All Live Young: Sales</title>
+        <style>
+            input[type="text"],
+            input[type="date"] {
+                width: 200px;
+                height: 40px;
+                font-size: 16px;
+                padding: 5px;
+            }
+
+            .no-link {
+                color: inherit;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+
+    <body id="page-top">
+    <h1 sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')" class="h3 mb-2 text-gray-800">매출 목록</h1>
+    <p sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')" class="mb-4">매출 목록을 확인합니다.</p>
+
+    <h1 sec:authorize="hasRole('ROLE_COMPANY')" class="h3 mb-2 text-gray-800">지출 목록</h1>
+    <p sec:authorize="hasRole('ROLE_COMPANY')" class="mb-4">지출 목록을 확인합니다.</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')" class="m-0 font-weight-bold text-primary">매출 내역</h6>
+            <h6 sec:authorize="hasRole('ROLE_COMPANY')" class="m-0 font-weight-bold text-primary">지출 내역</h6>
+        </div>
+        <p></p>
+        <p></p>
+
+        <form method="get">
+            <div class="mb-4" style="display: flex; margin: 0.5rem 0.5rem 0.5rem 1.5rem;">
+                <select id="type" name="type" onchange="inputField()" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
+                    <option value="category">매출분류</option>
+                    <option value="date">매출일</option>
+                    <option value="member">회사명</option>
+                    <option sec:authorize="hasRole('ROLE_ADMIN')" value="warehouse">창고</option>
+                </select>
+
+                <label for="keyword" style="margin-left: 0.5rem"></label>
+                <input type="text" id="keyword" name="keyword" placeholder="검색어를 입력하세요." sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
+
+                <div id="dateSub" style="display: none;">
+                    <label for="dateFrom"></label>
+                    <input type="date" id="dateFrom" name="dateFrom" disabled> ~
+
+                    <label for="dateTo"></label>
+                    <input type="date" id="dateTo" name="dateTo" disabled>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-left: 0.5rem" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">검색</button>
+
+                <script>
+                    function inputField() {
+                        const type = document.getElementById('type').value;
+                        const keyword = document.getElementById('keyword');
+                        const dateSub = document.getElementById('dateSub');
+                        const dateFrom = document.getElementById('dateFrom');
+                        const dateTo = document.getElementById('dateTo');
+
+                        if (type === 'category' || type === 'warehouse' || type === 'member') {
+                            keyword.style.display = 'block';
+                            dateSub.style.display = 'none';
+                            keyword.disabled = false;
+                            dateFrom.disabled = true;
+                            dateTo.disabled = true;
+                        } else if (type === 'date') {
+                            keyword.style.display = 'none';
+                            dateSub.style.display = 'block';
+                            keyword.disabled = true;
+                            dateFrom.disabled = false;
+                            dateTo.disabled = false;
+                        }
+                    }
+                </script>
+            </div>
+        </form>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="inputTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>창고명</th>
+                        <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">매출분류</th>
+                        <th sec:authorize="hasRole('ROLE_COMPANY')">지출분류</th>
+                        <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">회사명</th>
+                        <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">매출일자</th>
+                        <th sec:authorize="hasRole('ROLE_COMPANY')">지출일자</th>
+                        <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">매출액</th>
+                        <th sec:authorize="hasRole('ROLE_COMPANY')">지출액</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="sales: ${salesList.sales}">
+                        <td><a class="no-link" th:href="@{/sales/{id}(id=${sales.id})}" th:text="${sales.id}"/></td>
+                        <td><a class="no-link" th:href="@{/sales/{id}(id=${sales.id})}"
+                               th:text="${sales.warehouse.name}"/></td>
+                        <td><a class="no-link" th:href="@{/sales/{id}(id=${sales.id})}" th:text="${sales.category}"/>
+                        </td>
+                        <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')"><a class="no-link" th:href="@{/sales/{id}(id=${sales.id})}" th:text="${sales.member.name}"/>
+                        </td>
+                        <td><a class="no-link" th:href="@{/sales/{id}(id=${sales.id})}" th:text="${{sales.salesDate}}"/>
+                        </td>
+                        <td><a class="no-link" th:href="@{/sales/{id}(id=${sales.id})}" th:text="${{sales.amount}}"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-between align-items-center" style="display: flex; width: 100%">
+                    <a th:href="@{/sales/save}" sec:authorize="hasRole('ROLE_MANAGER')" class="btn btn-primary" th:text="등록"></a>
+                    <ul class="pagination mb-0">
+                        <li class="page-item">
+                            <a class="page-link" th:if="${salesList.keyword} == null and ${salesList.dateFrom} == null"
+                               th:href="@{/sales(page=${salesList.page - 10 >= 1 ? salesList.page - 10 : 1})}">이전</a>
+                            <a class="page-link" th:if="${salesList.keyword} != null"
+                               th:href="@{/expenses(type=${salesList.type}, keyword=${salesList.keyword}, page=${salesList.page - 10 >= 1 ? salesList.page - 10 : 1})}">이전</a>
+                            <a class="page-link" th:if="${salesList.dateFrom} != null"
+                               th:href="@{/expenses(type=${salesList.type}, dateFrom=${salesList.dateFrom}, dateTo=${salesList.dateTo}, page=${salesList.page - 10 >= 1 ? salesList.page - 10 : 1})}">이전</a>
+                        </li>
+
+                        <li class="page-item" th:each="i : ${#numbers.sequence(salesList.start, salesList.end)}">
+                            <a class="page-link" th:text="${i}"
+                               th:if="${salesList.keyword} == null and ${salesList.dateFrom} == null"
+                               th:href="@{/sales(page=${i})}"></a>
+                            <a class="page-link" th:text="${i}" th:if="${salesList.keyword} != null"
+                               th:href="@{/sales(type=${salesList.type}, keyword=${salesList.keyword}, page=${i})}"></a>
+                            <a class="page-link" th:text="${i}" th:if="${salesList.dateFrom} != null"
+                               th:href="@{/sales(type=${salesList.type}, dateFrom=${salesList.dateFrom}, dateTo=${salesList.dateTo}, page=${i})}"></a>
+                        </li>
+
+                        <li class="page-item">
+                            <a class="page-link" th:if="${salesList.keyword} == null and ${salesList.dateFrom} == null"
+                               th:href="@{/sales(page=${salesList.page + 10 <= salesList.last ? salesList.page + 10 : salesList.end})}">다음</a>
+                            <a class="page-link" th:if="${salesList.keyword} != null"
+                               th:href="@{/sales(type=${salesList.type}, keyword=${salesList.keyword}, page=${salesList.page + 10 <= salesList.last ? salesList.page + 10 : salesList.end})}">다음</a>
+                            <a class="page-link" th:if="${salesList.dateFrom} != null"
+                               th:href="@{/sales(type=${salesList.type}, dateFrom=${salesList.dateFrom}, dateTo=${salesList.dateTo}, page=${salesList.page + 10 <= salesList.last ? salesList.page + 10 : salesList.end})}">다음</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+</section>
+</html>

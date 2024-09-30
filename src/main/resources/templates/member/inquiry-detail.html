@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>문의 상세</h2>
+    <h3 th:text="${inquiry.inquiryTitle}"></h3>
+    <p th:text="${inquiry.inquiryContent}"></p>
+    <p>작성일: <span th:text="${#temporals.format(inquiry.writeTime, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+    <p>작성자: <span th:text="${inquiry.memberName}"></span></p>
+
+    <!-- 답변이 있는 경우 답변 내용 표시 -->
+    <div th:if="${answer != null}">
+        <h4>답변</h4>
+        <p th:text="${answer.answerContent}"></p>
+        <p>답변일: <span th:text="${#temporals.format(answer.answerTime, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+        <p>답변자: <span th:text="${answer.memberName}"></span></p>
+
+        <!-- 창고 관리자에게만 답변 수정 및 삭제 버튼 표시 -->
+        <div th:if="${#session.getAttribute('loginMember') != null and #session.getAttribute('loginMember').roleType == '' and #session.getAttribute('loginMember').memberId == answer.memberId}">
+            <a th:href="@{/inquiries/{inquiryId}/answer/{answerId}/update(inquiryId=${inquiry.inquiryId}, answerId=${answer.answerId})}">답변 수정</a>
+            <form th:action="@{/inquiries/{inquiryId}/answer/{answerId}/delete(inquiryId=${inquiry.inquiryId}, answerId=${answer.answerId})}" method="post" style="display:inline;">
+                <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">답변 삭제</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 창고 관리자에게만 답변 작성 버튼 표시 -->
+    <div th:if="${#session.getAttribute('loginMember') != null and
+                     #session.getAttribute('loginMember').roleType == '' and
+                     answer == null}">
+        <a th:href="@{/inquiries/{id}/answer(id=${inquiry.inquiryId})}">답변 작성</a>
+    </div>
+
+    <!-- 회사 회원에게만 문의 수정 및 삭제 버튼 표시 -->
+    <div th:if="${#session.getAttribute('loginMember') != null and
+                     #session.getAttribute('loginMember').roleType == 'COMPANY' and
+                     #session.getAttribute('loginMember').memberId == inquiry.memberId}">
+        <a th:href="@{/inquiries/{id}/update(id=${inquiry.inquiryId})}">문의 수정</a>
+        <form th:action="@{/inquiries/{id}/delete(id=${inquiry.inquiryId})}" method="post" style="display:inline;">
+            <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">문의 삭제</button>
+        </form>
+    </div>
+
+    <a th:href="@{/inquiries}">목록으로 돌아가기</a>
+</section>
+</body>
+</html>

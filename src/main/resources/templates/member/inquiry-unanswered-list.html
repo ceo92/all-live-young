@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>미답변 문의 목록</h2>
+
+    <!-- 성공 메시지 표시 -->
+    <div th:if="${message}" class="success">
+        <p th:text="${message}"></p>
+    </div>
+
+    <!-- 에러 메시지 표시 -->
+    <div th:if="${errorMessage}" class="error">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+            <th>액션</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="inquiry : ${inquiries}">
+            <td>
+                <a th:href="@{/inquiries/{id}(id=${inquiry.inquiryId})}" th:text="${inquiry.inquiryTitle}"></a>
+            </td>
+            <td th:text="${inquiry.memberName}"></td>
+            <td th:text="${#temporals.format(inquiry.writeTime, 'yyyy-MM-dd')}"></td>
+            <td>
+                <a th:href="@{/inquiries/{id}/answer(id=${inquiry.inquiryId})}">답변 작성</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/inquiries}">문의 목록으로 돌아가기</a>
+</section>
+</body>
+</html>

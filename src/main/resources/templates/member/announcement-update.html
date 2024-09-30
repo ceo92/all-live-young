@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>공지사항 수정</h2>
+    <form th:action="@{/announcements/{id}/update(id=${announcementDTO.announcementId})}" th:object="${announcementDTO}" method="post">
+        <!-- 공지사항 ID (숨겨진 필드) -->
+        <input type="hidden" th:field="*{announcementId}">
+
+        <!-- 공지사항 제목 -->
+        <div>
+            <label for="title">제목:</label>
+            <input type="text" id="title" th:field="*{title}" required>
+            <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error"></div>
+        </div>
+
+        <!-- 공지사항 내용 -->
+        <div>
+            <label for="content">내용:</label>
+            <textarea id="content" th:field="*{content}" required></textarea>
+            <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="error"></div>
+        </div>
+
+        <!-- 하이라이트 여부 -->
+        <div>
+            <label>
+                <input type="checkbox" th:field="*{highlight}">
+                하이라이트 공지사항
+            </label>
+        </div>
+
+        <!-- 에러 메시지 표시 -->
+        <div th:if="${#fields.hasErrors('*')}">
+            <p th:each="err : ${#fields.errors('*')}" th:text="${err}" class="error"></p>
+        </div>
+
+        <!-- 수정 버튼 -->
+        <button type="submit">수정</button>
+    </form>
+
+    <a th:href="@{/announcements/{id}(id=${announcementDTO.announcementId})}">상세보기로 돌아가기</a>
+</section>
+</body>
+</html>

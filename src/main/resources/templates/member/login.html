@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>로그인</h2>
+    <form th:action="@{/member/login}" th:object="${loginDTO}" method="post">
+        <div>
+            <label for="email">이메일:</label>
+            <input type="email" id="email" th:field="*{email}" required>
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
+        </div>
+        <div>
+            <label for="password">비밀번호:</label>
+            <input type="password" id="password" th:field="*{password}" required>
+            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
+        </div>
+
+        <!-- 전역 에러 메시지 표시 -->
+        <div th:if="${#fields.hasGlobalErrors()}">
+            <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+        </div>
+
+        <button type="submit">로그인</button>
+    </form>
+
+
+    <div>
+        <a th:href="@{/member/find-email}">이메일 찾기</a>
+        <a th:href="@{/member/forgot-password}">비밀번호 재설정</a>
+        <a th:href="@{/member/register-select}">회원가입</a>
+    </div>
+</section>
+</body>
+</html>
