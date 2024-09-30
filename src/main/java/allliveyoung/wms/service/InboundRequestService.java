@@ -11,11 +11,15 @@ public interface InboundRequestService {
 
     List<InboundProductDTO> findInbound(Long id);
 
-    Long saveInbound(InboundRequestSaveDTO inboundRequestSaveDTO, List<InboundProductSaveDTO> inboundProductSaveDTOList);
+    Long saveInbound(InboundRequestSaveDTO inboundRequestSaveDTO);
 
     void updateInbound(InboundRequestUpdateDTO inboundRequestUpdateDTO, List<InboundProductUpdateDTO> inboundRequestProducts);
 
     void deleteInbound(Long id);
 
     void updateInboundStatus(Long id, String status);
+
+    List<WarehouseDTO> getWarehouseList();
+
+    List<ProductDTO> getMatchedProductList(Long id);
 }

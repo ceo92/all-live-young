@@ -1,24 +1,21 @@
 package allliveyoung.wms.domain;
 
+import lombok.*;
+
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
-@Getter @Setter
-@AllArgsConstructor
+@Getter
+@ToString
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Product {
-  private Long id;
-  private String productName;
-  private String storeTemperature; //StoreTemperature
-  private String productType; //ProductType
-
-  @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-  private LocalDateTime productLicenseDate;
-  private Integer productLicenseNum;
-  private Member member;
+    private Long id;
+    private String name;
+    private Long memberId;
+    private String storeTemperature;
+    private String type;
+    private LocalDateTime licenseDate;
+    private int licenseNum;
 
 }

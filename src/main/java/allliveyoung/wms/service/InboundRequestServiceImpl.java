@@ -1,8 +1,7 @@
 package allliveyoung.wms.service;
 
-
-import allliveyoung.wms.domain.InboundRequestProduct;
-import allliveyoung.wms.mapper.InboundRequestMapper;
+import allliveyoung.allliveinbound.domain.InboundRequestProduct;
+import allliveyoung.allliveinbound.mapper.InboundRequestMapper;
 import allliveyoung.wms.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class InboundRequestServiceImpl implements InboundRequestService {
+public class InboundRequestServiceImpl implements allliveyoung.allliveinbound.service.InboundRequestService {
 
     private final InboundRequestMapper inboundRequestMapper;
     private final ModelMapper modelMapper;
@@ -44,10 +43,10 @@ public class InboundRequestServiceImpl implements InboundRequestService {
     }
 
     @Override
-    public Long saveInbound(InboundRequestSaveDTO inboundRequestSaveDTO, List<InboundProductSaveDTO> inboundProductSaveDTOList) {
-        inboundRequestMapper.save(inboundRequestSaveDTO);
-        inboundRequestMapper.saveProducts(inboundProductSaveDTOList);
-        Long id = inboundRequestSaveDTO.getId();
+    public Long saveInbound(InboundRequestSaveDTO inboundRequestSaveDTO) {
+        Long id = inboundRequestMapper.save(inboundRequestSaveDTO);
+        log.info("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{id = " + id);
+        /*inboundRequestMapper.saveProducts(inboundRequestSaveDTO.getInboundProductSaveDTOList());*/
         return id;
     }
 
@@ -66,5 +65,20 @@ public class InboundRequestServiceImpl implements InboundRequestService {
     public void updateInboundStatus(Long id, String status) {
         Map map = Map.of("id",id,"status",status);
         inboundRequestMapper.updateStatus(map);
+    }
+
+    @Override
+    public List<WarehouseDTO> getWarehouseList() {
+        List<Warehouse> warehouseList = inboundRequestMapper.getWarehouseList();
+        List<WarehouseDTO> warehouseDTOList = warehouseList.stream()
+                .map(warehouse -> modelMapper.map(warehouse,WarehouseDTO.class)).collect(Collectors.toList());
+        return warehouseDTOList;
+    }
+
+    @Override
+    public List<ProductDTO> getMatchedProductList(Long id) {
+        List<ProductDTO> productDTOList = inboundRequestMapper.getMatchedProductList(id).stream()
+                .map(product -> modelMapper.map(product,ProductDTO.class)).collect(Collectors.toList());
+        return productDTOList;
     }
 }

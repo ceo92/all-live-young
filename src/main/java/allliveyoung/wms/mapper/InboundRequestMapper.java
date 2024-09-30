@@ -1,8 +1,6 @@
 package allliveyoung.wms.mapper;
 
 
-import allliveyoung.wms.domain.InboundRequest;
-import allliveyoung.wms.domain.InboundRequestProduct;
 import allliveyoung.wms.web.dto.InboundPageRequestDTO;
 import allliveyoung.wms.web.dto.InboundProductSaveDTO;
 import allliveyoung.wms.web.dto.InboundProductUpdateDTO;
@@ -14,11 +12,11 @@ import java.util.*;
 
 @Mapper
 public interface InboundRequestMapper {
-    List<InboundRequest> findAll(InboundPageRequestDTO inboundPageRequestDTO);
+    List<allliveyoung.allliveinbound.domain.InboundRequest> findAll(InboundPageRequestDTO inboundPageRequestDTO);
 
-    List<InboundRequestProduct> findById(@Param("id") Long id);
+    List<allliveyoung.allliveinbound.domain.InboundRequestProduct> findById(@Param("id") Long id);
 
-    void save(InboundRequestSaveDTO inboundRequestSaveDTO);
+    Long save(InboundRequestSaveDTO inboundRequestSaveDTO);
 
     void saveProducts(List<InboundProductSaveDTO> inboundProductSaveDTOList);
 
@@ -32,4 +30,8 @@ public interface InboundRequestMapper {
     void updateStatus(Map<String, Object> map);
 
     int getCount(InboundPageRequestDTO inboundPageRequestDTO);
+
+    List<Warehouse> getWarehouseList();
+
+    List<allliveyoung.allliveinbound.domain.Product> getMatchedProductList(Long id);
 }
