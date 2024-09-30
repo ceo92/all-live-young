@@ -1,5 +1,6 @@
 package allliveyoung.wms.mapper;
 
+import allliveyoung.wms.domain.Member;
 import allliveyoung.wms.domain.Sales;
 import allliveyoung.wms.web.dto.SalesRequestDTO;
 import allliveyoung.wms.web.dto.SumSalesDTO;
