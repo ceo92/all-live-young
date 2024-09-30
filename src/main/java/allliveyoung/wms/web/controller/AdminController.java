@@ -21,19 +21,20 @@ public class AdminController {
     private final MemberService memberService;
     private static final String LOGIN_MEMBER = "loginMember";
 
+    Member admin = Member.builder().roleType(RoleType.ADMIN).build();
+
     @Autowired
     public AdminController(MemberService memberService) {
         this.memberService = memberService;
     }
 
-    Member admin = Member.builder().roleType(RoleType.ADMIN).build();
-
     // 회원 목록 조회 (단순 조회용)
     @GetMapping("/members")
-    public String listMembers(@ModelAttribute MemberSearchCriteriaDTO searchCriteria, Model model, HttpSession session) {
+    public String listMembers(@ModelAttribute MemberSearchCriteriaDTO searchCriteria, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
 //        Member admin = (Member) session.getAttribute(LOGIN_MEMBER);
         if (admin == null || admin.getRoleType() != RoleType.ADMIN) {
-            return "redirect:/member/profile";
+            redirectAttributes.addFlashAttribute("errorMessage", "관리자 권한이 필요합니다.");
+            return "redirect:/member/login";
         }
 
         List<Member> members = memberService.getMembersByCriteria(searchCriteria);
@@ -45,30 +46,32 @@ public class AdminController {
 
     // 회원 상세 조회 (단순 조회용 - 버튼 없음)
     @GetMapping("/members/{memberId}")
-    public String viewMemberDetails(@PathVariable Long memberId, Model model, HttpSession session) {
+    public String viewMemberDetails(@PathVariable Long memberId, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
 //        Member admin = (Member) session.getAttribute(LOGIN_MEMBER);
         if (admin == null || admin.getRoleType() != RoleType.ADMIN) {
+            redirectAttributes.addFlashAttribute("errorMessage", "관리자 권한이 필요합니다.");
             return "redirect:/member/login";
         }
 
         // 회원의 상세 정보를 가져오기
         Member member = memberService.getMemberDetails(memberId);
         if (member == null) {
-            model.addAttribute("errorMessage", "해당 회원 정보를 찾을 수 없습니다.");
+            redirectAttributes.addFlashAttribute("errorMessage", "해당 회원 정보를 찾을 수 없습니다.");
             return "redirect:/admin/members";
         }
 
         // 모델에 회원 정보를 추가하여 view에 전달
         model.addAttribute("member", member);
         model.addAttribute("showActionButtons", false); // 버튼 비활성화
-        return "admin-member-details";
+        return "admin-member-details"; // 해당 회원의 상세 정보를 표시하는 HTML 페이지로 이동
     }
 
     // 회원 승인 요청 목록 조회
     @GetMapping("/approval-requests")
-    public String listApprovalRequests(Model model, HttpSession session) {
+    public String listApprovalRequests(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
 //        Member admin = (Member) session.getAttribute(LOGIN_MEMBER);
         if (admin == null || admin.getRoleType() != RoleType.ADMIN) {
+            redirectAttributes.addFlashAttribute("errorMessage", "관리자 권한이 필요합니다.");
             return "redirect:/member/login";
         }
 
@@ -83,9 +86,10 @@ public class AdminController {
 
     // 회원 탈퇴 요청 목록 조회
     @GetMapping("/withdraw-requests")
-    public String listWithdrawalRequests(Model model, HttpSession session) {
+    public String listWithdrawalRequests(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
 //        Member admin = (Member) session.getAttribute(LOGIN_MEMBER);
         if (admin == null || admin.getRoleType() != RoleType.ADMIN) {
+            redirectAttributes.addFlashAttribute("errorMessage", "관리자 권한이 필요합니다.");
             return "redirect:/member/login";
         }
 
@@ -103,6 +107,7 @@ public class AdminController {
     public String approveMember(@PathVariable Long memberId, RedirectAttributes redirectAttributes, HttpSession session) {
 //        Member admin = (Member) session.getAttribute(LOGIN_MEMBER);
         if (admin == null || admin.getRoleType() != RoleType.ADMIN) {
+            redirectAttributes.addFlashAttribute("errorMessage", "관리자 권한이 필요합니다.");
             return "redirect:/member/login";
         }
 
@@ -116,6 +121,7 @@ public class AdminController {
     public String approveWithdrawal(@PathVariable Long memberId, RedirectAttributes redirectAttributes, HttpSession session) {
 //        Member admin = (Member) session.getAttribute(LOGIN_MEMBER);
         if (admin == null || admin.getRoleType() != RoleType.ADMIN) {
+            redirectAttributes.addFlashAttribute("errorMessage", "관리자 권한이 필요합니다.");
             return "redirect:/member/login";
         }
 
@@ -129,6 +135,7 @@ public class AdminController {
     public String rejectMember(@PathVariable Long memberId, RedirectAttributes redirectAttributes, HttpSession session) {
 //        Member admin = (Member) session.getAttribute(LOGIN_MEMBER);
         if (admin == null || admin.getRoleType() != RoleType.ADMIN) {
+            redirectAttributes.addFlashAttribute("errorMessage", "관리자 권한이 필요합니다.");
             return "redirect:/member/login";
         }
 
