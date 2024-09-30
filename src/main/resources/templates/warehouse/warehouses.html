@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+
+<section>
+
+  <h1 class="h3 mb-2 text-gray-800">창고 목록</h1>
+  <br>
+  <form method="get" th:object="${warehouseSearch}" th:action>
+    <th:block>
+      <label for="warehouseName" th:text="|창고 이름 : |"></label>
+      <input type="text" th:field="*{warehouseName}" id="warehouseName">
+    </th:block>
+
+
+    <th:block>
+      <label for="warehouseRoadAddress" th:text="|창고 주소 : |"></label>
+      <input type="text" th:field="*{warehouseRoadAddress}" id="warehouseRoadAddress">
+    </th:block>
+    <button type="submit" style="float:right" th:text="|검색하기|" class="btn btn-primary"></button>
+
+  </form>
+
+
+  <div id="map" style="width:1500px;height:500px;"></div> <!--kakao map 출력-->
+
+  <div class="card-body child">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="inputTable" width="100%" cellspacing="0">
+        <thead>
+        <th>번호</th>
+        <th>창고 코드</th>
+        <th>창고 이름</th>
+        <th>창고 주소</th>
+        </thead>
+        <tbody>
+          <tr th:each="warehouse : ${warehouses}">
+              <td th:text="${warehouseStat.index}"></td>
+              <td th:text="${warehouse.code}"></td>
+              <td th:text="${warehouse.name}"></td>
+              <td th:text="${warehouse.address.roadNameAddress}"></td>
+              <td th:text="${warehouse.address.zipcode}"></td>
+              <td><button th:text="|상세보기|" class="btn btn-primary" th:onclick="|location.href='@{/warehouses/{id}(id = ${warehouse.id})}'|"></button></td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-primary" th:text="|창고 등록|" th:onclick="|location.href='@{/warehouses/save}'|"></button>
+
+    </div>
+  </div>
+
+
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1820ddf0f285025d0105d85dfd07591c&libraries=services,clusterer,drawing"></script>
+
+  <script th:inline="javascript">
+      var latitude=[[${latitude}]]
+      var longitude=[[${longitude}]]
+      var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+      var options = { //지도를 생성할 때 필요한 기본 옵션
+        center: new kakao.maps.LatLng(latitude, longitude), //지도의 중심좌표.
+        level: 2 //지도의 레벨(확대, 축소 정도)
+      };
+
+
+      var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+
+
+      /**
+        *  주소 변환하기
+      **/
+
+      //주소 변환 객체 생성
+      var geocoder = new kakao.maps.services.Geocoder();
+/*
+      var callback = function(result, status) {
+          if (status === kakao.maps.services.Status.OK) {
+              console.log(result);
+          }
+      };
+*/
+      //geocoder.addressSearch('해남군 송지면', callback);
+
+      // 특정 주소를 좌표로 변환
+      geocoder.addressSearch('서울특별시 강남구 역삼동', function(result, status) {
+
+      // 정상적으로 변환이 되었는지 확인
+      if (status === kakao.maps.services.Status.OK) {
+        var coords = new kakao.maps.LatLng(latitude, longitude);
+
+        // 지도에 마커를 생성
+        var marker = new kakao.maps.Marker({
+            map: map,
+            position: coords
+         });
+
+      // 지도를 해당 좌표로 이동
+      map.setCenter(coords);
+    }
+});
+      /*
+
+      * 마커 찍기
+
+      */
+
+
+      /*
+      // 마커가 표시될 위치
+      var markerPosition  = new kakao.maps.LatLng(latitude, longitude);
+
+
+      // 마커 생성
+      var marker = new kakao.maps.Marker({
+          position: markerPosition
+      });
+
+      // 마커를 지도 위에 표시
+      marker.setMap(map);
+
+      // 마커에 표시할 임의의 이름 설정
+      var content = '<div style="padding:5px;">이천 물류창고</div>';
+
+      // 커스텀 오버레이 생성
+      var overlay = new kakao.maps.CustomOverlay({
+          content: content,
+          map: map,
+          position: marker.getPosition()
+      });
+      */
+  </script>
+
+
+</section>
+</html>
