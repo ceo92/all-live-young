@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>답변 작성</h2>
+
+    <!-- 성공 메시지 표시 -->
+    <div th:if="${message}" class="success">
+        <p th:text="${message}"></p>
+    </div>
+
+    <!-- 에러 메시지 표시 -->
+    <div th:if="${errorMessage}" class="error">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <form th:action="@{/inquiries/{id}/answer(id=${inquiryId})}" th:object="${answerDTO}" method="post">
+        <!-- 문의 ID (숨겨진 필드) -->
+        <input type="hidden" th:field="*{inquiryId}">
+
+        <!-- 답변 내용 -->
+        <div>
+            <label for="answerContent">답변 내용:</label>
+            <textarea id="answerContent" th:field="*{answerContent}" required></textarea>
+            <div th:if="${#fields.hasErrors('answerContent')}" th:errors="*{answerContent}" class="error"></div>
+        </div>
+
+        <!-- 에러 메시지 표시 -->
+        <div th:if="${#fields.hasErrors('*')}">
+            <p th:each="err : ${#fields.errors('*')}" th:text="${err}" class="error"></p>
+        </div>
+
+        <!-- 답변 작성 버튼 -->
+        <button type="submit">답변 작성</button>
+    </form>
+
+    <a th:href="@{/inquiries/{id}(id=${inquiryId})}">문의 상세보기로 돌아가기</a>
+</section>
+</body>
+</html>

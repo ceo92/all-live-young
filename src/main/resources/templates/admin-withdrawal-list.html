@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>탈퇴 요청 목록</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>이름</th>
+            <th>이메일</th>
+            <th>회원 유형</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member : ${members}">
+            <td th:text="${member.name}"></td>
+            <td>
+                <!-- 이메일을 클릭하면 상세 조회로 이동 -->
+                <a th:href="@{/admin/members/{memberId}(memberId=${member.memberId})}" th:text="${member.email}"></a>
+            </td>
+            <td th:text="${member.roleType}"></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>

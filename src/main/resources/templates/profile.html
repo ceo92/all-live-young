@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>나의 정보</h2>
+    <p>이름: <span th:text="${member.name}"></span></p>
+    <p>이메일: <span th:text="${member.email}"></span></p>
+    <p>전화번호: <span th:text="${member.phoneNumber}"></span></p>
+    <p>주소: <span th:text="${member.roadNameAddress} + ' ' + ${member.detailsAddress}"></span></p>
+    <p>가입 날짜: <span th:text="${member.joinDate}"></span></p>
+    <p>상태: <span th:text="${member.accountStatus}"></span></p>
+    <p>회원 유형: <span th:text="${member.roleType}"></span></p>
+
+    <!-- 회사인 경우 사업자 번호 표시 -->
+    <p th:if="${member.roleType == 'BUSINESS'}">사업자 번호: <span th:text="${member.businessNumber}"></span></p>
+
+    <!-- 창고 관리자일 경우 창고 ID 표시 -->
+    <p th:if="${member.roleType == ''}">창고 ID: <span th:text="${member.warehouseId}"></span></p>
+
+    <a th:href="@{/member/edit-profile}">정보 수정</a>
+    <form th:action="@{/member/withdraw}" method="post">
+        <button type="submit">회원 탈퇴</button>
+    </form>
+</section>
+</body>
+</html>
