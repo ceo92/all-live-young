@@ -13,6 +13,4 @@ public class StockUpdateDto {
   private Integer palletQuantity;
   private Integer boxQuantity;
 
-
-
 }
