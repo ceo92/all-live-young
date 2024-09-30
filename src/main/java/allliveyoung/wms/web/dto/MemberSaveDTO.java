@@ -34,5 +34,7 @@ public class MemberSaveDTO {
 
     private String businessNumber;
 
+    private Long warehouseId;
+
     private Boolean isAgree;
 }
