@@ -1,8 +1,11 @@
-package allliveyoung.wms.service;
+package allliveyoung.allliveinbound.service;
 
+import allliveyoung.allliveinbound.config.ModelMapperConfig;
+import allliveyoung.allliveinbound.domain.InboundRequest;
 import allliveyoung.allliveinbound.domain.InboundRequestProduct;
+import allliveyoung.allliveinbound.domain.Warehouse;
 import allliveyoung.allliveinbound.mapper.InboundRequestMapper;
-import allliveyoung.wms.web.dto.*;
+import allliveyoung.allliveinbound.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -10,12 +13,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class InboundRequestServiceImpl implements allliveyoung.allliveinbound.service.InboundRequestService {
+public class InboundRequestServiceImpl implements InboundRequestService {
 
     private final InboundRequestMapper inboundRequestMapper;
     private final ModelMapper modelMapper;
@@ -45,8 +49,7 @@ public class InboundRequestServiceImpl implements allliveyoung.allliveinbound.se
     @Override
     public Long saveInbound(InboundRequestSaveDTO inboundRequestSaveDTO) {
         Long id = inboundRequestMapper.save(inboundRequestSaveDTO);
-        log.info("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{id = " + id);
-        /*inboundRequestMapper.saveProducts(inboundRequestSaveDTO.getInboundProductSaveDTOList());*/
+        inboundRequestMapper.saveProducts(inboundRequestSaveDTO.getInboundProductSaveDTOList());
         return id;
     }
 
