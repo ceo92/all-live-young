@@ -5,33 +5,33 @@
 
         <section>
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">재고</h1>
+        <h1 class="h3 mb-2 text-gray-800">재고 목록</h1>
         <br>
           <form th:object="${stockSearch}" th:action method="get">
 <!--            <h6 class="m-0 font-weight-bold text-primary">재고 검색</h6>-->
             <div>
 
               <th:block>
-                <label for="stockCode" th:text="|재고 코드 : |"></label>
+                <label for="stockCode" th:text="|재고 코드 : |">재고 코드</label>
                 <input type="text" th:field="*{stockCode}" id="stockCode">
               </th:block>
 
+
               <th:block>
-                <label for="productName" th:text="|의약품 이름 : |"></label>
+                <label for="productName" th:text="|의약품 이름 : |">의약품 이름</label>
                 <input type="text" th:field="*{productName}" id="productName">
               </th:block>
 
               <th:block>
-                <label for="companyName" th:text="|회사 이름 : |"></label>
+                <label for="companyName" th:text="|회사 이름 : |">회사 이름</label>
                 <input type="text" th:field="*{companyName}" id="companyName">
               </th:block>
 
               <th:block>
-                <label for="expirationDate" th:text="|유효기간 : |"></label>
+                <label for="expirationDate" th:text="|유효기간 : |">유효기간</label>
                 <input type="datetime-local" th:field="*{expirationDate}" id="expirationDate">
               </th:block>
             </div>
-
 
               <div>
                 보관 온도 선택 :
@@ -73,7 +73,6 @@
                 </thead>
                 <tbody>
                 <tr th:each="stock : ${stocks}">
-                  <a th:href="@{{id}(id = ${stock.id})}">
                     <td th:text="${stockStat.index}"></td>
                     <!--<td th:if="${member.roleType.equals('ADMIN')}" th:text="${stock.warehouse.warehouseCode}"></td>
                     <td th:if="${member.roleType.equals('ADMIN')}" th:text="${stock.warehouse.warehouseName}"></td>-->
@@ -85,7 +84,6 @@
                     <td th:text="${stock.product.member.name}"></td>
                     <td th:text="${{stock.pallet.inboundRequestProduct.expirationDate}}"></td>
                     <td><button th:text="|상세보기|" class="btn btn-primary" th:onclick="|location.href='@{/stocks/{id}(id = ${stock.id})}'|"></button></td>
-                  </a>
                 </tr>
                 </tbody>
               </table>
