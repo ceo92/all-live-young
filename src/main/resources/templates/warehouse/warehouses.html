@@ -51,7 +51,59 @@
 
   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1820ddf0f285025d0105d85dfd07591c&libraries=services,clusterer,drawing"></script>
 
+
+
   <script th:inline="javascript">
+    var warehouseList = [[${warehouses}]];
+
+    // Kakao 지도 API 초기화
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(37.5665, 126.9780), // 초기 중심 좌표
+            level: 10 // 초기 줌 레벨
+        };
+
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    // 마커를 찍고 커스텀 이름을 표시하는 함수
+    warehouseList.forEach(function(warehouse) {
+        var address = warehouse.address.roadNameAddress; // 도로명 주소
+        var warehouseName = warehouse.name; // 창고 이름
+
+        // 주소를 좌표로 변환하는 Geocoder
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        // 주소를 좌표로 변환 후 마커 생성
+        geocoder.addressSearch(address, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                // 마커 생성
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+
+                // 마커 위에 표시될 커스텀 이름 (InfoWindow)
+                var infowindow = new kakao.maps.InfoWindow({
+                    content: `<div style="padding:5px;">${warehouseName}</div>` // 커스텀 이름 표시
+                });
+
+                // InfoWindow를 항상 열어둠
+                infowindow.open(map, marker);
+
+
+
+
+
+                // 마커가 지도 중심에 맞게 조정 (첫 번째 마커 기준)
+                map.setCenter(coords);
+            }
+        });
+    });
+  </script>
+
+  <!--<script th:inline="javascript">
       var latitude=[[${latitude}]]
       var longitude=[[${longitude}]]
       var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
@@ -127,7 +179,7 @@
       });
       */
   </script>
-
+-->
 
 </section>
 </html>
