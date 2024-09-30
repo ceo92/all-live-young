@@ -5,9 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
-@Getter
+@Getter @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +21,7 @@ public class OutboundRequest {
   private Stock stock;
   private Integer quantity;
   private String recipientName;
-  private Address address;
+  private String recipientAddress;
   private String recipientContact;
   private Boolean isFault;
   private String rejectionNote;

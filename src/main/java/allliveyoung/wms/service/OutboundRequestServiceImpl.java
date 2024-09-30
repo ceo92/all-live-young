@@ -1,11 +1,13 @@
 package allliveyoung.wms.service;
 
 import allliveyoung.wms.domain.OutboundRequest;
+import allliveyoung.wms.domain.Status;
 import allliveyoung.wms.mapper.OutboundRequestMapper;
 import allliveyoung.wms.web.dto.OutboundRequestDTO;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Param;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +25,8 @@ public class OutboundRequestServiceImpl implements OutboundRequestService {
   }
 
   @Override
-  public List<OutboundRequest> findOutboundRequests(OutboundRequestDTO outboundRequestDTO) {
-    List<OutboundRequest> list = outboundRequestMapper.findAll(outboundRequestDTO);
+  public List<OutboundRequest> findOutboundRequests(@Param("status") Status status) {
+    List<OutboundRequest> list = outboundRequestMapper.findAll(status);
     return list;
   }
 

@@ -23,7 +23,7 @@ public class Address {
 
   @NotBlank(message = "우편번호는 필수 입력 값입니다.")
   @Size(max = 30, message = "우편번호는 최대 30자까지 가능합니다.")
-  private String zipcode;
+  private String zipCode;
 
   @NotBlank(message = "상세 주소는 필수 입력 값입니다.")
   @Size(max = 50, message = "상세 주소는 최대 50자까지 가능합니다.")

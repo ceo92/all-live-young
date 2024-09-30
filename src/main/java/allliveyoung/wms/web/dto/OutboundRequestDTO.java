@@ -1,6 +1,8 @@
 package allliveyoung.wms.web.dto;
 
+import allliveyoung.wms.domain.Member;
 import allliveyoung.wms.domain.Status;
+import allliveyoung.wms.domain.Stock;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -18,18 +20,11 @@ public class OutboundRequestDTO {
   private Long id;
   private String code;
   private Status status;
-  @NotNull(message="필수 입력 값입니다.")
-  private Long memberId;
-  @NotNull(message="필수 입력 값입니다.")
-  private Long stockId;
-  @NotNull(message="필수 입력 값입니다.")
-  @Positive(message = "양수만 가능합니다.")
+  private Member member;
+  private Stock stock;
   private int quantity;
-  @NotNull(message="필수 입력 값입니다.")
   private String recipientName;
-  @NotNull(message="필수 입력 값입니다.")
   private String recipientAddress;
-  @NotNull(message="필수 입력 값입니다.")
   private String recipientContact;
   private Boolean isFault;
   private String rejectionNote;

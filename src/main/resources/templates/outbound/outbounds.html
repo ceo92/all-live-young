@@ -8,22 +8,24 @@
     <div class="container-fluid">
 
       <!-- Page Heading -->
-      <h1 class="h3 mb-2 text-gray-800">출고 요청</h1>
-      <p class="mb-4">출고 요청 설명</p>
+      <h1 class="h3 mb-2 text-gray-800">출고 요청 관리</h1>
+      <p class="mb-4">출고 요청 등록, 조회, 수정</p>
 
       <div class="card shadow mb-4 p-3" >
         <div class="mt-2">
-          <form id="filterForm" th:action="@{outbound-requests}" method="post">
-            <div class="ml-1">
-              <input type="checkbox" name="types" value="waiting" id="waiting"> 처리 대기중
-              <input type="checkbox" name="types" value="approved" id="approved"> 승인
-              <input type="checkbox" name="types" value="rejected" id="rejected"> 반려
+          <form id="filterForm" th:action="@{outbound-requests}" method="get">
+            <div class="ml-1" style="margin-bottom: 10px;">
+              <input type="radio" name="status" value="" th:checked="${status == '' or status == null}"> 전체
+              <input type="radio" name="status" value="처리대기중" th:checked="${status == '처리대기중'}" id="waiting"> 처리대기중
+              <input type="radio" name="status" value="승인" th:checked="${status == '승인'}" id="approved"> 승인
+              <input type="radio" name="status" value="반려" th:checked="${status == '반려'}" id="rejected"> 반려
             </div>
-            <button class="btn btn-primary" type="submit">조회</button>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn btn-primary" type="submit">조회</button>
+              <a href="/outbound-request/save" class="btn btn-primary" id="registerBtn">등록</a>
+            </div>
           </form>
-          <form id="saveForm" th:action="@{outbound-request/save}" method="get">
-            <button class="btn btn-primary" id="registerBtn" type="submit">등록</button>
-          </form>
+
         </div>
       </div>
     </div>
@@ -57,16 +59,18 @@
             <tbody>
 
             <tr th:each="outboundRequest : ${outboundRequestList}">
-              <div th:if="${outboundRequest != null}">
-                <span th:text="${outboundRequest.id}"></span>
-              </div>
+              <td>
+                <div th:if="${outboundRequest != null}">
+                  <span th:text="${outboundRequest.id}"></span>
+                </div>
+              </td>
               <td>
                 <a th:href="@{outbound-requests/{id}(id=${outboundRequest.id})}">
                   <span th:text="${outboundRequest.code}"></span>
                 </a>
               </td>
               <td th:text="${outboundRequest.status}"></td>
-              <td th:text="${outboundRequest.member.id}"></td>
+              <td th:text="${outboundRequest.member.memberId}"></td>
               <td th:text="${outboundRequest.stock.id}"></td>
               <td th:text="${outboundRequest.quantity}"></td>
               <td th:text="${outboundRequest.recipientName}"></td>
@@ -76,11 +80,8 @@
               <td th:text="${outboundRequest.rejectionNote}"></td>
               <td th:text="${outboundRequest.regDate}"></td>
               <td th:text="${outboundRequest.modDate != null ? outboundRequest.modDate : 'N/A'}"></td>
-              <td th:text="${outboundRequest.note != null ? outboundRequest.modDate : 'N/A'}"></td>
+              <td th:text="${outboundRequest.note != null ? outboundRequest.note : 'N/A'}"></td>
             </tr>
-
-
-
             </tbody>
           </table>
         </div>

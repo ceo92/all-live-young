@@ -27,45 +27,38 @@ public class OutboundRequestController {
   private final OutboundRequestService outboundRequestService;
 
   @GetMapping("/dashboard")
-  public String getDashboard(Model model) {
+  public String getDashboard() {
     // 필요한 데이터를 모델에 추가할 수 있습니다.
     return "mem-dashboard";
   }
 
   //사용자, 총관리자, 창고관리자가 출고요청 리스트를 조회하는 페이지
   @GetMapping("/outbound-requests")
-  public String getOutboundRequests(Model model, @RequestParam(required = false) String status,
-      @ModelAttribute OutboundRequestDTO outboundRequestDTO) {
+  public String getOutboundRequests(Model model, @RequestParam(value = "status", required = false) Status status) {
 
-    if ("처리대기중".equals(status)) {
-      outboundRequestDTO.setStatus(Status.처리대기중);
-    } else if ("승인".equals(status)) {
-      outboundRequestDTO.setStatus(Status.승인);
-    } else if ("반려".equals(status)) {
-      outboundRequestDTO.setStatus(Status.반려);
-    }
-
-    List<OutboundRequest> outboundRequestList = outboundRequestService.findOutboundRequests(outboundRequestDTO);
-    log.info(outboundRequestList);
+    List<OutboundRequest> outboundRequestList = outboundRequestService.findOutboundRequests(status);
     model.addAttribute("outboundRequestList", outboundRequestList);
-    log.info(outboundRequestList);
+    model.addAttribute("status", status);
     return "mem-outboundrequest";
   }
 
   // 사용자가 출고요청을 등록하는 페이지
   @GetMapping("/outbound-request/save")
-  public String getOutboundRequestsSaveForm() {
+  public String getOutboundRequestsSaveForm(Model model) {
+    model.addAttribute("outboundRequestDTO", new OutboundRequestDTO());
     return "mem-outboundrequest_insert";
   }
 
+
   // 사용자의 출고요청 입력 동적처리
   @PostMapping("/outbound-request/save")
-  public String postOutboundRequestsSaveForm(@Validated OutboundRequestDTO outboundRequestDTO,
+  public String postOutboundRequestsSaveForm(@Validated @ModelAttribute OutboundRequestDTO outboundRequestDTO,
       BindingResult bindingResult, RedirectAttributes redirectAttributes) {
     if (bindingResult.hasErrors()) {
       redirectAttributes.addFlashAttribute("errors", bindingResult);
       return "mem-outboundrequest_insert";
     }
+
     outboundRequestService.saveOutboundRequest(outboundRequestDTO);
     redirectAttributes.addFlashAttribute("message","저장 성공");
 

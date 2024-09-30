@@ -72,17 +72,3 @@ document.getElementById('removeRowBtn').addEventListener('click', function() {
     table.deleteRow(rowCount - 1);
   }
 });
-
-document.getElementById("modifyBtn").addEventListener("click", function() {
-  // 수정 가능한 항목들을 가져오기
-  var editableFields = document.querySelectorAll('.editable');
-
-  // 각 항목의 disabled 속성을 제거하여 수정 가능하게 전환
-  editableFields.forEach(function(field) {
-    field.disabled = false; // 수정 가능 상태로 전환
-  });
-
-  // 수정 버튼 숨기고 저장 버튼 보이기
-  document.getElementById("editBtn").style.display = 'none';
-  document.getElementById("saveBtn").style.display = 'inline-block';
-});

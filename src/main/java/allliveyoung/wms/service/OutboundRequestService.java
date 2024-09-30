@@ -5,12 +5,13 @@ import allliveyoung.wms.domain.OutboundRequest;
 import allliveyoung.wms.domain.Status;
 import allliveyoung.wms.web.dto.OutboundRequestDTO;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface OutboundRequestService {
 
   Long saveOutboundRequest(OutboundRequestDTO outboundRequestDTO);
 
-  List<OutboundRequest> findOutboundRequests(OutboundRequestDTO outboundRequestDTO);
+  List<OutboundRequest> findOutboundRequests(@Param("status") Status status);
 
   OutboundRequest findOneOutboundRequest(Long id);
 
