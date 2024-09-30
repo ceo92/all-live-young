@@ -4,7 +4,7 @@
 
 <mapper namespace="allliveyoung.wms.mapper.SalesMapper">
 
-    <resultMap id="SalesResultMap" type="com.all_live_young_wms_local.domain.Sales">
+    <resultMap id="SalesResultMap" type="allliveyoung.wms.domain.Sales">
         <id property="id" column="sales_id"/>
         <result property="salesDate" column="sales_date"/>
         <result property="category" column="sales_category"/>
@@ -13,12 +13,12 @@
         <result property="regDate" column="reg_date"/>
         <result property="modDate" column="mod_date"/>
 
-        <association property="warehouse" javaType="com.all_live_young_wms_local.domain.Warehouse">
+        <association property="warehouse" javaType="allliveyoung.wms.domain.Warehouse">
             <id property="id" column="warehouse_id"/>
             <result property="name" column="warehouse_name"/>
             <result property="code" column="warehouse_code"/>
 
-            <association property="warehouseAddress" javaType="com.all_live_young_wms_local.domain.Address">
+            <association property="warehouseAddress" javaType="allliveyoung.wms.domain.Address">
                 <result property="roadNameAddress" column="warehouse_road_address"/>
                 <result property="jibunAddress" column="warehouse_jibun_address"/>
                 <result property="zipCode" column="warehouse_zipcode"/>
@@ -26,7 +26,7 @@
             </association>
         </association>
 
-        <association property="member" javaType="com.all_live_young_wms_local.domain.Member">
+        <association property="member" javaType="allliveyoung.wms.domain.Member">
             <id property="id" column="member_id"/>
             <result property="name" column="name"/>
             <result property="password" column="password"/>
@@ -40,17 +40,17 @@
             <result property="isAgree" column="is_agree"/>
             <result property="agreeDate" column="agree_date"/>
 
-            <association property="address" javaType="com.all_live_young_wms_local.domain.Address">
+            <association property="address" javaType="allliveyoung.wms.domain.Address">
                 <result property="roadNameAddress" column="road_name_address"/>
                 <result property="detailsAddress" column="details_address"/>
             </association>
 
-            <association property="warehouse" javaType="com.all_live_young_wms_local.domain.Warehouse">
+            <association property="warehouse" javaType="allliveyoung.wms.domain.Warehouse">
                 <id property="id" column="warehouse_id"/>
                 <result property="name" column="warehouse_name"/>
                 <result property="code" column="warehouse_code"/>
 
-                <association property="warehouseAddress" javaType="com.all_live_young_wms_local.domain.Address">
+                <association property="warehouseAddress" javaType="allliveyoung.wms.domain.Address">
                     <result property="roadNameAddress" column="warehouse_road_address"/>
                     <result property="jibunAddress" column="warehouse_jibun_address"/>
                     <result property="zipCode" column="warehouse_zipcode"/>
@@ -60,7 +60,7 @@
         </association>
     </resultMap>
 
-    <resultMap id="sumSales" type="com.all_live_young_wms_local.web.dto.SumSalesDTO">
+    <resultMap id="sumSales" type="allliveyoung.wms.web.dto.SumSalesDTO">
         <result property="year" column="YEAR(sales_date)"/>
         <result property="month" column="MONTH(sales_date)"/>
         <result property="sumAmount" column="SUM(sales_amount)"/>
@@ -96,24 +96,34 @@
         JOIN warehouse w ON s.warehouse_id = w.warehouse_id
         LEFT JOIN member m ON s.member_id = m.member_id
 
-        <if test="requestDTO.keyword != ''">
-            <if test="requestDTO.type == 'category'">
-                WHERE sales_category LIKE CONCAT ('%', #{requestDTO.keyword} '%')
+        <where>
+            <if test="member.businessNumber != null and member.warehouse == null">
+                s.member_id = #{member.id}
+                AND sales_category LIKE CONCAT ('%', '계약비용', '%')
             </if>
-            <if test="requestDTO.type == 'warehouse'">
-                WHERE warehouse_name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+            <if test="member.warehouse != null and member.businessNumber == null">
+                s.warehouse_id = #{member.warehouse.id}
             </if>
-            <if test="requestDTO.type == 'member'">
-                WHERE m.name = LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
-            </if>
-        </if>
 
-        <if test="requestDTO.dateFrom != null and requestDTO.dateTo != null">
-            <![CDATA[
-                WHERE sales_date >= #{requestDTO.dateFrom}
-                 AND sales_date <= #{requestDTO.dateTo}
-            ]]>
-        </if>
+            <if test="requestDTO.keyword != ''">
+                <if test="requestDTO.type == 'category'">
+                    sales_category LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+                </if>
+                <if test="requestDTO.type == 'warehouse'">
+                    warehouse_name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+                </if>
+                <if test="requestDTO.type == 'member'">
+                    m.name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+                </if>
+            </if>
+
+            <if test="requestDTO.dateFrom != null and requestDTO.dateTo != null">
+                <![CDATA[
+                    sales_date >= #{requestDTO.dateFrom}
+                     AND sales_date <= #{requestDTO.dateTo}
+                ]]>
+            </if>
+        </where>
         ORDER BY sales_id DESC
         LIMIT #{requestDTO.offset}, #{requestDTO.size}
     </select>
@@ -124,24 +134,34 @@
         JOIN warehouse w ON s.warehouse_id = w.warehouse_id
         LEFT JOIN member m ON s.member_id = m.member_id
 
-        <if test="requestDTO.keyword != ''">
-            <if test="requestDTO.type == 'category'">
-                WHERE sales_category LIKE CONCAT ('%', #{requestDTO.keyword} '%')
+        <where>
+            <if test="member.businessNumber != null and member.warehouse == null">
+                s.member_id = #{member.id}
+                AND sales_category LIKE CONCAT ('%', '계약비용', '%')
             </if>
-            <if test="requestDTO.type == 'warehouse'">
-                WHERE warehouse_name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+            <if test="member.warehouse != null and member.businessNumber == null">
+                s.warehouse_id = #{member.warehouse.id}
             </if>
-            <if test="requestDTO.type == 'member'">
-                WHERE m.name = LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
-            </if>
-        </if>
 
-        <if test="requestDTO.dateFrom != null and requestDTO.dateTo != null">
-            <![CDATA[
-                WHERE sales_date >= #{requestDTO.dateFrom}
-                 AND sales_date <= #{requestDTO.dateTo}
-            ]]>
-        </if>
+            <if test="requestDTO.keyword != ''">
+                <if test="requestDTO.type == 'category'">
+                    sales_category LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+                </if>
+                <if test="requestDTO.type == 'warehouse'">
+                    warehouse_name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+                </if>
+                <if test="requestDTO.type == 'member'">
+                    m.name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+                </if>
+            </if>
+
+            <if test="requestDTO.dateFrom != null and requestDTO.dateTo != null">
+                <![CDATA[
+                    sales_date >= #{requestDTO.dateFrom}
+                     AND sales_date <= #{requestDTO.dateTo}
+                ]]>
+            </if>
+        </where>
     </select>
 
     <select id="findSumSales" resultMap="sumSales">

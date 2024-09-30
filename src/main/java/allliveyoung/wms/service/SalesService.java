@@ -24,11 +24,11 @@ public class SalesService {
      * @return
      */
     @Transactional(readOnly = true)
-    public SalesResponseDTO findSales(SalesRequestDTO salesRequestDTO) {
+    public SalesResponseDTO findSales(SalesRequestDTO salesRequestDTO, Member member) {
         return SalesResponseDTO.builder()
                 .salesRequestDTO(salesRequestDTO)
-                .sales(salesMapper.findAll(salesRequestDTO))
-                .total(salesMapper.count(salesRequestDTO))
+                .sales(salesMapper.findAll(salesRequestDTO, member))
+                .total(salesMapper.count(salesRequestDTO, member))
                 .build();
     }
 

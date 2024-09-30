@@ -24,8 +24,10 @@ public class SalesController {
     private final MemberService memberService;
 
     @GetMapping
-    public String getSales(SalesRequestDTO salesRequestDTO, Model model) {
-        model.addAttribute("salesList", salesService.findSales(salesRequestDTO));
+    public String getSales(@AuthenticationPrincipal UserDetailsDTO user,
+                           SalesRequestDTO salesRequestDTO, Model model) {
+        log.info("{}: ", user.getMember().getWarehouse());
+        model.addAttribute("salesList", salesService.findSales(salesRequestDTO, user.getMember()));
         return "/finance/sales-list";
     }
 
