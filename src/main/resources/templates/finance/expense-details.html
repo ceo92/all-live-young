@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <section>
     <head>
         <title>All Live Young: Expense</title>
@@ -41,9 +42,9 @@
                 </tr>
             </table>
             <div style="display: flex; align-items: center;">
-                <a th:href="@{/expenses/{id}/update(id=${expense.id})}" class="btn btn-primary" th:text="수정"></a>
+                <a th:href="@{/expenses/{id}/update(id=${expense.id})}" class="btn btn-primary" sec:authorize="hasRole('ROLE_MANAGER')" th:text="수정"></a>
                 <form method="post" th:action="@{/expenses/{id}/delete(id=${expense.id})}">
-                    <button type="submit" class="btn btn-danger" style="margin-left: 0.3rem" th:text="삭제"/>
+                    <button type="submit" class="btn btn-danger" style="margin-left: 0.3rem" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')" th:text="삭제"/>
                 </form>
                 <a th:href="@{/expenses}" class="btn btn-secondary" th:text="목록" style="margin-left: 0.3rem"></a>
             </div>

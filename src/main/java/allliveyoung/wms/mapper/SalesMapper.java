@@ -2,6 +2,7 @@ package allliveyoung.wms.mapper;
 
 import allliveyoung.wms.domain.Sales;
 import allliveyoung.wms.web.dto.SalesRequestDTO;
+import allliveyoung.wms.web.dto.SumSalesDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 @Mapper
 public interface SalesMapper {
-    List<Sales> findAll(@Param("requestDTO") SalesRequestDTO requestDTO);
+    List<Sales> findAll(@Param("requestDTO") SalesRequestDTO requestDTO, @Param("member") Member member);
 
     Optional<Sales> findById(@Param("id") Long id);
 
@@ -20,6 +21,7 @@ public interface SalesMapper {
 
     void delete(@Param("id") Long id);
 
-    Integer count(@Param("requestDTO") SalesRequestDTO requestDTO);
+    Integer count(@Param("requestDTO") SalesRequestDTO requestDTO, @Param("member") Member member);
 
+    List<SumSalesDTO> findSumSales(Integer year);
 }

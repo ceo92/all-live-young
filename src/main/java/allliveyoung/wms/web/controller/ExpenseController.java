@@ -1,6 +1,7 @@
 package allliveyoung.wms.web.controller;
 
 import allliveyoung.wms.service.ExpenseService;
+import allliveyoung.wms.service.SalesService;
 import allliveyoung.wms.web.dto.ExpenseRequestDTO;
 import allliveyoung.wms.web.dto.ExpenseSaveDTO;
 import allliveyoung.wms.web.dto.ExpenseUpdateDTO;
@@ -14,6 +15,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/expenses")
@@ -21,10 +24,18 @@ import org.springframework.web.bind.annotation.*;
 public class ExpenseController {
 
     private final ExpenseService expenseService;
+    private final SalesService salesService;
 
     @GetMapping
-    public String getExpenses(ExpenseRequestDTO expenseRequestDTO, Model model) {
-        model.addAttribute("expenseList", expenseService.findExpenses(expenseRequestDTO));
+    public String getExpenses(@AuthenticationPrincipal UserDetailsDTO user,
+                              ExpenseRequestDTO expenseRequestDTO, Model model) {
+        Warehouse warehouse = user.getMember().getWarehouse();
+
+        if (warehouse == null) {
+            model.addAttribute("expenseList", expenseService.findExpenses(expenseRequestDTO, 0L));
+        } else {
+            model.addAttribute("expenseList", expenseService.findExpenses(expenseRequestDTO, user.getMember().getWarehouse().getId()));
+        }
         return "/finance/expense-list";
     }
 
@@ -78,6 +89,15 @@ public class ExpenseController {
         expenseService.deleteExpense(id);
         log.info("{}번 지출 내역 삭제 완료", id);
         return "redirect:/expenses";
+    }
+
+    @GetMapping("/statistic")
+    public String getExpenseStatistic(Model model) {
+        model.addAttribute("sumExpense", expenseService.findSumExpenses(LocalDate.now().getYear()));
+        model.addAttribute("sumExpenseCategory", expenseService.findSumExpensesCategory(LocalDate.now().getYear()));
+        model.addAttribute("sumSales", salesService.findSumSales(LocalDate.now().getYear()));
+        model.addAttribute("netProfit", expenseService.findNetProfit());
+        return "/finance/expense-chart";
     }
 
     private static void printErrorLog(BindingResult result) {

@@ -2,15 +2,13 @@ package allliveyoung.wms.service;
 
 import allliveyoung.wms.domain.Expense;
 import allliveyoung.wms.mapper.ExpenseMapper;
-import allliveyoung.wms.web.dto.ExpenseRequestDTO;
-import allliveyoung.wms.web.dto.ExpenseResponseDTO;
-import allliveyoung.wms.web.dto.ExpenseSaveDTO;
-import allliveyoung.wms.web.dto.ExpenseUpdateDTO;
+import allliveyoung.wms.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,11 +22,11 @@ public class ExpenseService {
      * @return
      */
     @Transactional(readOnly = true)
-    public ExpenseResponseDTO findExpenses(ExpenseRequestDTO expenseRequestDTO) {
+    public ExpenseResponseDTO findExpenses(ExpenseRequestDTO expenseRequestDTO, Long warehouse_id) {
         return ExpenseResponseDTO.builder()
                 .expenseRequestDTO(expenseRequestDTO)
-                .expenses(expenseMapper.findAll(expenseRequestDTO))
-                .total(expenseMapper.count(expenseRequestDTO))
+                .expenses(expenseMapper.findAll(expenseRequestDTO, warehouse_id))
+                .total(expenseMapper.count(expenseRequestDTO, warehouse_id))
                 .build();
     }
 
@@ -89,5 +87,20 @@ public class ExpenseService {
     @Transactional
     public void deleteExpense(Long id) {
         expenseMapper.delete(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SumExpensesDTO> findSumExpenses(Integer year) {
+        return expenseMapper.findSumExpenses(year);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SumExpensesCategoryDTO> findSumExpensesCategory(Integer year) {
+        return expenseMapper.findSumExpensesCategory(year);
+    }
+
+    @Transactional(readOnly = true)
+    public List<NetProfitDTO> findNetProfit() {
+        return expenseMapper.findNetProfit();
     }
 }

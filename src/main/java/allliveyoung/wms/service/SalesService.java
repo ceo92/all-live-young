@@ -2,15 +2,13 @@ package allliveyoung.wms.service;
 
 import allliveyoung.wms.domain.Sales;
 import allliveyoung.wms.mapper.SalesMapper;
-import allliveyoung.wms.web.dto.SalesRequestDTO;
-import allliveyoung.wms.web.dto.SalesResponseDTO;
-import allliveyoung.wms.web.dto.SalesSaveDTO;
-import allliveyoung.wms.web.dto.SalesUpdateDTO;
+import allliveyoung.wms.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,11 +24,11 @@ public class SalesService {
      * @return
      */
     @Transactional(readOnly = true)
-    public SalesResponseDTO findSales(SalesRequestDTO salesRequestDTO) {
+    public SalesResponseDTO findSales(SalesRequestDTO salesRequestDTO, Member member) {
         return SalesResponseDTO.builder()
                 .salesRequestDTO(salesRequestDTO)
-                .sales(salesMapper.findAll(salesRequestDTO))
-                .total(salesMapper.count(salesRequestDTO))
+                .sales(salesMapper.findAll(salesRequestDTO, member))
+                .total(salesMapper.count(salesRequestDTO, member))
                 .build();
     }
 
@@ -105,5 +103,10 @@ public class SalesService {
     @Transactional
     public void deleteSale(Long id) {
         salesMapper.delete(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SumSalesDTO> findSumSales(Integer year) {
+        return salesMapper.findSumSales(year);
     }
 }
