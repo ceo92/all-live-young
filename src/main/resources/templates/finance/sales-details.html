@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <section>
     <head>
         <title>All Live Young: Sales</title>
@@ -9,7 +10,8 @@
     <h1 class="h3 mb-4 text-gray-800"></h1>
     <div class="card shadow">
         <div class="card-body">
-            <h5>매출 내역</h5>
+            <h5 sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">매출 내역</h5>
+            <h5 sec:authorize="hasRole('ROLE_COMPANY')">지출 내역</h5>
             <p></p>
             <table class="table table-bordered">
                 <tr>
@@ -17,23 +19,27 @@
                     <td th:text="${sales.member.warehouse.name}"></td>
                 </tr>
                 <tr>
-                    <th>매출일자</th>
+                    <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">매출일자</th>
+                    <th sec:authorize="hasRole('ROLE_COMPANY')">지출일자</th>
                     <td th:text="${{sales.salesDate}}"></td>
                 </tr>
                 <tr>
-                    <th>매출분류</th>
+                    <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">매출분류</th>
+                    <th sec:authorize="hasRole('ROLE_COMPANY')">지출분류</th>
                     <td th:text="${sales.category}"></td>
                 </tr>
-                <tr>
+                <tr sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
                     <th>회사명</th>
                     <td th:text="${sales.member.name}"></td>
                 </tr>
                 <tr>
-                    <th>매출액</th>
+                    <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">매출액</th>
+                    <th sec:authorize="hasRole('ROLE_COMPANY')">지출액</th>
                     <td th:text="${{sales.amount}}"></td>
                 </tr>
                 <tr>
-                    <th>매출 설명</th>
+                    <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">매출 설명</th>
+                    <th sec:authorize="hasRole('ROLE_COMPANY')">지출 설명</th>
                     <td th:text="${sales.description}"></td>
                 </tr>
                 <tr>
@@ -46,9 +52,9 @@
                 </tr>
             </table>
             <div style="display: flex; align-items: center;">
-                <a th:href="@{/sales/{id}/update(id=${sales.id})}" class="btn btn-primary" th:text="수정"></a>
+                <a th:href="@{/sales/{id}/update(id=${sales.id})}" class="btn btn-primary" sec:authorize="hasRole('ROLE_MANAGER')" th:text="수정"></a>
                 <form method="post" th:action="@{/sales/{id}/delete(id=${sales.id})}">
-                    <button type="submit" class="btn btn-danger" style="margin-left: 0.3rem" th:text="삭제"/>
+                    <button type="submit" class="btn btn-danger" style="margin-left: 0.3rem" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')" th:text="삭제"/>
                 </form>
                 <a th:href="@{/sales}" class="btn btn-secondary" th:text="목록" style="margin-left: 0.3rem"></a>
             </div>
