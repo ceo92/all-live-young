@@ -74,8 +74,6 @@ public class WarehouseController {
     List<Warehouse> warehouses = warehouseService.findWarehouses(warehouseSearch);
     model.addAttribute("warehouses" , warehouses);
     model.addAttribute("warehouseSearch", warehouseSearch);
-    model.addAttribute("latitude", 37.218281064433);
-    model.addAttribute("longitude", 127.420907144956);
     return "warehouse/warehouses";
   }
 
@@ -85,7 +83,6 @@ public class WarehouseController {
     model.addAttribute("warehouse", warehouse);
     return "warehouse/warehouse";
   }
-
 
 
 
