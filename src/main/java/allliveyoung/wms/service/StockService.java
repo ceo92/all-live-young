@@ -3,6 +3,7 @@ package allliveyoung.wms.service;
 import allliveyoung.wms.domain.Stock;
 import allliveyoung.wms.mapper.StockMapper;
 import allliveyoung.wms.web.dto.StockSearch;
+import allliveyoung.wms.web.dto.StockUpdateDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
