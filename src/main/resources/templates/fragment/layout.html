@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html th:fragment="layout(content)" xmlns:th="http://www.thymeleaf.org">
+<html th:fragment="layout(content)" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
   <meta charset="utf-8">
@@ -131,8 +132,9 @@
     <div id="financeBar" class="collapse" aria-labelledby="headingFinanceBar" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">재무관리</h6>
-        <a class="collapse-item" th:href="@{/expenses}">지출 목록</a>
-        <a class="collapse-item" th:href="@{/sales}">매출 목록</a>
+        <a class="collapse-item" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')" th:href="@{/expenses}">지출 목록</a>
+        <a class="collapse-item" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')" th:href="@{/sales}">매출 목록</a>
+        <a class="collapse-item" sec:authorize="hasRole('ROLE_COMPANY')" th:href="@{/sales}">지출 목록</a>
       </div>
     </div>
   </li>
@@ -146,7 +148,7 @@
   </div>
 
   <!-- 회원 -->
-  <li class="nav-item">
+  <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#memberBar"
        aria-expanded="true" aria-controls="collapseTwo">
       <i class="fas fa-fw fa-user"></i>
@@ -177,15 +179,15 @@
   </li>
 
   <!-- Divider -->
-  <hr class="sidebar-divider">
+  <hr class="sidebar-divider" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
 
   <!-- Heading -->
-  <div class="sidebar-heading">
+  <div class="sidebar-heading" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
     분석
   </div>
 
   <!-- 통계 -->
-  <li class="nav-item">
+  <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#chartBar"
        aria-expanded="true" aria-controls="collapseTwo">
       <i class="fas fa-sign-out-alt fa-chart-area"></i>
@@ -326,7 +328,7 @@
     <li class="nav-item dropdown no-arrow">
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span class="mr-2 d-none d-lg-inline text-gray-600 small">  이경민</span>
+        <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${authName}"></span>
         <img class="img-profile rounded-circle"
              src="../../static/img/undraw_profile.svg" th:src="@{/img/undraw_profile.svg}">
       </a>
@@ -396,7 +398,9 @@
       <div class="modal-body">로그아웃 하시겠습니까?</div>
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
-        <a class="btn btn-primary" href="/logout" th:href="@{/logout}">로그아웃</a>
+        <form method="post" th:action="@{/logout}" style="display: inline">
+          <button class="btn btn-primary" type="submit">로그아웃</button>
+        </form>
       </div>
     </div>
   </div>
