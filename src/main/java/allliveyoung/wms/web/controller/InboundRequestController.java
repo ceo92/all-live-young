@@ -1,10 +1,8 @@
-package package allliveyoung.wms.web.controller;
+package allliveyoung.allliveinbound.web.controller;
 
+import allliveyoung.allliveinbound.domain.Member;
 import allliveyoung.allliveinbound.service.InboundRequestService;
-import allliveyoung.wms.web.dto.InboundPageRequestDTO;
-import allliveyoung.wms.web.dto.InboundProductUpdateDTO;
-import allliveyoung.wms.web.dto.InboundRequestSaveDTO;
-import allliveyoung.wms.web.dto.InboundRequestUpdateDTO;
+import allliveyoung.allliveinbound.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -14,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
