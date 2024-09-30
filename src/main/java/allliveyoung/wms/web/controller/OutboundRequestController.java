@@ -32,6 +32,10 @@ public class OutboundRequestController {
     return "mem-dashboard";
   }
 
+  @GetMapping("/charts")
+  public String getCharts() {
+    return "charts";
+  }
   //사용자, 총관리자, 창고관리자가 출고요청 리스트를 조회하는 페이지
   @GetMapping("/outbound-requests")
   public String getOutboundRequests(Model model, @RequestParam(value = "status", required = false) Status status) {
