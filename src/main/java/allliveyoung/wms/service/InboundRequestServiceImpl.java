@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -83,5 +84,20 @@ public class InboundRequestServiceImpl implements InboundRequestService {
         List<ProductDTO> productDTOList = inboundRequestMapper.getMatchedProductList(id).stream()
                 .map(product -> modelMapper.map(product,ProductDTO.class)).collect(Collectors.toList());
         return productDTOList;
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getCount(String status) {
+        return inboundRequestMapper.countByStatus(status);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CountRequestDTO> findCountInbound(Integer year) {
+        return inboundRequestMapper.findCountInbound(year);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CountStockDTO> findCountStock(Integer year){
+        return inboundRequestMapper.findCountStock(year);
     }
 }
