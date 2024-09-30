@@ -1,12 +1,7 @@
-package allliveyoung.wms.mapper;
+package allliveyoung.allliveinbound.mapper;
 
-
-import allliveyoung.wms.domain.InboundRequest;
-import allliveyoung.wms.domain.InboundRequestProduct;
-import allliveyoung.wms.web.dto.InboundPageRequestDTO;
-import allliveyoung.wms.web.dto.InboundProductSaveDTO;
-import allliveyoung.wms.web.dto.InboundProductUpdateDTO;
-import allliveyoung.wms.web.dto.InboundRequestSaveDTO;
+import allliveyoung.allliveinbound.domain.*;
+import allliveyoung.allliveinbound.web.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,4 +27,8 @@ public interface InboundRequestMapper {
     void updateStatus(Map<String, Object> map);
 
     int getCount(InboundPageRequestDTO inboundPageRequestDTO);
+
+    List<Warehouse> getWarehouseList();
+
+    List<Product> getMatchedProductList(Long id);
 }

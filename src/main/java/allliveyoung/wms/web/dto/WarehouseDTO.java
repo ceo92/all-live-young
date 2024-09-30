@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InboundProductUpdateDTO {
+public class WarehouseDTO {
+
     private Long id;
-    private String inboundRequestId;
-    private int palletQuantity;
-    private int boxQuantity;
-    private String manufactureNum;
-    private String expDate;
+    private String name;
+    private String code;
+    private String roadAddress;
+    private String jibunAddress;
+    private String zipCode;
+    private String detailsAddress;
 }

@@ -133,9 +133,17 @@
         SELECT * FROM INBOUND_REQUEST_PRODUCT WHERE inbound_request_id = #{id}
     </select>
 
+    <select id="getWarehouseList" resultMap="WarehouseResultMap">
+        select * from warehouse;
+    </select>
+
+    <select id="getMatchedProductList" resultMap="ProductResultMap">
+        SELECT * FROM PRODUCT WHERE member_id = #{memberId}
+    </select>
+
     <insert id="save" parameterType="allliveyoung.allliveinbound.web.dto.InboundRequestSaveDTO">
         INSERT INTO inbound_request (warehouse_id, member_id, inbound_request_code, reg_date, mod_date)
-        VALUES (#{warehouseId}, #{memberId}, #{code}, NOW(), NOW())
+        VALUES (#{warehouseId}, #{memberId}, null, NOW(), NOW())
     </insert>
 
     <insert id="saveProducts" parameterType="java.util.List">
@@ -198,8 +206,5 @@
         UPDATE INBOUND_REQUEST SET inbound_request_status = #{status} WHERE inbound_request_id = #{id}
     </select>
 
-    <select id="getCount" resultType="int">
-        select count(inbound_request_id) from inbound_request
-    </select>
 </mapper>
 
