@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="allliveyoung.wms.mapper.SalesMapper">
+
+    <resultMap id="SalesResultMap" type="com.all_live_young_wms_local.domain.Sales">
+        <id property="id" column="sales_id"/>
+        <result property="salesDate" column="sales_date"/>
+        <result property="category" column="sales_category"/>
+        <result property="amount" column="sales_amount"/>
+        <result property="description" column="sales_description"/>
+        <result property="regDate" column="reg_date"/>
+        <result property="modDate" column="mod_date"/>
+
+        <association property="warehouse" javaType="com.all_live_young_wms_local.domain.Warehouse">
+            <id property="id" column="warehouse_id"/>
+            <result property="name" column="warehouse_name"/>
+            <result property="code" column="warehouse_code"/>
+
+            <association property="warehouseAddress" javaType="com.all_live_young_wms_local.domain.Address">
+                <result property="roadNameAddress" column="warehouse_road_address"/>
+                <result property="jibunAddress" column="warehouse_jibun_address"/>
+                <result property="zipCode" column="warehouse_zipcode"/>
+                <result property="detailsAddress" column="warehouse_details_address"/>
+            </association>
+        </association>
+
+        <association property="member" javaType="com.all_live_young_wms_local.domain.Member">
+            <id property="id" column="member_id"/>
+            <result property="name" column="name"/>
+            <result property="password" column="password"/>
+            <result property="phoneNumber" column="phone_number"/>
+            <result property="email" column="email"/>
+            <result property="accountStatus" column="account_status"/>
+            <result property="joinDate" column="join_date"/>
+            <result property="lastLoginDate" column="last_login_date"/>
+            <result property="roleType" column="role_type"/>
+            <result property="businessNumber" column="businessNumber"/>
+            <result property="isAgree" column="is_agree"/>
+            <result property="agreeDate" column="agree_date"/>
+
+            <association property="address" javaType="com.all_live_young_wms_local.domain.Address">
+                <result property="roadNameAddress" column="road_name_address"/>
+                <result property="detailsAddress" column="details_address"/>
+            </association>
+
+            <association property="warehouse" javaType="com.all_live_young_wms_local.domain.Warehouse">
+                <id property="id" column="warehouse_id"/>
+                <result property="name" column="warehouse_name"/>
+                <result property="code" column="warehouse_code"/>
+
+                <association property="warehouseAddress" javaType="com.all_live_young_wms_local.domain.Address">
+                    <result property="roadNameAddress" column="warehouse_road_address"/>
+                    <result property="jibunAddress" column="warehouse_jibun_address"/>
+                    <result property="zipCode" column="warehouse_zipcode"/>
+                    <result property="detailsAddress" column="warehouse_details_address"/>
+                </association>
+            </association>
+        </association>
+    </resultMap>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sales (warehouse_id, sales_date, sales_category, member_id, sales_amount, sales_description, reg_date)
+        VALUES (#{sales.warehouse.id}, #{sales.salesDate}, #{sales.category}, #{sales.member.id, jdbcType=BIGINT}, #{sales.amount}, #{sales.description}, #{sales.regDate})
+    </insert>
+
+    <update id="update">
+        UPDATE sales
+        SET sales_amount = #{sales.amount}, sales_description = #{sales.description}, mod_date = #{sales.modDate}
+        WHERE sales_id = #{sales.id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM sales
+        WHERE sales_id = #{id}
+    </delete>
+
+    <select id="findById" resultMap="SalesResultMap">
+        SELECT *
+        FROM sales s
+                 JOIN warehouse w ON s.warehouse_id = w.warehouse_id
+                 LEFT JOIN member m ON s.member_id = m.member_id
+        WHERE sales_id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="SalesResultMap">
+        SELECT *
+        FROM sales s
+        JOIN warehouse w ON s.warehouse_id = w.warehouse_id
+        LEFT JOIN member m ON s.member_id = m.member_id
+
+        <if test="requestDTO.keyword != ''">
+            <if test="requestDTO.type == 'category'">
+                WHERE sales_category LIKE CONCAT ('%', #{requestDTO.keyword} '%')
+            </if>
+            <if test="requestDTO.type == 'warehouse'">
+                WHERE warehouse_name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+            </if>
+            <if test="requestDTO.type == 'member'">
+                WHERE m.name = LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+            </if>
+        </if>
+
+        <if test="requestDTO.dateFrom != null and requestDTO.dateTo != null">
+            <![CDATA[
+                WHERE sales_date >= #{requestDTO.dateFrom}
+                 AND sales_date <= #{requestDTO.dateTo}
+            ]]>
+        </if>
+        ORDER BY sales_id DESC
+        LIMIT #{requestDTO.offset}, #{requestDTO.size}
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(sales_id)
+        FROM sales s
+        JOIN warehouse w ON s.warehouse_id = w.warehouse_id
+        LEFT JOIN member m ON s.member_id = m.member_id
+
+        <if test="requestDTO.keyword != ''">
+            <if test="requestDTO.type == 'category'">
+                WHERE sales_category LIKE CONCAT ('%', #{requestDTO.keyword} '%')
+            </if>
+            <if test="requestDTO.type == 'warehouse'">
+                WHERE warehouse_name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+            </if>
+            <if test="requestDTO.type == 'member'">
+                WHERE m.name = LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+            </if>
+        </if>
+
+        <if test="requestDTO.dateFrom != null and requestDTO.dateTo != null">
+            <![CDATA[
+                WHERE sales_date >= #{requestDTO.dateFrom}
+                 AND sales_date <= #{requestDTO.dateTo}
+            ]]>
+        </if>
+    </select>
+</mapper>

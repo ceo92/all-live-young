@@ -17,4 +17,5 @@ public class Product {
     private String type;
     private LocalDateTime licenseDate;
     private int licenseNum;
+
 }

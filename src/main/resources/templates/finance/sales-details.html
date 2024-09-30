@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+<section>
+    <head>
+        <title>All Live Young: Sales</title>
+    </head>
+
+    <body id="page-top">
+    <h1 class="h3 mb-4 text-gray-800"></h1>
+    <div class="card shadow">
+        <div class="card-body">
+            <h5>매출 내역</h5>
+            <p></p>
+            <table class="table table-bordered">
+                <tr>
+                    <th>창고명</th>
+                    <td th:text="${sales.member.warehouse.name}"></td>
+                </tr>
+                <tr>
+                    <th>매출일자</th>
+                    <td th:text="${{sales.salesDate}}"></td>
+                </tr>
+                <tr>
+                    <th>매출분류</th>
+                    <td th:text="${sales.category}"></td>
+                </tr>
+                <tr>
+                    <th>회사명</th>
+                    <td th:text="${sales.member.name}"></td>
+                </tr>
+                <tr>
+                    <th>매출액</th>
+                    <td th:text="${{sales.amount}}"></td>
+                </tr>
+                <tr>
+                    <th>매출 설명</th>
+                    <td th:text="${sales.description}"></td>
+                </tr>
+                <tr>
+                    <th>등록일자</th>
+                    <td th:text="${{sales.regDate}}"></td>
+                </tr>
+                <tr>
+                    <th>수정일자</th>
+                    <td th:text="${{sales.modDate}}"></td>
+                </tr>
+            </table>
+            <div style="display: flex; align-items: center;">
+                <a th:href="@{/sales/{id}/update(id=${sales.id})}" class="btn btn-primary" th:text="수정"></a>
+                <form method="post" th:action="@{/sales/{id}/delete(id=${sales.id})}">
+                    <button type="submit" class="btn btn-danger" style="margin-left: 0.3rem" th:text="삭제"/>
+                </form>
+                <a th:href="@{/sales}" class="btn btn-secondary" th:text="목록" style="margin-left: 0.3rem"></a>
+            </div>
+        </div>
+    </div>
+    </body>
+</section>
+</html>
