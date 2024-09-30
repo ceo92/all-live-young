@@ -1,5 +1,6 @@
 package allliveyoung.wms.web.dto;
 
+import allliveyoung.wms.constant.RequestStatus;
 import allliveyoung.wms.domain.Member;
 import allliveyoung.wms.domain.Status;
 import allliveyoung.wms.domain.Stock;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class OutboundRequestDTO {
   private Long id;
   private String code;
-  private Status status;
+  private RequestStatus status;
   private Member member;
   private Stock stock;
   private int quantity;
