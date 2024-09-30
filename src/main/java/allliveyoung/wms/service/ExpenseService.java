@@ -22,11 +22,11 @@ public class ExpenseService {
      * @return
      */
     @Transactional(readOnly = true)
-    public ExpenseResponseDTO findExpenses(ExpenseRequestDTO expenseRequestDTO) {
+    public ExpenseResponseDTO findExpenses(ExpenseRequestDTO expenseRequestDTO, Long warehouse_id) {
         return ExpenseResponseDTO.builder()
                 .expenseRequestDTO(expenseRequestDTO)
-                .expenses(expenseMapper.findAll(expenseRequestDTO))
-                .total(expenseMapper.count(expenseRequestDTO))
+                .expenses(expenseMapper.findAll(expenseRequestDTO, warehouse_id))
+                .total(expenseMapper.count(expenseRequestDTO, warehouse_id))
                 .build();
     }
 

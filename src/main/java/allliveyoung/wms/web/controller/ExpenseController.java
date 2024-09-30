@@ -27,8 +27,15 @@ public class ExpenseController {
     private final SalesService salesService;
 
     @GetMapping
-    public String getExpenses(ExpenseRequestDTO expenseRequestDTO, Model model) {
-        model.addAttribute("expenseList", expenseService.findExpenses(expenseRequestDTO));
+    public String getExpenses(@AuthenticationPrincipal UserDetailsDTO user,
+                              ExpenseRequestDTO expenseRequestDTO, Model model) {
+        Warehouse warehouse = user.getMember().getWarehouse();
+
+        if (warehouse == null) {
+            model.addAttribute("expenseList", expenseService.findExpenses(expenseRequestDTO, 0L));
+        } else {
+            model.addAttribute("expenseList", expenseService.findExpenses(expenseRequestDTO, user.getMember().getWarehouse().getId()));
+        }
         return "/finance/expense-list";
     }
 

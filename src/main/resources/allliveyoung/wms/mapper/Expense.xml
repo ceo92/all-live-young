@@ -26,18 +26,18 @@
         </association>
     </resultMap>
 
-    <resultMap id="sumExpenses" type="com.all_live_young_wms_local.web.dto.SumExpensesDTO">
+    <resultMap id="sumExpenses" type="allliveyoung.wms.web.dto.SumExpensesDTO">
         <result property="year" column="YEAR(expense_date)"/>
         <result property="month" column="MONTH(expense_date)"/>
         <result property="sumAmount" column="SUM(expense_amount)"/>
     </resultMap>
 
-    <resultMap id="sumExpensesCategory" type="com.all_live_young_wms_local.web.dto.SumExpensesCategoryDTO">
+    <resultMap id="sumExpensesCategory" type="allliveyoung.wms.web.dto.SumExpensesCategoryDTO">
         <result property="category" column="expense_category"/>
         <result property="sumAmount" column="SUM(expense_amount)"/>
     </resultMap>
 
-    <resultMap id="netProfit" type="com.all_live_young_wms_local.web.dto.NetProfitDTO">
+    <resultMap id="netProfit" type="allliveyoung.wms.web.dto.NetProfitDTO">
         <result property="year" column="ey"/>
         <result property="netProfit" column="net_profit"/>
     </resultMap>
@@ -70,21 +70,26 @@
         FROM expense e
         JOIN warehouse w ON e.warehouse_id = w.warehouse_id
 
-        <if test="requestDTO.keyword != ''">
-            <if test="requestDTO.type == 'category'">
-                WHERE expense_category LIKE CONCAT ('%', #{requestDTO.keyword} '%')
+        <where>
+            <if test="warehouse_id != 0">
+                e.warehouse_id = #{warehouse_id}
             </if>
-            <if test="requestDTO.type == 'warehouse'">
-                WHERE warehouse_name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+            <if test="requestDTO.keyword != ''">
+                <if test="requestDTO.type == 'category'">
+                    AND expense_category LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+                </if>
+                <if test="requestDTO.type == 'warehouse'">
+                    AND warehouse_name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+                </if>
             </if>
-        </if>
 
-        <if test="requestDTO.dateFrom != null and requestDTO.dateTo != null">
-            <![CDATA[
-                WHERE expense_date >= #{requestDTO.dateFrom}
-                 AND expense_date <= #{requestDTO.dateTo}
-            ]]>
-        </if>
+            <if test="requestDTO.dateFrom != null and requestDTO.dateTo != null">
+                <![CDATA[
+                    AND expense_date >= #{requestDTO.dateFrom}
+                     AND expense_date <= #{requestDTO.dateTo}
+                ]]>
+            </if>
+        </where>
         ORDER BY expense_id DESC
         LIMIT #{requestDTO.offset}, #{requestDTO.size}
     </select>
@@ -94,21 +99,26 @@
         FROM expense e
         JOIN warehouse w ON e.warehouse_id = w.warehouse_id
 
-        <if test="requestDTO.keyword != ''">
-            <if test="requestDTO.type == 'category'">
-                WHERE expense_category LIKE CONCAT ('%', #{requestDTO.keyword} '%')
+        <where>
+            <if test="warehouse_id != 0">
+                e.warehouse_id = #{warehouse_id}
             </if>
-            <if test="requestDTO.type == 'warehouse'">
-                WHERE warehouse_name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+            <if test="requestDTO.keyword != ''">
+                <if test="requestDTO.type == 'category'">
+                    AND expense_category LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+                </if>
+                <if test="requestDTO.type == 'warehouse'">
+                    AND warehouse_name LIKE CONCAT ('%', #{requestDTO.keyword}, '%')
+                </if>
             </if>
-        </if>
 
-        <if test="requestDTO.dateFrom != null and requestDTO.dateTo != null">
-            <![CDATA[
-                WHERE expense_date >= #{requestDTO.dateFrom}
-                 AND expense_date <= #{requestDTO.dateTo}
-            ]]>
-        </if>
+            <if test="requestDTO.dateFrom != null and requestDTO.dateTo != null">
+                <![CDATA[
+                    AND expense_date >= #{requestDTO.dateFrom}
+                     AND expense_date <= #{requestDTO.dateTo}
+                ]]>
+            </if>
+        </where>
     </select>
 
     <select id="findSumExpenses" resultMap="sumExpenses">
