@@ -15,5 +15,5 @@ public class Announcement {
     private Long managerId;
     private LocalDateTime writeDate;
     private String content;
-    private Boolean Highlight;
+    private Boolean highlight;
 }
