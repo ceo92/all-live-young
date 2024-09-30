@@ -13,6 +13,8 @@ public class AnnouncementDTO {
 
     private Long managerId;
 
+    private String title;
+
     private String content;
 
     private Boolean highlight;

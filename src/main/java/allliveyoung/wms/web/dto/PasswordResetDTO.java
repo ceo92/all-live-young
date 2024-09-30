@@ -18,6 +18,5 @@ public class PasswordResetDTO {
     @NotBlank
     private String newPassword;
 
-// 토큰 검증
     private String resetToken;
 }

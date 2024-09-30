@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>회원 상세 정보</h2>
+    <p>이름: <span th:text="${member.name}"></span></p>
+    <p>이메일: <span th:text="${member.email}"></span></p>
+    <p>전화번호: <span th:text="${member.phoneNumber}"></span></p>
+    <!-- 기타 회원 정보 표시 -->
+    <div th:if="${member.accountStatus == 'WAITING_APPROVAL'}">
+        <form th:action="@{/admin/members/{memberId}/approve(memberId=${member.memberId})}" method="post">
+            <button type="submit">승인</button>
+        </form>
+        <form th:action="@{/admin/members/{memberId}/reject(memberId=${member.memberId})}" method="post">
+            <button type="submit">반려</button>
+        </form>
+    </div>
+    <div th:if="${member.accountStatus == 'WAITING_CANCEL'}">
+        <form th:action="@{/admin/members/{memberId}/approve-withdrawal(memberId=${member.memberId})}" method="post">
+            <button type="submit">탈퇴 처리</button>
+        </form>
+    </div>
+</section>
+</body>
+</html>

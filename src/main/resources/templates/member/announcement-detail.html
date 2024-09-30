@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>공지사항 상세</h2>
+    <h3 th:text="${announcement.title}"></h3>
+    <p th:text="${announcement.content}"></p>
+    <p>작성일: <span th:text="${#temporals.format(announcement.writeDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+    <p>작성자: <span th:text="${announcement.managerName}"></span></p>
+
+    <!-- 관리자 권한이 있는 경우에만 수정 및 삭제 버튼 표시 -->
+    <div th:if="${#session.getAttribute('loginMember') != null and
+                     (#session.getAttribute('loginMember').roleType == 'ADMIN' or
+                      #session.getAttribute('loginMember').roleType == '')}" >
+        <a th:href="@{/announcements/{id}/update(id=${announcement.announcementId})}">수정</a>
+        <form th:action="@{/announcements/{id}/delete(id=${announcement.announcementId})}" method="post" style="display:inline;">
+            <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+        </form>
+    </div>
+
+    <a th:href="@{/announcements}">목록으로 돌아가기</a>
+</section>
+</body>
+</html>

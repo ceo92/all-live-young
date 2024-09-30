@@ -1,5 +1,3 @@
-// src/main/java/allliveyoung/wms/config/MailConfig.java
-
 package allliveyoung.wms.config;
 
 import org.springframework.context.annotation.Bean;
@@ -12,8 +10,6 @@ import java.util.Properties;
 @Configuration
 public class MailConfig {
 
-
-    // mail config 파일입니다
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

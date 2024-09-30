@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>문의 작성</h2>
+
+    <!-- 성공 메시지 표시 -->
+    <div th:if="${message}" class="success">
+        <p th:text="${message}"></p>
+    </div>
+
+    <!-- 에러 메시지 표시 -->
+    <div th:if="${errorMessage}" class="error">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <form th:action="@{/inquiries/save}" th:object="${inquiryDTO}" method="post">
+        <!-- 문의 제목 -->
+        <div>
+            <label for="inquiryTitle">제목:</label>
+            <input type="text" id="inquiryTitle" th:field="*{inquiryTitle}" required>
+            <div th:if="${#fields.hasErrors('inquiryTitle')}" th:errors="*{inquiryTitle}" class="error"></div>
+        </div>
+
+        <!-- 문의 내용 -->
+        <div>
+            <label for="inquiryContent">내용:</label>
+            <textarea id="inquiryContent" th:field="*{inquiryContent}" required></textarea>
+            <div th:if="${#fields.hasErrors('inquiryContent')}" th:errors="*{inquiryContent}" class="error"></div>
+        </div>
+
+        <!-- 에러 메시지 표시 -->
+        <div th:if="${#fields.hasErrors('*')}">
+            <p th:each="err : ${#fields.errors('*')}" th:text="${err}" class="error"></p>
+        </div>
+
+        <!-- 문의 작성 버튼 -->
+        <button type="submit">작성</button>
+    </form>
+
+    <a th:href="@{/inquiries}">목록으로 돌아가기</a>
+</section>
+</body>
+</html>

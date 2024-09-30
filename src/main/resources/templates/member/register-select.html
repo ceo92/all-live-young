@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>회원 유형 선택</h2>
+    <ul>
+        <li><a th:href="@{/member/register?roleType=COMPANY}">회사 회원 가입</a></li>
+        <li><a th:href="@{/member/register?roleType=}">창고 관리자 가입</a></li>
+    </ul>
+</section>
+</body>
+</html>
