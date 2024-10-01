@@ -30,9 +30,9 @@ public class MemberUpdateDTO {
     public MemberUpdateDTO(Member member) {
         this.memberId = member.getMemberId();
         this.phoneNumber = member.getPhoneNumber();
-        this.roadNameAddress = member.getRoadNameAddress();
-        this.detailsAddress = member.getDetailsAddress();
+        this.roadNameAddress = member.getAddress().getRoadNameAddress();
+        this.detailsAddress = member.getAddress().getDetailsAddress();
         this.businessNumber = member.getBusinessNumber();
-        this.warehouseId = member.getWarehouseId();
+        this.warehouseId = member.getWarehouse().getWarehouseId();
     }
 }
