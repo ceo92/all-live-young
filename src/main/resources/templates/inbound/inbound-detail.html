@@ -66,23 +66,23 @@
                         </tbody>
                     </table>
                     <div class="form-container">
-                        <a th:href="@{/inbound-requests}" class="btn btn-secondary" th:text="취소"></a>
+                        <a th:href="@{/inbound-requests}" class="btn btn-secondary" th:text="취소" style="display: inline-block; margin-right: 0.5rem;"></a>
 
-                        <form id="rejectForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/update-status'}" method="post">
+                        <form id="rejectForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/update-status'}" method="post" style="display: inline-block; margin-right: 0.5rem;" th:if="${responseDTO.get(0).inboundRequest.status != '승인' and responseDTO.get(0).inboundRequest.status != '반려'}">
                             <input type="hidden" name="status" value="반려">
                             <button class="btn btn-danger" type="submit">반려</button>
                         </form>
 
-                        <form id="approveForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/update-status'}" method="post">
+                        <form id="approveForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/update-status'}" method="post" style="display: inline-block; margin-right: 0.5rem;" th:if="${responseDTO.get(0).inboundRequest.status != '승인' and responseDTO.get(0).inboundRequest.status != '반려'}">
                             <input type="hidden" name="status" value="승인">
                             <button class="btn btn-success" type="submit">승인</button>
                         </form>
 
-                        <form id="updateForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/update'}" method="get">
+                        <form id="updateForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/update'}" method="get" style="display: inline-block; margin-right: 0.5rem;" th:if="${responseDTO.get(0).inboundRequest.status != '승인' and responseDTO.get(0).inboundRequest.status != '반려'}">
                             <button class="btn btn-primary" type="submit">수정</button>
                         </form>
 
-                        <form id="deleteForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/delete'}" method="post">
+                        <form id="deleteForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/delete'}" method="post" style="display: inline-block;" th:if="${responseDTO.get(0).inboundRequest.status != '승인' and responseDTO.get(0).inboundRequest.status != '반려'}">
                             <button class="btn btn-danger" type="submit">삭제</button>
                         </form>
                     </div>
