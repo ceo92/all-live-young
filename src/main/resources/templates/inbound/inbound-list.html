@@ -78,7 +78,7 @@
                             </th:block>
                         </ul>
 
-                        <form th:action="@{/inbound-requests/save}" method="get">
+                        <form th:action="@{/inbound-requests/save}" method="get" th:if="${role == 'USER'}">
                             <button class="submit btn btn-primary" type="submit">등록</button>
                         </form>
                     </div>
