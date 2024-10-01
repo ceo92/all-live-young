@@ -17,8 +17,9 @@
         <tr th:each="member : ${members}">
             <td th:text="${member.name}"></td>
             <td>
-                <a th:href="@{/admin/members/{memberId}(memberId=${member.memberId})}"
-                   th:text="${member.email}"></a> <!-- 회원 이메일 클릭 시 상세보기로 이동 -->
+                <a th:href="@{/admin/members/{memberId}(memberId=${member.memberId}, showActionButtons=true)}" th:text="${member.email}"></a>
+
+                th:text="${member.email}"></a> <!-- 회원 이메일 클릭 시 상세보기로 이동 -->
             </td>
             <td th:text="${member.roleType}"></td>
             <td th:text="${#dates.format(member.joinDate, 'yyyy-MM-dd')}"></td>

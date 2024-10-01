@@ -2,38 +2,39 @@ package allliveyoung.wms.service;
 
 import allliveyoung.wms.domain.AccountStatus;
 import allliveyoung.wms.domain.Member;
+import allliveyoung.wms.domain.PasswordResetToken;
 import allliveyoung.wms.domain.RoleType;
 import allliveyoung.wms.exception.InvalidTokenException;
 import allliveyoung.wms.exception.MemberNotFoundException;
 import allliveyoung.wms.mapper.MemberMapper;
+import allliveyoung.wms.mapper.PasswordResetTokenMapper;
 import allliveyoung.wms.web.dto.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper memberMapper;
     private final ModelMapper modelMapper;
-    private final BCryptPasswordEncoder passwordEncoder;
-    private final EmailServiceImpl emailServiceImpl;
-//    private final EmailService emailService;
+    private final EmailService emailService; // 인터페이스로 변경
+    private final PasswordResetTokenMapper passwordResetTokenMapper;
+//    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public MemberServiceImpl(MemberMapper memberMapper, ModelMapper modelMapper,
-//                             ,EmailService emailService
-                             EmailServiceImpl emailServiceImpl) {
+    public MemberServiceImpl(MemberMapper memberMapper, PasswordResetTokenMapper passwordResetTokenMapper,
+                             ModelMapper modelMapper, EmailService emailService) { // 인터페이스로 변경
         this.memberMapper = memberMapper;
+        this.passwordResetTokenMapper = passwordResetTokenMapper;
         this.modelMapper = modelMapper;
-        this.passwordEncoder = new BCryptPasswordEncoder();
-//        this.emailService = emailService;
-        this.emailServiceImpl = emailServiceImpl;
+        this.emailService = emailService;
+//        this.passwordEncoder = passwordEncoder;
     }
 
     // 회원가입
@@ -41,26 +42,14 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void registerMember(MemberSaveDTO memberSaveDTO) {
         Member member = modelMapper.map(memberSaveDTO, Member.class);
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
+//        member.setPassword(passwordEncoder.encode(memberSaveDTO.getPassword()));
         member.setAccountStatus(AccountStatus.WAITING_APPROVAL); // 승인 대기 상태로 저장
         member.setJoinDate(LocalDateTime.now());
         member.setAgreeDate(LocalDateTime.now());
         member.setIsAgree(true);
+        member.setLastLoginDate(LocalDateTime.now());
 
         memberMapper.insertMember(member);
-    }
-
-    // 로그인
-    @Override
-    public Member login(LoginDTO loginDTO) {
-        Member member = memberMapper.selectMemberByEmail(loginDTO.getEmail());
-        if (member != null && passwordEncoder.matches(loginDTO.getPassword(), member.getPassword())) {
-            // 로그인 성공 시 마지막 로그인 날짜 업데이트
-            member.setLastLoginDate(LocalDateTime.now());
-            memberMapper.updateMember(member);
-            return member;
-        }
-        return null;
     }
 
     // 아이디 찾기
@@ -73,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
         return null;
     }
 
-//     비밀번호 재설정 요청 (이메일 발송)
+    // 비밀번호 재설정 요청 (이메일 발송)
     @Override
     @Transactional
     public void requestPasswordReset(PasswordResetRequestDTO passwordResetRequestDTO) throws Exception {
@@ -82,38 +71,49 @@ public class MemberServiceImpl implements MemberService {
                 passwordResetRequestDTO.getPhoneNumber(),
                 passwordResetRequestDTO.getBusinessNumber()
         );
+
         if (member != null) {
-            String resetToken = generateResetToken(); // 토큰 생성 메서드
-            // 토큰을 저장하거나 캐시에 저장하는 로직 추가 필요
-            String resetLink = "https://yourdomain.com/reset-password?token=" + resetToken;
-            emailServiceImpl.sendPasswordResetEmail(member.getEmail(), resetLink);
+            // 토큰 생성 및 저장
+            String resetToken = generateResetToken();
+            PasswordResetToken token = PasswordResetToken.builder()
+                    .token(resetToken)
+                    .memberId(member.getMemberId())
+                    .expirationTime(LocalDateTime.now().plusHours(1))  // 1시간 후 만료
+                    .build();
+
+            passwordResetTokenMapper.insertToken(token);
+
+            // 비밀번호 재설정 링크 전송
+            String resetLink = "https://yourdomain.com/member/reset-password?token=" + resetToken;
+            emailService.sendPasswordResetEmail(member.getEmail(), resetLink);
         } else {
             throw new MemberNotFoundException("일치하는 회원 정보를 찾을 수 없습니다.");
         }
     }
 
+    // 비밀번호 재설정 처리
     @Override
     @Transactional
-    public void resetPassword(PasswordResetDTO passwordResetDTO) {
-        // 토큰 검증 로직 (예시)
-        boolean isTokenValid = validateResetToken(passwordResetDTO.getEmail(), passwordResetDTO.getResetToken());
-        if (!isTokenValid) {
+    public void resetPassword(PasswordResetDTO passwordResetDTO) throws InvalidTokenException, MemberNotFoundException {
+        // 토큰 검증
+        PasswordResetToken token = passwordResetTokenMapper.selectTokenByToken(passwordResetDTO.getResetToken());
+
+        if (token == null || token.getExpirationTime().isBefore(LocalDateTime.now())) {
             throw new InvalidTokenException("유효하지 않거나 만료된 토큰입니다.");
         }
 
-        Member member = memberMapper.selectMemberByEmail(passwordResetDTO.getEmail());
+        // 회원 정보 조회
+        Member member = memberMapper.selectMemberById(token.getMemberId());
         if (member != null) {
-            member.setPassword(passwordEncoder.encode(passwordResetDTO.getNewPassword()));
+            // 새 비밀번호 설정 (암호화 없이)
+            member.setPassword(passwordResetDTO.getNewPassword());
             memberMapper.updateMember(member);
+
+            // 사용된 토큰 삭제
+            passwordResetTokenMapper.deleteTokenByMemberId(member.getMemberId());
         } else {
             throw new MemberNotFoundException("회원 정보를 찾을 수 없습니다.");
         }
-    }
-
-
-    private boolean validateResetToken(String email, String token) {
-
-        return true;
     }
 
     // 마이페이지 조회
@@ -134,13 +134,12 @@ public class MemberServiceImpl implements MemberService {
         if (member != null) {
             // 필요한 필드 업데이트
             member.setPhoneNumber(memberUpdateDTO.getPhoneNumber());
-            member.setRoadNameAddress(memberUpdateDTO.getRoadNameAddress());
-            member.setDetailsAddress(memberUpdateDTO.getDetailsAddress());
-            // 회원 유형별 특화 정보 업데이트 (예: businessNumber)
+            member.getAddress().setRoadNameAddress(memberUpdateDTO.getRoadNameAddress());
+            member.getAddress().setDetailsAddress(memberUpdateDTO.getDetailsAddress());
             if (member.getRoleType() == RoleType.COMPANY) {
                 member.setBusinessNumber(memberUpdateDTO.getBusinessNumber());
-            } else if (member.getRoleType() == RoleType.WAREHOUSE_MANAGER) {
-                member.setWarehouseId(memberUpdateDTO.getWarehouseId());
+            } else if (member.getRoleType() == RoleType.MANAGER) {
+                member.getWarehouse().setWarehouseId(memberUpdateDTO.getWarehouseId());
             }
             memberMapper.updateMember(member);
         } else {
@@ -154,7 +153,7 @@ public class MemberServiceImpl implements MemberService {
     public void requestWithdrawal(Long memberId) {
         Member member = memberMapper.selectMemberById(memberId);
         if (member != null) {
-            member.setAccountStatus(AccountStatus.WAITING_CANCEL); // 탈퇴 대기로 상태 변경
+            member.setAccountStatus(AccountStatus.WAITING_CANCEL); // 탈퇴 대기 상태로 변경
             memberMapper.updateMember(member);
         } else {
             throw new MemberNotFoundException("회원 정보를 찾을 수 없습니다.");
@@ -198,17 +197,13 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    // 비밀번호 재설정 토큰 생성 메서드
-    private String generateResetToken() {
-
-        return java.util.UUID.randomUUID().toString();
-    }
-
+    // 이메일로 회원 조회
     @Override
     public Member getMemberByEmail(String email) {
         return memberMapper.selectMemberByEmail(email);
     }
 
+    // 이메일로 회원의 전화번호 업데이트
     @Override
     @Transactional
     public void updateMemberPhoneNumber(String email, String phoneNumber) {
@@ -223,8 +218,18 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<Member> getMembersByCriteria(String roleType, String accountStatus, String keyword) {
-        RoleType rt = roleType != null ? RoleType.valueOf(roleType) : null;
-        AccountStatus as = accountStatus != null ? AccountStatus.valueOf(accountStatus) : null;
-        return memberMapper.selectMembersByCriteria(rt, as, keyword);
+        return List.of();
     }
+
+    // 토큰 생성 메서드
+    private String generateResetToken() {
+        return UUID.randomUUID().toString();
+    }
+
+    @Override
+    @Transactional
+    public void deleteMember(Long memberId) {
+        memberMapper.deleteMember(memberId);
+    }
+
 }
