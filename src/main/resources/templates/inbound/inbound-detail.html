@@ -61,7 +61,7 @@
                             <td th:text="${dto.palletQuantity}"></td>
                             <td th:text="${dto.boxQuantity}"></td>
                             <td th:text="${dto.manufactureNum}"></td>
-                            <td th:text="${dto.expDate}"></td>
+                            <td th:text="${dto.expirationDate}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -70,7 +70,7 @@
 
                         <form id="rejectForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/update-status'}" method="post" style="display: inline-block; margin-right: 0.5rem;" th:if="${responseDTO.get(0).inboundRequest.status != '승인' and responseDTO.get(0).inboundRequest.status != '반려'}">
                             <input type="hidden" name="status" value="반려">
-                            <button class="btn btn-danger" type="submit">반려</button>
+                            <button class="btn btn-danger" type="submit" onclick="handleReject()">반려</button>
                         </form>
 
                         <form id="approveForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/update-status'}" method="post" style="display: inline-block; margin-right: 0.5rem;" th:if="${responseDTO.get(0).inboundRequest.status != '승인' and responseDTO.get(0).inboundRequest.status != '반려'}">
@@ -91,6 +91,21 @@
         </div>
 
     </div>
+
+    <script>
+        function handleReject() {
+            var reason = prompt("반려 사유를 작성해주세요:");
+            if (reason) {
+                var rejectForm = document.getElementById("rejectForm");
+                var reasonInput = document.createElement("input");
+                reasonInput.type = "hidden";
+                reasonInput.name = "rejectionNote";
+                reasonInput.value = reason;
+                rejectForm.appendChild(reasonInput);
+                rejectForm.submit();
+            }
+        }
+    </script>
 </section>
 
 </html>

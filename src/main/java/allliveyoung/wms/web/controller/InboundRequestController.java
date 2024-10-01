@@ -24,28 +24,23 @@ public class InboundRequestController {
     private final InboundRequestService inboundRequestService;
 
     @GetMapping
-    public String getInboundRequests(@Validated InboundPageRequestDTO inboundPageRequestDTO, BindingResult bindingResult, Model model) {
-        log.info(inboundPageRequestDTO);
-        if(bindingResult.hasErrors()) {
-            inboundPageRequestDTO = InboundPageRequestDTO.builder().build();
-        }
+    public String getInboundRequests(InboundPageRequestDTO inboundPageRequestDTO, Model model, Member member) {
+        model.addAttribute("responseDTO", inboundRequestService.findInbounds(inboundPageRequestDTO, member));
 
-        model.addAttribute("responseDTO", inboundRequestService.findInbounds(inboundPageRequestDTO));
         return "inbound-list";
     }
 
     @GetMapping("/{id}")
-    public String getInboundRequest(@PathVariable Long id, Model model, InboundPageRequestDTO inboundPageRequestDTO) {
+    public String getInboundRequest(@PathVariable Long id, Model model) {
         log.info(id);
         inboundRequestService.findInbound(id).forEach(log::info);
         model.addAttribute("responseDTO", inboundRequestService.findInbound(id));
-
 
         return "inbound-detail";
     }
 
     @GetMapping("/save")
-    public String getInboundRequestSaveForm(Member member, Model model) {//todo 시큐리티 적용
+    public String getInboundRequestSaveForm(Model model) {//todo 시큐리티 적용
         log.info("getInboundRequestSaveForm..........");
 
         model.addAttribute("warehouseDTO", inboundRequestService.getWarehouseList());
@@ -58,6 +53,7 @@ public class InboundRequestController {
     public String getInboundRequestUpdateForm(@PathVariable(value = "id") Long id, Model model) {
         log.info("getInboundRequestUpdateForm..........");
         model.addAttribute("responseDTO", inboundRequestService.findInbound(id));
+
         return "inbound-modify";
     }
 
@@ -102,8 +98,8 @@ public class InboundRequestController {
         return "redirect:/inbound-requests/{id}";
     }
 
-    @PostMapping("/{id}/update-status")
-    public String PostRequestUpdateStatus(@PathVariable Long id, @RequestParam String status, RedirectAttributes redirectAttributes) {
+    @PostMapping("/{id}/update-status") //todo rejectionNote도 같이 넘겨줘야 함
+    public String PostRequestUpdateStatus(@PathVariable Long id, @RequestParam String status, @RequestParam String rejectionNote, RedirectAttributes redirectAttributes) {
         log.info("update status..........");
         inboundRequestService.updateInboundStatus(id, status);
 

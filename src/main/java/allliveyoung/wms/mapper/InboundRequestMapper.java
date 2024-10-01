@@ -1,7 +1,9 @@
-package allliveyoung.allliveinbound.mapper;
+package allliveyoung.wms.mapper;
 
-import allliveyoung.allliveinbound.domain.*;
-import allliveyoung.allliveinbound.web.dto.*;
+import allliveyoung.wms.domain.Member;
+import allliveyoung.wms.domain.Product;
+import allliveyoung.wms.domain.Warehouse;
+import allliveyoung.wms.web.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -9,7 +11,7 @@ import java.util.*;
 
 @Mapper
 public interface InboundRequestMapper {
-    List<InboundRequest> findAll(InboundPageRequestDTO inboundPageRequestDTO);
+    List<allliveyoung.allliveinbound.web.dto.InboundRequest> findAll(InboundPageRequestDTO inboundPageRequestDTO, Member member);
 
     List<InboundRequestProduct> findById(@Param("id") Long id);
 
@@ -26,7 +28,7 @@ public interface InboundRequestMapper {
 
     void updateStatus(Map<String, Object> map);
 
-    int getCount(InboundPageRequestDTO inboundPageRequestDTO);
+    int getCount(InboundPageRequestDTO inboundPageRequestDTO, Member member);
 
     List<Warehouse> getWarehouseList();
 

@@ -1,11 +1,12 @@
 package allliveyoung.wms.service;
 
+import allliveyoung.wms.domain.Member;
 import allliveyoung.wms.web.dto.*;
 
 import java.util.List;
 
 public interface InboundRequestService {
-    InboundPageResponseDTO<InboundRequestDTO> findInbounds(InboundPageRequestDTO inboundPageRequestDTO);
+    InboundPageResponseDTO<InboundRequestDTO> findInbounds(InboundPageRequestDTO inboundPageRequestDTO, Member member);
 
     List<InboundProductDTO> findInbound(Long id);
 

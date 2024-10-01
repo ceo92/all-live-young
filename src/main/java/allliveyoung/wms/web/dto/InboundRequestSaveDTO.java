@@ -19,5 +19,5 @@ public class InboundRequestSaveDTO {
     private Long id;
     private Long memberId;
     private Long warehouseId;
-    private List<allliveyoung.allliveinbound.web.dto.InboundProductSaveDTO> inboundProductSaveDTOList;
+    private List<InboundProductSaveDTO> inboundProductSaveDTOList;
 }

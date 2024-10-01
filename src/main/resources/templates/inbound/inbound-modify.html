@@ -71,7 +71,7 @@
                                 <input type="text" name="manufactureNum" th:value="${dto.manufactureNum}">
                             </td>
                             <td>
-                                <input type="date" name="expDate" th:value="${dto.expDate}">
+                                <input type="date" name="expirationDate" th:value="${dto.expirationDate}">
                             </td>
                         </tr>
                         </tbody>
@@ -120,7 +120,7 @@
                         palletQuantity: palletQuantityElement.value,
                         boxQuantity: boxQuantityElement.value,
                         manufactureNum: manufactureNumElement.value,
-                        expDate: expDateElement.value
+                        expirationDate: expDateElement.value
                     });
                 } else {
                     console.error('Some required elements are missing in row ' + (i + 1));

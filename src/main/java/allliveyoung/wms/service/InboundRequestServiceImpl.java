@@ -3,6 +3,7 @@ package allliveyoung.wms.service;
 
 import allliveyoung.allliveinbound.mapper.InboundRequestMapper;
 
+import allliveyoung.wms.domain.Member;
 import allliveyoung.wms.domain.Warehouse;
 import allliveyoung.wms.web.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,11 @@ public class InboundRequestServiceImpl implements InboundRequestService {
     private final ModelMapper modelMapper;
 
     @Override
-    public InboundPageResponseDTO<InboundRequestDTO> findInbounds(InboundPageRequestDTO inboundPageRequestDTO) {
-        List<InboundRequestDTO> requests = inboundRequestMapper.findAll(inboundPageRequestDTO).stream()
+    public InboundPageResponseDTO<InboundRequestDTO> findInbounds(InboundPageRequestDTO inboundPageRequestDTO, Member member) {
+        List<InboundRequestDTO> requests = inboundRequestMapper.findAll(inboundPageRequestDTO, member).stream()
                 .map(request -> modelMapper.map(request,InboundRequestDTO.class)).collect(Collectors.toList());
 
-        int total = inboundRequestMapper.getCount(inboundPageRequestDTO);
+        int total = inboundRequestMapper.getCount(inboundPageRequestDTO, member);
 
         InboundPageResponseDTO<InboundRequestDTO> responseDTO = InboundPageResponseDTO.<InboundRequestDTO>withAll()
                 .dtoList(requests).total(total).inboundPageRequestDTO(inboundPageRequestDTO).build();
@@ -56,6 +57,7 @@ public class InboundRequestServiceImpl implements InboundRequestService {
     @Override
     public void updateInbound(Long id, InboundRequestUpdateDTO inboundRequestUpdateDTO) {
         inboundRequestMapper.update(id);
+        log.info(inboundRequestUpdateDTO.getInboundProductUpdateDTOList());
         inboundRequestMapper.updateProducts(inboundRequestUpdateDTO.getInboundProductUpdateDTOList());
     }
 
