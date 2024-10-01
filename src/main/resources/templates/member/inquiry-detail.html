@@ -12,11 +12,13 @@
     <div th:if="${answer != null}">
         <h4>답변</h4>
         <p th:text="${answer.answerContent}"></p>
-        <p>답변일: <span th:text="${#temporals.format(answer.answerTime, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+        <p>답변일: <span th:text="${#temporals.format(answer.answerWriteTime, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
         <p>답변자: <span th:text="${answer.memberName}"></span></p>
 
         <!-- 창고 관리자에게만 답변 수정 및 삭제 버튼 표시 -->
-        <div th:if="${#session.getAttribute('loginMember') != null and #session.getAttribute('loginMember').roleType == '' and #session.getAttribute('loginMember').memberId == answer.memberId}">
+        <div th:if="${#session.getAttribute('loginMember') != null and
+                      #session.getAttribute('loginMember').roleType == 'MANAGER' and
+                      #session.getAttribute('loginMember').memberId == answer.memberId}">
             <a th:href="@{/inquiries/{inquiryId}/answer/{answerId}/update(inquiryId=${inquiry.inquiryId}, answerId=${answer.answerId})}">답변 수정</a>
             <form th:action="@{/inquiries/{inquiryId}/answer/{answerId}/delete(inquiryId=${inquiry.inquiryId}, answerId=${answer.answerId})}" method="post" style="display:inline;">
                 <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">답변 삭제</button>
@@ -26,15 +28,15 @@
 
     <!-- 창고 관리자에게만 답변 작성 버튼 표시 -->
     <div th:if="${#session.getAttribute('loginMember') != null and
-                     #session.getAttribute('loginMember').roleType == '' and
-                     answer == null}">
+                 #session.getAttribute('loginMember').roleType == 'MANAGER' and
+                 answer == null}">
         <a th:href="@{/inquiries/{id}/answer(id=${inquiry.inquiryId})}">답변 작성</a>
     </div>
 
     <!-- 회사 회원에게만 문의 수정 및 삭제 버튼 표시 -->
     <div th:if="${#session.getAttribute('loginMember') != null and
-                     #session.getAttribute('loginMember').roleType == 'COMPANY' and
-                     #session.getAttribute('loginMember').memberId == inquiry.memberId}">
+                 #session.getAttribute('loginMember').roleType == 'COMPANY' and
+                 #session.getAttribute('loginMember').memberId == inquiry.memberId}">
         <a th:href="@{/inquiries/{id}/update(id=${inquiry.inquiryId})}">문의 수정</a>
         <form th:action="@{/inquiries/{id}/delete(id=${inquiry.inquiryId})}" method="post" style="display:inline;">
             <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">문의 삭제</button>

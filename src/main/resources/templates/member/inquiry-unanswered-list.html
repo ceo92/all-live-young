@@ -18,7 +18,7 @@
         <thead>
         <tr>
             <th>제목</th>
-            <th>작성자</th>
+            <th>작성자</th> <!-- Added memberName -->
             <th>작성일</th>
             <th>액션</th>
         </tr>
@@ -28,7 +28,7 @@
             <td>
                 <a th:href="@{/inquiries/{id}(id=${inquiry.inquiryId})}" th:text="${inquiry.inquiryTitle}"></a>
             </td>
-            <td th:text="${inquiry.memberName}"></td>
+            <td th:text="${inquiry.memberName}"></td> <!-- Display memberName -->
             <td th:text="${#temporals.format(inquiry.writeTime, 'yyyy-MM-dd')}"></td>
             <td>
                 <a th:href="@{/inquiries/{id}/answer(id=${inquiry.inquiryId})}">답변 작성</a>
