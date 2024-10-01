@@ -1,9 +1,6 @@
-package allliveyoung.allliveinbound.service;
+package allliveyoung.wms.service;
 
-import allliveyoung.allliveinbound.domain.InboundRequest;
-import allliveyoung.allliveinbound.domain.InboundRequestProduct;
-import allliveyoung.allliveinbound.domain.Warehouse;
-import allliveyoung.allliveinbound.web.dto.*;
+import allliveyoung.wms.web.dto.*;
 
 import java.util.List;
 
@@ -14,7 +11,7 @@ public interface InboundRequestService {
 
     Long saveInbound(InboundRequestSaveDTO inboundRequestSaveDTO);
 
-    void updateInbound(InboundRequestUpdateDTO inboundRequestUpdateDTO, List<InboundProductUpdateDTO> inboundRequestProducts);
+    void updateInbound(Long id, InboundRequestUpdateDTO inboundRequestUpdateDTO);
 
     void deleteInbound(Long id);
 
@@ -23,4 +20,10 @@ public interface InboundRequestService {
     List<WarehouseDTO> getWarehouseList();
 
     List<ProductDTO> getMatchedProductList(Long id);
+
+    Integer getCount(String status);
+
+    List<CountRequestDTO> findCountInbound(Integer year);
+
+    List<CountStockDTO> findCountStock(Integer year);
 }

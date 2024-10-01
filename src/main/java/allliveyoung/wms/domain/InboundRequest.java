@@ -1,11 +1,12 @@
-package allliveyoung.wms.domain;
+package allliveyoung.allliveinbound.web.dto;
 
+import allliveyoung.wms.domain.Member;
+import allliveyoung.wms.domain.Warehouse;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

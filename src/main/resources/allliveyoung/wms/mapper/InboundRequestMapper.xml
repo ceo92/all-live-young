@@ -210,5 +210,40 @@
         select count(inbound_request_id) from inbound_request
     </select>
 
+    <resultMap id="countInbound" type="allliveyoung.allliveinbound.web.dto.CountRequestDTO">
+        <result property="year" column="YEAR(reg_date)"/>
+        <result property="month" column="MONTH(reg_date)"/>
+        <result property="count" column="COUNT(inbound_request_id)"/>
+    </resultMap>
+
+    <resultMap id="countStock" type="allliveyoung.allliveinbound.web.dto.CountStockDTO">
+        <result property="name" column="product_name"/>
+        <result property="count" column="count"/>
+    </resultMap>
+
+    <select id="countByStatus" resultType="int">
+        SELECT COUNT(inbound_request_id)
+        FROM inbound_request
+        WHERE inbound_request_status = #{status}
+    </select>
+
+    <select id="findCountInbound" resultMap="countInbound">
+        SELECT YEAR(reg_date), MONTH(reg_date), COUNT(inbound_request_id)
+        FROM inbound_request
+        WHERE YEAR(reg_date) = #{year}
+        GROUP BY DATE_FORMAT(reg_date, '%Y-%m')
+        ORDER BY YEAR(reg_date), MONTH(reg_date)
+    </select>
+
+    <select id="findCountStock" resultMap="countStock">
+        SELECT product_name, SUM(pallet_quantity * box_quantity) AS count
+        FROM inbound_request_product irp
+            JOIN product p ON irp.product_id = p.product_id
+        WHERE YEAR(expiration_date) = #{year}
+        GROUP BY p.product_id
+        ORDER BY count DESC
+            LIMIT 5
+    </select>
+
 </mapper>
 

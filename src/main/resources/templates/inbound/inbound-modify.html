@@ -54,16 +54,6 @@
                             <th>유효기간</th>
                         </tr>
                         </thead>
-                        <tfoot>
-                        <tr>
-                            <th>번호</th>
-                            <th>의약품</th>
-                            <th>파레트 수량</th>
-                            <th>박스 수량</th>
-                            <th>제조번호</th>
-                            <th>유효기간</th>
-                        </tr>
-                        </tfoot>
                         <tbody>
                         <tr th:each="dto : ${responseDTO}">
                             <th scope="row" th:text="${dto.id}"></th>
@@ -88,14 +78,67 @@
                         </tbody>
                     </table>
                     <div class="form-container">
-                        <button class="Cancel" type="button">취소</button>
-                        <button class="submit" type="submit">수정</button>
+                        <form th:action="@{/inbound-requests}" method="get">
+                            <button class="submit btn btn-primary" type="submit">취소</button>
+                        </form>
+                        <button id="submitBtn" class="submit" type="button">등록</button>
                     </div>
                 </div>
             </div>
         </div>
 
     </div>
+    <script th:inline="javascript">
+        var id = [[${responseDTO[0].inboundRequest.id}]];
+
+        document.getElementById('submitBtn').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            var tableBody = document.getElementById('inputTable').getElementsByTagName('tbody')[0];
+            var rows = tableBody.getElementsByTagName('tr');
+            var products = [];
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName('td');
+                products.push({
+                    productId: cells[0].textContent, // 제품 ID를 첫 번째 셀의 텍스트 내용으로 가정
+                    palletQuantity: cells[1].getElementsByTagName('select')[0].value,
+                    boxQuantity: cells[2].getElementsByTagName('select')[0].value,
+                    manufactureNum: cells[3].getElementsByTagName('input')[0].value,
+                    expDate: cells[4].getElementsByTagName('input')[0].value,
+                    inboundRequestId: id
+                });
+            }
+
+            var data = {
+                inboundProductUpdateDTOList: products
+            };
+
+            var id = /*[[${responseDTO[0].inboundRequest.id}]]*/ null; // Thymeleaf를 사용하여 서버에서 가져옴
+
+            fetch('/inbound-requests/' + id + '/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // 서버 응답을 JSON으로 파싱
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    window.location.href = '/inbound-requests';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('오류가 발생했습니다: ' + error.message);
+                });
+        });
+    </script>
 </section>
 
 </html>

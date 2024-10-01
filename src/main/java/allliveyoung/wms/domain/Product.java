@@ -5,7 +5,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Getter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,5 +16,4 @@ public class Product {
     private String type;
     private LocalDateTime licenseDate;
     private int licenseNum;
-
 }

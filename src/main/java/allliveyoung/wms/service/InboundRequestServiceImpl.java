@@ -1,11 +1,10 @@
-package allliveyoung.allliveinbound.service;
+package allliveyoung.wms.service;
 
-import allliveyoung.allliveinbound.config.ModelMapperConfig;
-import allliveyoung.allliveinbound.domain.InboundRequest;
-import allliveyoung.allliveinbound.domain.InboundRequestProduct;
-import allliveyoung.allliveinbound.domain.Warehouse;
+
 import allliveyoung.allliveinbound.mapper.InboundRequestMapper;
-import allliveyoung.allliveinbound.web.dto.*;
+
+import allliveyoung.wms.domain.Warehouse;
+import allliveyoung.wms.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -55,9 +54,9 @@ public class InboundRequestServiceImpl implements InboundRequestService {
     }
 
     @Override
-    public void updateInbound(InboundRequestUpdateDTO inboundRequestUpdateDTO , List<InboundProductUpdateDTO> inboundRequestProducts) {
-        inboundRequestMapper.update(inboundRequestUpdateDTO.getId());
-        inboundRequestMapper.updateProducts(inboundRequestProducts);
+    public void updateInbound(Long id, InboundRequestUpdateDTO inboundRequestUpdateDTO) {
+        inboundRequestMapper.update(id);
+        inboundRequestMapper.updateProducts(inboundRequestUpdateDTO.getInboundProductUpdateDTOList());
     }
 
     @Override

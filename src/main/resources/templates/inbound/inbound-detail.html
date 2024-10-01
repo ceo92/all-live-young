@@ -66,15 +66,24 @@
                         </tbody>
                     </table>
                     <div class="form-container">
-                        <button class="Cancel" type="button">취소</button>
-                        <button class="Cancel" type="button">반려</button>
-                        <button class="submit" type="submit">승인</button>
-                        <button class="Cancel" type="button">수정</button>
-                        <form id="form5" action="" method="post">
-                            <input type="hidden" name="id" value="${responseDTO.inboundRequest.id}" readonly>
-                            <div>
-                                <button type="submit">삭제</button>
-                            </div>
+                        <a th:href="@{/inbound-requests}" class="btn btn-secondary" th:text="취소"></a>
+
+                        <form id="rejectForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/update-status'}" method="post">
+                            <input type="hidden" name="status" value="반려">
+                            <button class="btn btn-danger" type="submit">반려</button>
+                        </form>
+
+                        <form id="approveForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/update-status'}" method="post">
+                            <input type="hidden" name="status" value="승인">
+                            <button class="btn btn-success" type="submit">승인</button>
+                        </form>
+
+                        <form id="updateForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/update'}" method="get">
+                            <button class="btn btn-primary" type="submit">수정</button>
+                        </form>
+
+                        <form id="deleteForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/delete'}" method="post">
+                            <button class="btn btn-danger" type="submit">삭제</button>
                         </form>
                     </div>
                 </div>

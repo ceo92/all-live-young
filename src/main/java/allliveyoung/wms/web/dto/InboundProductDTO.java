@@ -1,7 +1,7 @@
 package allliveyoung.wms.web.dto;
 
-import allliveyoung.allliveinbound.domain.InboundRequest;
-import allliveyoung.allliveinbound.domain.Product;
+import allliveyoung.wms.domain.Member;
+import allliveyoung.wms.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +17,7 @@ public class InboundProductDTO {
     private int boxQuantity;
     private String manufactureNum;
     private String expDate;
-    private InboundRequest inboundRequest;
+    private allliveyoung.allliveinbound.web.dto.InboundRequest inboundRequest;
     private Product product;
     private Member member;
 }

@@ -35,7 +35,7 @@ public class InboundRequestController {
     }
 
     @GetMapping("/{id}")
-    public String getInboundRequest(@PathVariable(value = "id") Long id, Model model, InboundPageRequestDTO inboundPageRequestDTO) {
+    public String getInboundRequest(@PathVariable Long id, Model model, InboundPageRequestDTO inboundPageRequestDTO) {
         log.info(id);
         inboundRequestService.findInbound(id).forEach(log::info);
         model.addAttribute("responseDTO", inboundRequestService.findInbound(id));
@@ -68,13 +68,9 @@ public class InboundRequestController {
                                              Model model) {
 
         Long savedId = inboundRequestService.saveInbound(inboundRequestSaveDTO);
-        log.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        log.info("inboundRequestSaveDTO = " + inboundRequestSaveDTO);
-        log.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
         redirectAttributes.addAttribute("id", savedId);
 
-        // 리다이렉트 URL에 플레이스홀더 대신 실제 값 사용
         return "redirect:/inbound-requests/{id}";
     }
 
@@ -90,19 +86,24 @@ public class InboundRequestController {
     }
 
     @PostMapping("/{id}/update")
-    public String postInboundRequestUpdateForm(@Validated InboundRequestUpdateDTO inboundRequestUpdateDTO, List<InboundProductUpdateDTO> inboundProductUpdateDTO, InboundPageRequestDTO inboundPageRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String postInboundRequestUpdateForm(@PathVariable Long id,
+                                               @RequestBody InboundRequestUpdateDTO inboundRequestUpdateDTO,
+                                               InboundPageRequestDTO inboundPageRequestDTO,
+                                               BindingResult bindingResult,
+                                               RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             log.info("has error..........");
             redirectAttributes.addFlashAttribute("error",bindingResult.getAllErrors());
         }
 
-        inboundRequestService.updateInbound(inboundRequestUpdateDTO, inboundProductUpdateDTO);
+        inboundRequestService.updateInbound(id, inboundRequestUpdateDTO);
+        redirectAttributes.addAttribute("id", id);
 
         return "redirect:/inbound-requests/{id}";
     }
 
     @PostMapping("/{id}/update-status")
-    public String PostRequestUpdateStatus(Long id, String status, RedirectAttributes redirectAttributes) {
+    public String PostRequestUpdateStatus(@PathVariable Long id, @RequestParam String status, RedirectAttributes redirectAttributes) {
         log.info("update status..........");
         inboundRequestService.updateInboundStatus(id, status);
 
