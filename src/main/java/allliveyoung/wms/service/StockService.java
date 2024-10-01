@@ -1,5 +1,7 @@
 package allliveyoung.wms.service;
 
+import allliveyoung.wms.domain.InboundRequestProduct;
+import allliveyoung.wms.domain.Member;
 import allliveyoung.wms.domain.Stock;
 import allliveyoung.wms.mapper.StockMapper;
 import allliveyoung.wms.web.dto.StockSearch;

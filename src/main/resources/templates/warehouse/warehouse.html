@@ -2,6 +2,20 @@
 <html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
 
 <section>
+  <style>
+    table, td, th {
+   border : 1px solid black;
+   border-collapse : collapse;
+ }
+ table {
+   width : 300px;
+   height : 200px;
+ }
+ th, td {
+   text-align: center;
+   vertical-align; bottom;
+ }
+  </style>
   <!-- Page Heading -->
   <h1 class="h3 mb-4 text-gray-800">창고 상세</h1>
   <div class="card shadow">
@@ -13,6 +27,7 @@
         <tr>
           <th>창고 이름</th>
           <td th:text="${warehouse.name}"></td>
+          <td rowspan="6" id="map" style="width:750px;height:500px;"></td>
         </tr>
 
         <tr>
@@ -47,7 +62,6 @@
         <a th:href="@{/warehouses}" class="btn btn-secondary" th:text="목록" style="margin-left: 0.3rem"></a>
       </div>
     </div>
-    <div id="map" style="width:1500px;height:500px;"></div>
 
   </div>
   <!-- 컨텐츠 끝 -->
