@@ -2,7 +2,6 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="allliveyoung.wms.mapper.MemberMapper">
 
     <resultMap id="MemberResultMap" type="allliveyoung.wms.domain.Member">
@@ -21,84 +20,148 @@
         <result property="warehouseId" column="warehouse_id"/>
         <result property="isAgree" column="is_agree"/>
         <result property="agreeDate" column="agree_date"/>
+
+
+        <association property="warehouse" javaType="allliveyoung.wms.domain.Warehouse">
+            <id property="id" column="warehouse_id"/>
+            <result property="warehouseName" column="warehouse_name"/>
+            <result property="warehouseCode" column="warehouse_code"/>
+
+            <association property="address" javaType="allliveyoung.wms.domain.Address">
+                <result property="roadNameAddress" column="warehouse_road_address"/>
+                <result property="jibunAddress" column="warehouse_jibun_address"/>
+                <result property="zipCode" column="warehouse_zipcode"/>
+                <result property="detailsAddress" column="warehouse_details_address"/>
+            </association>
+        </association>
     </resultMap>
+
+
+
 
     <!-- 회원 삽입 -->
     <insert id="insertMember" useGeneratedKeys="true" keyProperty="memberId">
-        INSERT INTO MEMBER (name,
-                            password,
-                            phone_number,
-                            email,
-                            road_name_address,
-                            details_address,
-                            account_status,
-                            join_date,
-                            last_login_date,
-                            role_type,
-                            business_number,
-                            warehouse_id,
-                            is_agree,
-                            agree_date)
-        VALUES (#{name},
-                #{password},
-                #{phoneNumber},
-                #{email},
-                #{roadNameAddress},
-                #{detailsAddress},
-                #{accountStatus},
-                #{joinDate},
-                #{lastLoginDate},
-                #{roleType},
-                #{businessNumber},
-                #{warehouseId},
-                #{isAgree},
-                #{agreeDate})
+        INSERT INTO MEMBER (
+            name,
+            password,
+            phone_number,
+            email,
+            road_name_address,
+            details_address,
+            account_status,
+            join_date,
+            last_login_date,
+            role_type,
+            business_number,
+            warehouse_id,
+            is_agree,
+            agree_date
+        ) VALUES (
+                     #{name},
+                     #{password},
+                     #{phoneNumber},
+                     #{email},
+                     #{roadNameAddress},
+                     #{detailsAddress},
+                     #{accountStatus},
+                     #{joinDate},
+                     #{lastLoginDate},
+                     #{roleType},
+                     #{businessNumber},
+                     #{warehouseId},
+                     #{isAgree},
+                     #{agreeDate}
+                 )
     </insert>
 
     <!-- 회원 업데이트 -->
     <update id="updateMember">
         UPDATE MEMBER
-        SET name              = #{name},
-            password          = #{password},
-            phone_number      = #{phoneNumber},
-            email             = #{email},
+        SET
+            name = #{name},
+            password = #{password},
+            phone_number = #{phoneNumber},
+            email = #{email},
             road_name_address = #{roadNameAddress},
-            details_address   = #{detailsAddress},
-            account_status    = #{accountStatus},
-            join_date         = #{joinDate},
-            last_login_date   = #{lastLoginDate},
-            role_type         = #{roleType},
-            business_number   = #{businessNumber},
-            warehouse_id      = #{warehouseId},
-            is_agree          = #{isAgree},
-            agree_date        = #{agreeDate}
+            details_address = #{detailsAddress},
+            account_status = #{accountStatus},
+            join_date = #{joinDate},
+            last_login_date = #{lastLoginDate},
+            role_type = #{roleType},
+            business_number = #{businessNumber},
+            warehouse_id = #{warehouseId},
+            is_agree = #{isAgree},
+            agree_date = #{agreeDate}
         WHERE member_id = #{memberId}
     </update>
 
     <!-- 회원 삭제 -->
     <delete id="deleteMember">
-        DELETE
-        FROM MEMBER
-        WHERE member_id = #{memberId}
+        DELETE FROM MEMBER WHERE member_id = #{memberId}
     </delete>
 
     <!-- 회원 ID로 조회 -->
     <select id="selectMemberById" resultMap="MemberResultMap">
-        SELECT *
+        SELECT
+            member_id,
+            name,
+            password,
+            phone_number,
+            email,
+            road_name_address,
+            details_address,
+            account_status,
+            join_date,
+            last_login_date,
+            role_type,
+            business_number,
+            warehouse_id,
+            is_agree,
+            agree_date
         FROM MEMBER
         WHERE member_id = #{memberId}
     </select>
 
     <!-- 이메일으로 회원 조회 -->
     <select id="selectMemberByEmail" resultMap="MemberResultMap">
-        SELECT *
+        SELECT
+            member_id,
+            name,
+            password,
+            phone_number,
+            email,
+            road_name_address,
+            details_address,
+            account_status,
+            join_date,
+            last_login_date,
+            role_type,
+            business_number,
+            warehouse_id,
+            is_agree,
+            agree_date
         FROM MEMBER
         WHERE email = #{email}
     </select>
 
     <!-- 이름과 전화번호로 회원 조회 -->
     <select id="selectMemberByNameAndPhone" resultMap="MemberResultMap">
-        SELECT *
+        SELECT
+            member_id,
+            name,
+            password,
+            phone_number,
+            email,
+            road_name_address,
+            details_address,
+            account_status,
+            join_date,
+            last_login_date,
+            role_type,
+            business_number,
+            warehouse_id,
+            is_agree,
+            agree_date
         FROM MEMBER
         WHERE name = #{name}
           AND phone_number = #{phoneNumber}
@@ -106,7 +169,22 @@
 
     <!-- 이름, 전화번호, 사업자 번호로 회원 조회 -->
     <select id="selectMemberByNamePhoneAndBusinessNumber" resultMap="MemberResultMap">
-        SELECT *
+        SELECT
+            member_id,
+            name,
+            password,
+            phone_number,
+            email,
+            road_name_address,
+            details_address,
+            account_status,
+            join_date,
+            last_login_date,
+            role_type,
+            business_number,
+            warehouse_id,
+            is_agree,
+            agree_date
         FROM MEMBER
         WHERE name = #{name}
           AND phone_number = #{phoneNumber}
@@ -115,17 +193,38 @@
 
     <!-- 회원 목록 조회 (관리자용) -->
     <select id="selectMembersByCriteria" resultMap="MemberResultMap">
-        SELECT *
+        SELECT
+        member_id,
+        name,
+        password,
+        phone_number,
+        email,
+        road_name_address,
+        details_address,
+        account_status,
+        join_date,
+        last_login_date,
+        role_type,
+        business_number,
+        warehouse_id,
+        is_agree,
+        agree_date
         FROM MEMBER
-        WHERE (#{roleType} IS NULL OR role_type = #{roleType})
-          AND (#{accountStatus} IS NULL OR account_status = #{accountStatus})
-          AND (#{keyword} IS NULL OR name LIKE CONCAT('%', #{keyword}, '%') OR email LIKE CONCAT('%', #{keyword}, '%'))
+        <where>
+            <if test="roleType != null">
+                AND role_type = #{roleType}
+            </if>
+            <if test="accountStatus != null">
+                AND account_status = #{accountStatus}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (name LIKE CONCAT('%', #{keyword}, '%') OR email LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY join_date DESC
     </select>
 
-    <select id="findByEmail" resultMap="MemberResultMap">
-        SELECT *
-        FROM MEMBER
-        WHERE email = #{username}
-    </select>
+
+
 
 </mapper>
