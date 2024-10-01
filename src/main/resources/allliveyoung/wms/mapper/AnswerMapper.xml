@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="allliveyoung.wms.mapper.AnswerMapper">
+
+    <resultMap id="AnswerResultMap" type="allliveyoung.wms.domain.Answer">
+        <id property="answerId" column="answer_id"/>
+        <result property="inquiryId" column="inquiry_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="answerContent" column="answer_content"/>
+        <result property="answerWriteTime" column="answer_write_time"/>
+        <result property="memberName" column="name"/> <!-- Added -->
+    </resultMap>
+
+    <!-- 답변 삽입 -->
+    <insert id="insertAnswer" useGeneratedKeys="true" keyProperty="answerId">
+        INSERT INTO ANSWER (
+            inquiry_id,
+            member_id,
+            answer_content,
+            answer_write_time
+        ) VALUES (
+                     #{inquiryId},
+                     #{memberId},
+                     #{answerContent},
+                     NOW()
+                 )
+    </insert>
+
+    <!-- 답변 업데이트 -->
+    <update id="updateAnswer">
+        UPDATE ANSWER
+        SET
+            answer_content = #{answerContent},
+            answer_write_time = #{answerWriteTime}
+        WHERE answer_id = #{answerId}
+    </update>
+
+    <!-- 답변 삭제 -->
+    <delete id="deleteAnswer">
+        DELETE FROM ANSWER WHERE answer_id = #{answerId}
+    </delete>
+
+    <!-- 답변 ID로 조회 -->
+    <select id="selectAnswerById" resultMap="AnswerResultMap">
+        SELECT
+            a.answer_id,
+            a.inquiry_id,
+            a.member_id,
+            a.answer_content,
+            a.answer_write_time,
+            m.name
+        FROM ANSWER a
+                 JOIN MEMBER m ON a.member_id = m.member_id
+        WHERE a.answer_id = #{answerId}
+    </select>
+
+    <!-- 문의 ID로 답변 조회 -->
+    <select id="selectAnswerByInquiryId" resultMap="AnswerResultMap">
+        SELECT
+            a.answer_id,
+            a.inquiry_id,
+            a.member_id,
+            a.answer_content,
+            a.answer_write_time,
+            m.name
+        FROM ANSWER a
+                 JOIN MEMBER m ON a.member_id = m.member_id
+        WHERE a.inquiry_id = #{inquiryId}
+    </select>
+
+</mapper>

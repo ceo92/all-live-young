@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>All Live Young: 회원가입</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #4e73df; /* bg-gradient-primary 색상 유지 */
+            margin: 0;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 400px; /* 로그인 창과 동일한 비율로 조정 */
+            padding: 20px; /* 로그인 창과 동일한 패딩 */
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .register-container img {
+            display: block;
+            margin: 0 auto 20px;
+            width: 100px;
+        }
+
+        .register-container h1 {
+            margin-bottom: 30px;
+            color: #1cc88a; /* Primary 색상과 조화롭게 */
+        }
+
+        .type-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .type-button {
+            flex: 1;
+            margin: 0 5px;
+            padding: 0; /* 패딩 제거 */
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            aspect-ratio: 1 / 1; /* 정사각형 비율 유지 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .type-button:first-child {
+            margin-left: 0;
+        }
+
+        .type-button:last-child {
+            margin-right: 0;
+        }
+
+        .type-button:hover {
+            opacity: 0.9;
+        }
+
+        /* 버튼 색상 */
+        .warehouse-manager {
+            background-color: #1cc88a; /* 녹색 */
+        }
+
+        .delivery-driver {
+            background-color: #36b9cc; /* 파란색 */
+        }
+
+        .business-owner {
+            background-color: #f6c23e; /* 노란색 */
+        }
+
+        @media (max-width: 576px) {
+            .type-buttons {
+                flex-direction: column;
+            }
+
+            .type-button {
+                margin: 10px 0;
+                width: 100%;
+                aspect-ratio: unset; /* 모바일에서는 정사각형 비율 제거 */
+                height: 50px; /* 고정 높이 설정 */
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- 컨텐츠 시작 -->
+    <div class="register-container">
+        <img src="img/logo.png" alt="로고">
+        <h1>회원가입</h1>
+        <div class="type-buttons">
+            <button class="type-button warehouse-manager" onclick="window.location.href='register.html?type=warehouse-manager'">
+                창고관리자
+            </button>
+            <button class="type-button delivery-driver" onclick="window.location.href='register.html?type=delivery-driver'">
+                배송기사
+            </button>
+            <button class="type-button business-owner" onclick="window.location.href='register.html?type=business-owner'">
+                사업자
+            </button>
+        </div>
+    </div>
+    <!-- 컨텐츠 끝 -->
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+</body>
+
+</html>

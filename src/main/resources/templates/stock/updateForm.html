@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+
+  <section>
+    <style>
+      .field-error {
+          border-color: #dc3545;
+          color: #dc3545;
+      }
+    </style>
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800"></h1>
+    <div class="card shadow">
+      <div class="card-body">
+        <h5>재고 수정</h5>
+        <p></p>
+        <form method="post" th:action th:object="${stock}">
+<!--          <input type="hidden" th:field="*{id}">-->
+          <div class="form-group">
+            <label for="stockCode">재고 번호</label>
+            <input type="text" class="form-control" id="stockCode" th:field="*{stockCode}" disabled>
+          </div>
+          <div class="form-group">
+            <label for="productName">의약품 이름</label>
+            <input type="text" class="form-control" id="productName" th:field="*{productName}" disabled>
+          </div>
+
+         <div class="form-group">
+            <label for="name">회사 이름</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}" disabled>
+          </div>
+
+         <div class="form-group">
+            <label for="manufactureNumber">제조 번호</label>
+            <input type="text" class="form-control" id="manufactureNumber" th:field="*{manufactureNumber}" disabled>
+          </div>
+
+          <hr>
+
+          <div class="form-group">
+            <label for="palletQuantity">파레트 수량</label>
+            <input type="text" class="form-control" id="palletQuantity" th:field="*{palletQuantity}" th:errorclass="field-error">
+            <div th:errors="*{palletQuantity}" class="field-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="boxQuantity">파레트 별 박스 수량</label>
+            <input type="text" class="form-control" id="boxQuantity" th:field="*{boxQuantity}" th:errorclass="field-error">
+            <div th:errors="*{boxQuantity}" class="field-error"></div>
+          </div>
+
+
+          <button type="submit" class="btn btn-primary" th:text="|수량 수정|"></button>
+          <a th:href="@{/stocks/{id}(id = ${id})}" class="btn btn-secondary" th:text="취소" style="margin-left: 0.3rem"></a>
+        </form>
+      </div>
+    </div>
+
+  </section>
+
+</html>

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="allliveyoung.wms.mapper.InboundRequestMapper">
+
+    <!-- _________________________________ resultMap _________________________________ -->
+
+    <resultMap id="InboundRequestResultMap" type="allliveyoung.wms.domain.InboundRequest">
+        <id property="id" column="inbound_request_id"/>
+        <result property="code" column="inbound_request_code"/>
+        <result property="status" column="inbound_request_status"/>
+        <result property="regDate" column="reg_date"/>
+        <result property="modDate" column="mod_date"/>
+        <result property="isFault" column="is_fault"/>
+        <result property="rejectionNote" column="rejection_note"/>
+        <association property="member" javaType="allliveyoung.wms.domain.Member" column="member_id" select="allliveyoung.wms.mapper.InboundRequestMapper.findMember">
+        </association>
+        <association property="warehouse" javaType="allliveyoung.wms.domain.Warehouse" column="warehouse_id" select="allliveyoung.wms.mapper.InboundRequestMapper.findWarehouse">
+        </association>
+    </resultMap>
+
+    <resultMap id="MemberResultMap" type="allliveyoung.wms.domain.Member">
+        <id property="id" column="member_id"/>
+        <result property="name" column="name"/>
+        <result property="password" column="password"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="email" column="email"/>
+        <result property="roadNameAddress" column="road_name_address"/>
+        <result property="detailsAddress" column="details_address"/>
+        <result property="accountStatus" column="account_status"/>
+        <result property="joinDate" column="join_date"/>
+        <result property="lastLoginDate" column="last_login_date"/>
+        <result property="roleType" column="role_type"/>
+        <result property="businessNumber" column="business_number"/>
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="isAgree" column="is_agree"/>
+        <result property="agreeDate" column="agree_date"/>
+    </resultMap>
+
+    <resultMap id="WarehouseResultMap" type="allliveyoung.wms.domain.Warehouse">
+        <id property="id" column="warehouse_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="name" column="warehouse_name"/>
+        <result property="code" column="warehouse_code"/>
+        <result property="roadAddress" column="warehouse_road_address"/>
+        <result property="jibunAddress" column="warehouse_jibun_address"/>
+        <result property="zipcode" column="warehouse_zipcode"/>
+        <result property="detailsAddress" column="warehouse_details_address"/>
+    </resultMap>
+
+    <resultMap id="InboundRequestProductResultMap" type="allliveyoung.wms.domain.InboundRequestProduct">
+        <id property="id" column="inbound_request_product_id"/>
+        <result property="palletQuantity" column="pallet_quantity"/>
+        <result property="boxQuantity" column="box_quantity"/>
+        <result property="manufactureNum" column="manufacture_number"/>
+        <result property="expirationDate" column="expiration_date"/>
+        <association property="inboundRequest" javaType="allliveyoung.wms.domain.InboundRequest" column="inbound_request_id" select="allliveyoung.wms.mapper.InboundRequestMapper.findInboundRequest">
+        </association>
+        <association property="product" javaType="allliveyoung.wms.domain.Product" column="product_id" select="allliveyoung.wms.mapper.InboundRequestMapper.findProduct">
+        </association>
+    </resultMap>
+
+    <resultMap id="ProductResultMap" type="allliveyoung.wms.domain.Product">
+        <id property="id" column="product_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="name" column="product_name"/>
+        <result property="storeTemperature" column="store_temperature"/>
+        <result property="type" column="product_type"/>
+        <result property="licenseDate" column="product_license_date"/>
+        <result property="licenseNum" column="product_license_num"/>
+    </resultMap>
+
+    <!-- _________________________________ resultMap Select _________________________________ -->
+
+    <select id="findMember" resultType="allliveyoung.wms.domain.Member" resultMap="MemberResultMap">
+        SELECT * FROM Member WHERE Member_id = #{id}
+    </select>
+
+    <select id="findWarehouse" resultType="allliveyoung.wms.domain.Warehouse" resultMap="WarehouseResultMap">
+        SELECT * FROM Warehouse WHERE warehouse_id = #{id}
+    </select>
+
+    <select id="findInboundRequest" resultType="allliveyoung.wms.domain.InboundRequest" resultMap="InboundRequestResultMap">
+        SELECT * FROM INBOUND_REQUEST WHERE inbound_request_id = #{id}
+    </select>
+
+    <select id="findProduct" resultType="allliveyoung.wms.domain.Product" resultMap="ProductResultMap">
+        SELECT * FROM PRODUCT WHERE product_id = #{id}
+    </select>
+
+    <!-- _________________________________ SQL _________________________________ -->
+
+
+    <sql id="search">
+        <where>
+            <choose>
+                <when test="member.roleType == 'USER'">
+                    member_id = #{member.id}
+                </when>
+                <when test="member.roleType == 'ADMIN'">
+                    warehouse_id = #{member.warehouseId}
+                </when>
+                <when test="member.roleType == 'SUPER_ADMIN'">
+                    <!-- 전체 조회이므로 조건 없음 -->
+                </when>
+            </choose>
+            <if test="inboundPageRequestDTO.types != null and inboundPageRequestDTO.types.length > 0">
+                AND
+                <foreach collection="inboundPageRequestDTO.types" item="type" separator=" OR " open="(" close=")">
+                    <choose>
+                        <when test="type == 'w'.toString()">
+                            inbound_request_status = '처리대기중'
+                        </when>
+                        <when test="type == 'a'.toString()">
+                            inbound_request_status = '승인'
+                        </when>
+                        <when test="type == 'r'.toString()">
+                            inbound_request_status = '반려'
+                        </when>
+                    </choose>
+                </foreach>
+            </if>
+            <if test="inboundPageRequestDTO.keyword != null">
+                AND inbound_request_code like concat('%', #{inboundPageRequestDTO.keyword}, '%')
+            </if>
+        </where>
+    </sql>
+
+    <select id="findAll" resultMap="InboundRequestResultMap">
+        SELECT * FROM INBOUND_REQUEST
+        <include refid="search" />
+        ORDER BY inbound_request_id DESC limit #{inboundPageRequestDTO.skip}, #{inboundPageRequestDTO.size}
+    </select>
+
+    <select id="findById" resultMap="InboundRequestProductResultMap">
+        SELECT * FROM INBOUND_REQUEST_PRODUCT WHERE inbound_request_id = #{id}
+    </select>
+
+    <select id="getWarehouseList" resultMap="WarehouseResultMap">
+        select * from warehouse;
+    </select>
+
+    <select id="getMatchedProductList" resultMap="ProductResultMap">
+        SELECT * FROM PRODUCT WHERE member_id = #{memberId}
+    </select>
+
+    <insert id="save" parameterType="allliveyoung.wms.web.dto.InboundRequestSaveDTO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO inbound_request (warehouse_id, member_id, inbound_request_code, reg_date, mod_date)
+        VALUES (#{warehouseId}, #{memberId}, null, NOW(), NOW())
+    </insert>
+
+    <insert id="saveProducts" parameterType="java.util.List">
+        INSERT INTO INBOUND_REQUEST_PRODUCT
+        (pallet_quantity, box_quantity, manufacture_number, expiration_date, inbound_request_id, product_id)
+        VALUES
+        <foreach collection="inboundProductSaveDTOList" item="product" separator=",">
+            (#{product.palletQuantity}, #{product.boxQuantity}, #{product.manufactureNum}, #{product.expirationDate}, LAST_INSERT_ID(), #{product.productId})
+        </foreach>
+    </insert>
+
+    <delete id="delete">
+        DELETE ir, irp
+    FROM INBOUND_REQUEST ir
+    LEFT JOIN INBOUND_REQUEST_PRODUCT irp ON ir.inbound_request_id = irp.inbound_request_id
+    WHERE ir.inbound_request_id = #{id}
+    </delete>
+
+    <update id="update" parameterType="InboundRequest">
+        UPDATE INBOUND_REQUEST
+        SET mod_date = NOW()
+        WHERE inbound_request_id = #{id}
+    </update>
+
+    <!-- mysql에서 여러 sql문을 ;로 구분하여 한 번에 실행하는 것이 불가능. 해당 방식은 단일 update문에서 루프 처리가 가능하다 -->
+    <update id="updateProducts" parameterType="java.util.List">
+        UPDATE INBOUND_REQUEST_PRODUCT
+        SET
+        pallet_quantity = CASE
+        <foreach collection="list" item="item">
+            WHEN inbound_request_product_id = #{item.id} AND inbound_request_id = #{item.inboundRequestId}
+            THEN #{item.palletQuantity}
+        </foreach>
+        ELSE pallet_quantity END,
+        box_quantity = CASE
+        <foreach collection="list" item="item">
+            WHEN inbound_request_product_id = #{item.id} AND inbound_request_id = #{item.inboundRequestId}
+            THEN #{item.boxQuantity}
+        </foreach>
+        ELSE box_quantity END,
+        manufacture_number = CASE
+        <foreach collection="list" item="item">
+            WHEN inbound_request_product_id = #{item.id} AND inbound_request_id = #{item.inboundRequestId}
+            THEN #{item.manufactureNum}
+        </foreach>
+        ELSE manufacture_number END,
+        expiration_date = CASE
+        <foreach collection="list" item="item">
+            WHEN inbound_request_product_id = #{item.id} AND inbound_request_id = #{item.inboundRequestId}
+            THEN #{item.expirationDate}
+        </foreach>
+        ELSE expiration_date END
+        WHERE inbound_request_product_id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <select id="updateStatus" parameterType="map">
+        UPDATE INBOUND_REQUEST SET inbound_request_status = #{status} WHERE inbound_request_id = #{id}
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(inbound_request_id) from inbound_request
+        <where>
+            <choose>
+                <when test="member.roleType == 'USER'">
+                    member_id = #{member.id}
+                </when>
+                <when test="member.roleType == 'ADMIN'">
+                    warehouse_id = #{member.warehouseId}
+                </when>
+                <when test="member.roleType == 'SUPER_ADMIN'">
+                    <!-- 전체 조회이므로 조건 없음 -->
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <resultMap id="countInbound" type="allliveyoung.wms.web.dto.CountRequestDTO">
+        <result property="year" column="YEAR(reg_date)"/>
+        <result property="month" column="MONTH(reg_date)"/>
+        <result property="count" column="COUNT(inbound_request_id)"/>
+    </resultMap>
+
+    <resultMap id="countStock" type="allliveyoung.wms.web.dto.CountStockDTO">
+        <result property="name" column="product_name"/>
+        <result property="count" column="count"/>
+    </resultMap>
+
+    <select id="countByStatus" resultType="int">
+        SELECT COUNT(inbound_request_id)
+        FROM inbound_request
+        WHERE inbound_request_status = #{status}
+    </select>
+
+    <select id="findCountInbound" resultMap="countInbound">
+        SELECT YEAR(reg_date), MONTH(reg_date), COUNT(inbound_request_id)
+        FROM inbound_request
+        WHERE YEAR(reg_date) = #{year}
+        GROUP BY DATE_FORMAT(reg_date, '%Y-%m')
+        ORDER BY YEAR(reg_date), MONTH(reg_date)
+    </select>
+
+    <select id="findCountStock" resultMap="countStock">
+        SELECT product_name, SUM(pallet_quantity * box_quantity) AS count
+        FROM inbound_request_product irp
+            JOIN product p ON irp.product_id = p.product_id
+        WHERE YEAR(expiration_date) = #{year}
+        GROUP BY p.product_id
+        ORDER BY count DESC
+            LIMIT 5
+    </select>
+
+</mapper>
+

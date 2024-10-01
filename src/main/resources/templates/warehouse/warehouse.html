@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+
+<section>
+  <style>
+    table, td, th {
+   border : 1px solid black;
+   border-collapse : collapse;
+ }
+ table {
+   width : 300px;
+   height : 200px;
+ }
+ th, td {
+   text-align: center;
+   vertical-align; bottom;
+ }
+  </style>
+  <!-- Page Heading -->
+  <h1 class="h3 mb-4 text-gray-800">창고 상세</h1>
+  <div class="card shadow">
+    <div class="card-body">
+      <h4 th:if="${param.saveStatus}" th:text="|창고 등록이 완료되었습니다!|"></h4>
+      <h4 th:if="${param.updateStatus}" th:text="|창고 수정이 완료되었습니다!|"></h4>
+      <p></p>
+      <table class="table table-bordered">
+        <tr>
+          <th>창고 이름</th>
+          <td th:text="${warehouse.name}"></td>
+          <td rowspan="6" id="map" style="width:750px;height:500px;"></td>
+        </tr>
+
+        <tr>
+          <th>창고 코드</th>
+          <td th:text="${warehouse.code}"></td>
+        </tr>
+
+        <tr>
+          <th>도로명 주소</th>
+          <td th:text="${warehouse.address.roadNameAddress}"></td>
+        </tr>
+
+        <tr>
+          <th>지번 주소</th>
+          <td th:text="${warehouse.address.jibunAddress}"></td>
+        </tr>
+
+        <tr>
+          <th>우편번호</th>
+          <td th:text="${warehouse.address.zipcode}"></td>
+        </tr>
+
+        <tr>
+          <th>상세 주소</th>
+          <td th:text="${warehouse.address.detailsAddress}"></td>
+        </tr>
+
+
+      </table>
+      <div style="display: flex; align-items: center;">
+        <a th:href="@{/warehouses/{id}/update(id=${warehouse.id})}" class="btn btn-primary" th:text="|창고 수정|"></a>
+        <a th:href="@{/warehouses}" class="btn btn-secondary" th:text="목록" style="margin-left: 0.3rem"></a>
+      </div>
+    </div>
+
+  </div>
+  <!-- 컨텐츠 끝 -->
+
+
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1820ddf0f285025d0105d85dfd07591c&libraries=services,clusterer,drawing"></script>
+
+
+  <script type="text/javascript" th:inline="javascript">
+    // Thymeleaf로 전달된 단일 주소와 이름을 JavaScript 변수로 가져오기
+    var address = [[${warehouse.address.roadNameAddress}]];
+    var name = [[${warehouse.name}]];
+
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(37.5665, 126.9780), // 초기 지도 중심 좌표 (서울)
+            level: 5 // 지도의 확대 레벨
+        };
+
+    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    // 주소로 좌표를 검색합니다.
+    geocoder.addressSearch(address, function(result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+            // 지도에 마커를 생성합니다.
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: coords
+            });
+
+            // 마커 위에 정보 창(이름)을 생성합니다.
+            var infowindow = new kakao.maps.InfoWindow({
+                content: '<div style="padding:5px;">' + name + '</div>'
+            });
+            infowindow.open(map, marker);
+
+            // 지도의 중심을 마커의 좌표로 이동합니다.
+            map.setCenter(coords);
+        }
+    });
+  </script>
+</section>
+
+</html>
+
+
+
+
+
+

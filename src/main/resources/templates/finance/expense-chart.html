@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+<section>
+    <head>
+        <title>All Live Young: Expense</title>
+    </head>
+
+    <body id="page-top">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">재무 통계</h1>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-lg-4">
+
+            <!-- 총 지출 통계 -->
+            <div class="card shadow mb-4">
+                <!-- Card Header -->
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">총 지출</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- 지출 분류 통계 -->
+            <div class="card shadow mb-4">
+                <!-- Card Header -->
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">지출 분류</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body" style="height: 360px;">
+                    <div class="chart-pie">
+                        <canvas id="expenseCategoryChart" width="400"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-4">
+            <!-- 총 매출 통계 -->
+            <div class="card shadow mb-4">
+                <!-- Card Header -->
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">총 매출</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- 순수익 -->
+            <div class="card shadow mb-4">
+                <!-- Card Header -->
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">순수익</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="netProfitChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../vendor/chart.js/Chart.min.js" th:src="@{/vendor/chart.js/Chart.min.js}"></script>
+    <script src="../js/demo/chart-area-demo.js" th:src="@{/js/demo/chart-area-demo.js}"></script>
+    <script src="../js/demo/chart-bar-demo.js" th:src="@{/js/demo/chart-bar-demo.js}"></script>
+
+    <script th:inline="javascript">
+        //***************************************************************************지출
+        const expenses = [[${sumExpense}]];
+        const labels1 = expenses.map(exp => exp.month + '월');
+        const data1 = expenses.map(exp => exp.sumAmount);
+
+        var ctx1 = document.getElementById("expenseChart");
+        var expenseChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: labels1,
+                datasets: [{
+                    label: "지출",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(78, 115, 223, 0.05)",
+                    borderColor: "#41CDCD",
+                    pointRadius: 3,
+                    pointBackgroundColor: "#41CDCD",
+                    pointBorderColor: "#41CDCD",
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: data1,
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 25,
+                        top: 25,
+                        bottom: 0
+                    }
+                },
+                scales: {
+                    xAxes: [{
+                        time: {
+                            unit: 'date'
+                        },
+                        gridLines: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 12
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            maxTicksLimit: 10,
+                            padding: 10,
+                            callback: function (value, index, values) {
+                                return number_format(value) + '원';
+                            }
+                        },
+                        gridLines: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2]
+                        }
+                    }],
+                },
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    titleMarginBottom: 10,
+                    titleFontColor: '#6e707e',
+                    titleFontSize: 14,
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    intersect: false,
+                    mode: 'index',
+                    caretPadding: 10,
+                    callbacks: {
+                        label: function (tooltipItem, chart) {
+                            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                            return datasetLabel + ': ' + number_format(tooltipItem.yLabel) + '원';
+                        }
+                    }
+                }
+            }
+        });
+
+        //***************************************************************************지출 카테고리
+        const categories = [[${sumExpenseCategory}]];
+        const labels2 = categories.map(category1 => category1.category);
+        const data2 = categories.map(category1 => category1.sumAmount);
+
+        var ctx2 = document.getElementById("expenseCategoryChart");
+        var expenseCategoryChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: labels2,
+                datasets: [{
+                    data: data2,
+                    backgroundColor: ['#A4C8E1', '#F4B400', '#A8E6CE', '#E1BEE7', '#FFB3BA'],
+                    hoverBackgroundColor: ['#7BAFD4', '#D99E00', '#7DD8B2', '#D18BCE', '#FF8C94'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                    callbacks: {
+                        label: function (tooltipItem, chart) {
+                            var datasetLabel = chart.labels[tooltipItem.index] || '';
+                            var data = chart.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] || 0;
+                            return datasetLabel + ': ' + data.toLocaleString() + '원';
+                        }
+                    }
+                },
+                legend: {
+                    display: true
+                },
+                cutoutPercentage: 70,
+            },
+        });
+
+        //***************************************************************************매출
+        const sales = [[${sumSales}]];
+        const labels3 = sales.map(sale => sale.month + '월');
+        const data3 = sales.map(sale => sale.sumAmount);
+
+        var ctx3 = document.getElementById("salesChart");
+        var salesChart = new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: labels3,
+                datasets: [{
+                    label: "매출",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(78, 115, 223, 0.05)",
+                    borderColor: "##A8E6CE",
+                    pointRadius: 3,
+                    pointBackgroundColor: "#A8E6CE",
+                    pointBorderColor: "#A8E6CE",
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "#7DD8B2",
+                    pointHoverBorderColor: "#7DD8B2",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: data3,
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 25,
+                        top: 25,
+                        bottom: 0
+                    }
+                },
+                scales: {
+                    xAxes: [{
+                        time: {
+                            unit: 'date'
+                        },
+                        gridLines: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 12
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            maxTicksLimit: 10,
+                            padding: 10,
+                            callback: function (value, index, values) {
+                                return number_format(value) + '원';
+                            }
+                        },
+                        gridLines: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2]
+                        }
+                    }],
+                },
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    titleMarginBottom: 10,
+                    titleFontColor: '#6e707e',
+                    titleFontSize: 14,
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    intersect: false,
+                    mode: 'index',
+                    caretPadding: 10,
+                    callbacks: {
+                        label: function (tooltipItem, chart) {
+                            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                            return datasetLabel + ': ' + number_format(tooltipItem.yLabel) + '원';
+                        }
+                    }
+                }
+            }
+        });
+
+        //***************************************************************************순수익
+        const netProfits = [[${netProfit}]];
+        const labels4 = netProfits.map(netProfit1 => netProfit1.year + '년');
+        const data4 = netProfits.map(netProfit1 => netProfit1.netProfit);
+
+        var ctx4 = document.getElementById("netProfitChart");
+        var netProfitChart = new Chart(ctx4, {
+            type: 'line',
+            data: {
+                labels: labels4,
+                datasets: [{
+                    label: "순수익",
+                    lineTension: 0.3,
+                    backgroundColor: "rgb(105,213,54, 0.05)",
+                    borderColor: "#9cf56f",
+                    pointRadius: 3,
+                    pointBackgroundColor: "#9cf56f",
+                    pointBorderColor: "#9cf56f",
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "rgb(105,213,54, 1)",
+                    pointHoverBorderColor: "rgb(105,213,54, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: data4,
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 25,
+                        top: 25,
+                        bottom: 0
+                    }
+                },
+                scales: {
+                    xAxes: [{
+                        time: {
+                            unit: 'date'
+                        },
+                        gridLines: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 12
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            maxTicksLimit: 10,
+                            padding: 10,
+                            // Include a dollar sign in the ticks
+                            callback: function (value, index, values) {
+                                return number_format(value) + '원';
+                            }
+                        },
+                        gridLines: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2]
+                        }
+                    }],
+                },
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    titleMarginBottom: 10,
+                    titleFontColor: '#6e707e',
+                    titleFontSize: 14,
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    intersect: false,
+                    mode: 'index',
+                    caretPadding: 10,
+                    callbacks: {
+                        label: function (tooltipItem, chart) {
+                            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                            return datasetLabel + ': ' + number_format(tooltipItem.yLabel) + '원';
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    </body>
+</section>
+</html>

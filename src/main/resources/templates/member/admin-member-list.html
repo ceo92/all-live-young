@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2 class="mb-4">회원 목록</h2>
+
+    <!-- 성공 메시지 표시 -->
+    <div th:if="${message}" class="alert alert-success">
+        <p th:text="${message}"></p>
+    </div>
+
+    <!-- 필터 폼 -->
+    <form th:action="@{/admin/members}" method="get" class="row mb-4">
+        <div class="col-md-4">
+            <label for="roleType" class="form-label">회원 유형</label>
+            <select id="roleType" name="roleType" class="form-select">
+                <option value="">전체</option>
+                <option value="COMPANY" th:selected="${searchCriteria.roleType == 'COMPANY'}">회사</option>
+                <option value="MANAGER" th:selected="${searchCriteria.roleType == 'MANAGER'}">창고 관리자</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="accountStatus" class="form-label">회원 상태</label>
+            <select id="accountStatus" name="accountStatus" class="form-select">
+                <option value="">전체</option>
+                <option value="WAITING_APPROVAL" th:selected="${searchCriteria.accountStatus == 'WAITING_APPROVAL'}">승인 대기</option>
+                <option value="ACTIVATION" th:selected="${searchCriteria.accountStatus == 'ACTIVATION'}">활성</option>
+                <option value="INACTIVATION" th:selected="${searchCriteria.accountStatus == 'INACTIVATION'}">비활성</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="keyword" class="form-label">검색어</label>
+            <input type="text" id="keyword" name="keyword" th:value="${searchCriteria.keyword}" class="form-control">
+        </div>
+        <div class="col-md-12 mt-3 text-end">
+            <button type="submit" class="btn btn-primary">검색</button>
+        </div>
+    </form>
+
+    <!-- 회원 목록 테이블 -->
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>이름</th>
+            <th>이메일</th>
+            <th>회원 유형</th>
+            <th>회원 상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member : ${members}">
+            <td th:text="${member.name}"></td>
+            <td>
+                <!-- 이메일을 클릭하면 상세보기로 이동 -->
+                <a th:href="@{/admin/members/{memberId}(memberId=${member.memberId})}" th:text="${member.email}"></a>
+            </td>
+            <td th:text="${member.roleType}"></td>
+            <td th:text="${member.accountStatus}"></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>

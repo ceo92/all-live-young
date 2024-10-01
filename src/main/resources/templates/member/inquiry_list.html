@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>1:1 문의 목록</h2>
+
+    <!-- 성공 메시지 표시 -->
+    <div th:if="${message}" class="success">
+        <p th:text="${message}"></p>
+    </div>
+
+    <!-- 에러 메시지 표시 -->
+    <div th:if="${errorMessage}" class="error">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>작성일</th>
+            <th>답변 여부</th>
+            <th>액션</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="inquiry : ${inquiries}">
+            <td>
+                <a th:href="@{/inquiries/{id}(id=${inquiry.inquiryId})}" th:text="${inquiry.inquiryTitle}"></a>
+            </td>
+            <td th:text="${#temporals.format(inquiry.writeTime, 'yyyy-MM-dd')}"></td>
+            <td th:text="${inquiry.answered ? '답변 완료' : '미답변'}"></td>
+            <td>
+                <a th:href="@{/inquiries/{id}(id=${inquiry.inquiryId})}">상세보기</a>
+                <!-- 관리자 권한이 있는 경우에만 추가 액션 표시 -->
+                <span th:if="${#session.getAttribute('loginMember') != null and
+                                     (#session.getAttribute('loginMember').roleType == 'ADMIN' or
+                                      #session.getAttribute('loginMember').roleType == 'MANAGER')}">
+                    | <a th:href="@{/inquiries/{id}/update(id=${inquiry.inquiryId})}">수정</a>
+                    |
+                    <form th:action="@{/inquiries/{id}/delete(id=${inquiry.inquiryId})}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+                    </form>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 회사 회원에게만 문의 작성 버튼 표시 -->
+    <div th:if="${#session.getAttribute('loginMember') != null and #session.getAttribute('loginMember').roleType == 'COMPANY'}">
+        <a th:href="@{/inquiries/save}">문의 작성</a>
+    </div>
+
+    <!-- 창고 관리자에게만 미답변 문의 목록으로 이동 버튼 표시 -->
+    <div th:if="${#session.getAttribute('loginMember') != null and #session.getAttribute('loginMember').roleType == 'MANAGER'}">
+        <a th:href="@{/inquiries/unanswered}">미답변 문의 목록</a>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+
+  <section>
+    <style>
+      table, td, th {
+  border : 1px solid black;
+  border-collapse : collapse;
+}
+table {
+  width : 300px;
+  height : 200px;
+}
+th, td {
+  text-align: center;
+}
+    </style>
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">재고 상세</h1>
+    <div class="card shadow">
+      <div class="card-body">
+        <h4 th:if="${param.status}" th:text="|재고 수정이 완료되었습니다!|"></h4>
+        <p></p>
+        <table class="table table-bordered">
+
+          <tr>
+            <th>재고번호</th>
+            <td th:text="${stock.stockCode}"></td>
+            <td rowspan="20"><img th:src="@{/stocks/images/{filename}(filename = ${stock.product.imageFileName})}" width="500" height="570"></td>
+          </tr>
+
+          <tr>
+            <th>등록일자</th>
+            <td th:text="${{stock.regDate}}"></td>
+          </tr>
+
+          <tr>
+            <th>수정일자</th>
+            <td th:text="${{stock.modDate}}"></td>
+          </tr>
+
+          <tr>
+            <th>의약품 이름</th>
+            <td th:text="${stock.product.productName}"></td>
+          </tr>
+
+          <tr>
+            <th>보관 온도</th>
+            <td th:text="${stock.product.storeTemperature}"></td>
+          </tr>
+
+          <tr>
+            <th>의약품 종류</th>
+            <td th:text="${stock.product.productType}"></td>
+          </tr>
+
+          <tr>
+            <th>총 박스 수량</th>
+            <td th:text="${totalStockCount}"></td>
+          </tr>
+
+          <tr>
+            <th>회사 이름</th>
+            <td th:text="${stock.product.member.name}"></td>
+          </tr>
+
+          <tr>
+            <th>제조번호</th>
+            <td th:text="${{stock.pallet.inboundRequestProduct.manufactureNumber}}"></td>
+          </tr>
+
+          <tr>
+            <th>유통기한</th>
+            <td th:text="${{stock.pallet.inboundRequestProduct.expirationDate}}"></td>
+          </tr>
+
+          <tr>
+            <th>창고 코드</th>
+            <td th:text="${stock.warehouse.name}"></td>
+          </tr>
+
+          <tr>
+            <th>창고 이름</th>
+            <td th:text="${stock.warehouse.code}"></td>
+          </tr>
+
+          <tr>
+            <th>섹션 코드</th>
+            <td th:text="${stock.pallet.section.sectionCode}"></td>
+          </tr>
+
+          <tr>
+            <th>섹션 용량</th>
+            <td th:text="${stock.pallet.section.sectionCapacity}"></td>
+          </tr>
+
+        </table>
+        <div style="display: flex; align-items: center;">
+          <a th:href="@{/stocks/{id}/update(id=${stock.id})}" class="btn btn-primary" th:text="수정"></a>
+          <a th:href="@{/stocks}" class="btn btn-secondary" th:text="목록" style="margin-left: 0.3rem"></a>
+        </div>
+      </div>
+    </div>
+    <!-- 컨텐츠 끝 -->
+  </section>
+
+</html>
+
+
+
+
+
+

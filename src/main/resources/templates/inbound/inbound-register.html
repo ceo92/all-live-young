@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+
+<section>
+    <style>
+        .form-container {
+            display: flex;
+            gap: 10px; /* Optional: Add some space between buttons */
+        }
+    </style>
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">입고 요청서</h1>
+        <p class="mb-4">입고 요청 설명서를 작성해주세요</p>
+
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">입고 요청 리스트</h6>
+                <li class="nav-item dropdown">
+                    <div class="dropdown" aria-labelledby="navbarDropdown">
+                        <form id="inboundRequestForm">
+                            <select id="warehouseSelect" name="warehouse">
+                                <option th:each="warehouse : ${warehouseDTO}" th:value="${warehouse.id}" th:text="${warehouse.name}"></option>
+                            </select>
+                        </form>
+                    </div>
+                </li>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="inputTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>의약품</th>
+                            <th>파레트 수량</th>
+                            <th>박스 수량</th>
+                            <th>제조번호</th>
+                            <th>유효기간</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="form-container">
+                        <button id="addRowBtn">+ 열 추가</button>
+                        <form th:action="@{/inbound-requests}" method="get">
+                            <button class="submit btn btn-primary" type="submit">취소</button>
+                        </form>
+                        <button id="submitBtn" class="submit" type="button">등록</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script th:inline="javascript">
+        var matchedProductDTO = /*[[${matchedProductDTO}]]*/ [];
+        var memberId = /*[[${responseDTO}]]*/ null;
+
+        function createProductSelect(name) {
+
+            var select = document.createElement('select');
+            select.name = name;
+
+            // 빈 옵션 추가
+            var emptyOption = document.createElement('option');
+            emptyOption.value = "";
+            emptyOption.defaultSelected = true;
+            select.appendChild(emptyOption);
+
+            // DTO의 옵션들을 순회하며 옵션 추가
+            matchedProductDTO.forEach(function(product) {
+                var option = document.createElement('option');
+                option.value = product.id;
+                option.textContent = product.name;
+                select.appendChild(option);
+            });
+
+            return select;
+        }
+
+        document.getElementById('addRowBtn').addEventListener('click', function() {
+            //post 요청 방지
+            event.preventDefault();
+            event.stopPropagation();
+
+            var tableBody = document.getElementById('inputTable').getElementsByTagName('tbody')[0];
+            var rowCount = tableBody.getElementsByTagName('tr').length;
+            var newRow = document.createElement('tr');
+
+            var numberCell = document.createElement('td');
+            numberCell.textContent = rowCount + 1;
+            newRow.appendChild(numberCell);
+
+            var option1Cell = document.createElement('td');
+            var option1Select = createProductSelect('option1[]');
+            option1Cell.appendChild(option1Select);
+            newRow.appendChild(option1Cell);
+
+            var option2Cell = document.createElement('td');
+            var option2Select = document.createElement('select');
+            option2Select.name = 'option2[]';
+
+            for (var i = 1; i <= 100; i++) {
+                var option = document.createElement('option');
+                option.value = i;
+                option.text = i;
+                option2Select.appendChild(option);
+            }
+            option2Cell.appendChild(option2Select);
+            newRow.appendChild(option2Cell);
+
+            var option3Cell = document.createElement('td');
+            var option3Select = document.createElement('select');
+            option3Select.name = 'option3[]';
+            for (var i = 1; i <= 100; i++) {
+                var option = document.createElement('option');
+                option.value = i;
+                option.text = i;
+                option3Select.appendChild(option);
+            }
+            option3Cell.appendChild(option3Select);
+            newRow.appendChild(option3Cell);
+
+            var textInputCell = document.createElement('td');
+            var textInput = document.createElement('input');
+            textInput.type = 'text';
+            textInput.name = 'textInput[]';
+            textInputCell.appendChild(textInput);
+            newRow.appendChild(textInputCell);
+
+            var dateCell = document.createElement('td');
+            var dateInput = document.createElement('input');
+            dateInput.type = 'date';
+            dateInput.name = 'date[]';
+            dateCell.appendChild(dateInput);
+            newRow.appendChild(dateCell);
+
+            tableBody.appendChild(newRow);
+        });
+
+        document.getElementById('submitBtn').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            var tableBody = document.getElementById('inputTable').getElementsByTagName('tbody')[0];
+            var rows = tableBody.getElementsByTagName('tr');
+            var products = [];
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName('td');
+                products.push({
+                    productId: cells[1].getElementsByTagName('select')[0].value,
+                    palletQuantity: cells[2].getElementsByTagName('select')[0].value,
+                    boxQuantity: cells[3].getElementsByTagName('select')[0].value,
+                    manufactureNum: cells[4].getElementsByTagName('input')[0].value,
+                    expirationDate: cells[5].getElementsByTagName('input')[0].value
+                });
+            }
+
+            var warehouseId = document.getElementById('warehouseSelect').value;
+
+            var data = {
+                warehouseId: warehouseId,
+                inboundProductSaveDTOList: products,
+                memberId: 1 // 임시로 memberId를 1로 설정
+            };
+
+            fetch('/inbound-requests/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    window.location.href = '/inbound-requests';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // 에러 처리 로직 추가
+                });
+        });
+    </script>
+</section>
+
+</html>

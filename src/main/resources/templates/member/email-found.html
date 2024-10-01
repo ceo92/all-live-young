@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<body>
+<section>
+    <h2>이메일 찾기 결과</h2>
+    <p>찾으시는 이메일은 다음과 같습니다:</p>
+    <p th:text="${email}"></p>
+    <div>
+        <a th:href="@{/member/login}">로그인</a>
+        <a th:href="@{/member/register-select}">회원가입</a>
+    </div>
+</section>
+</body>
+</html>

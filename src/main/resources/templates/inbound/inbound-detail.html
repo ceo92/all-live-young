@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html th:replace="~{fragment/layout.html :: layout(~{::section})}" xmlns:th="http://www.thymeleaf.org">
+
+<section>
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">입고 요청서</h1>
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>입고 요청 정보</h5>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>회사</th>
+                        <td th:text="${responseDTO.get(0).inboundRequest.member.name}"></td>
+                    </tr>
+                    <tr>
+                        <th>창고</th>
+                        <td th:text="${responseDTO.get(0).inboundRequest.warehouse.name}"></td>
+                    </tr>
+                    <tr>
+                        <th>입고요청코드</th>
+                        <td th:text="${responseDTO.get(0).inboundRequest.code}"></td>
+                    </tr>
+                    <tr>
+                        <th>등록일자</th>
+                        <td th:text="${responseDTO.get(0).inboundRequest.regDate}"></td>
+                    </tr>
+                    <tr>
+                        <th>입고요청상태</th>
+                        <td th:text="${responseDTO.get(0).inboundRequest.status}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">입고 요청 리스트</h6>
+
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="inputTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>의약품</th>
+                            <th>파레트 수량</th>
+                            <th>박스 수량</th>
+                            <th>제조번호</th>
+                            <th>유효기간</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="dto : ${responseDTO}">
+                            <th scope="row" th:text="${dto.id}"></th>
+                            <td th:text="${dto.product.name}"></td>
+                            <td th:text="${dto.palletQuantity}"></td>
+                            <td th:text="${dto.boxQuantity}"></td>
+                            <td th:text="${dto.manufactureNum}"></td>
+                            <td th:text="${dto.expirationDate}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="form-container">
+                        <a th:href="@{/inbound-requests}" class="btn btn-secondary" th:text="취소" style="display: inline-block; margin-right: 0.5rem;"></a>
+
+                        <form id="rejectForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/update-status'}" method="post" style="display: inline-block; margin-right: 0.5rem;" th:if="${responseDTO.get(0).inboundRequest.status != '승인' and responseDTO.get(0).inboundRequest.status != '반려'}">
+                            <input type="hidden" name="status" value="반려">
+                            <button class="btn btn-danger" type="submit" onclick="handleReject()">반려</button>
+                        </form>
+
+                        <form id="approveForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/update-status'}" method="post" style="display: inline-block; margin-right: 0.5rem;" th:if="${responseDTO.get(0).inboundRequest.status != '승인' and responseDTO.get(0).inboundRequest.status != '반려'}">
+                            <input type="hidden" name="status" value="승인">
+                            <button class="btn btn-success" type="submit">승인</button>
+                        </form>
+
+                        <form id="updateForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/update'}" method="get" style="display: inline-block; margin-right: 0.5rem;" th:if="${responseDTO.get(0).inboundRequest.status != '승인' and responseDTO.get(0).inboundRequest.status != '반려'}">
+                            <button class="btn btn-primary" type="submit">수정</button>
+                        </form>
+
+                        <form id="deleteForm" th:action="@{'/inbound-requests/' + ${responseDTO.get(0).inboundRequest.id} + '/delete'}" method="post" style="display: inline-block;" th:if="${responseDTO.get(0).inboundRequest.status != '승인' and responseDTO.get(0).inboundRequest.status != '반려'}">
+                            <button class="btn btn-danger" type="submit">삭제</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function handleReject() {
+            var reason = prompt("반려 사유를 작성해주세요:");
+            if (reason) {
+                var rejectForm = document.getElementById("rejectForm");
+                var reasonInput = document.createElement("input");
+                reasonInput.type = "hidden";
+                reasonInput.name = "rejectionNote";
+                reasonInput.value = reason;
+                rejectForm.appendChild(reasonInput);
+                rejectForm.submit();
+            }
+        }
+    </script>
+</section>
+
+</html>
