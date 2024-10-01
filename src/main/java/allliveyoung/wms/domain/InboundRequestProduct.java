@@ -2,6 +2,10 @@ package allliveyoung.wms.domain;
 
 import allliveyoung.wms.domain.InboundRequest;
 import allliveyoung.wms.domain.Product;
+import lombok.*;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
