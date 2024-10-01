@@ -1,27 +1,42 @@
+package allliveyoung.wms.domain;
 
-
+import allliveyoung.wms.domain.InboundRequest;
 import allliveyoung.wms.domain.Product;
 import lombok.*;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
-
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 
 @Getter
-@ToString
-@Builder
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class InboundRequestProduct {
+
     private Long id;
     @NumberFormat(pattern = "#,###")
-    private int palletQuantity;
+    private Integer palletQuantity;
+
     @NumberFormat(pattern = "#,###")
-    private int boxQuantity;
-    private String manufactureNum;
+    private Integer boxQuantity;
+    private String manufactureNumber;
+
+
     @DateTimeFormat(pattern = "yyyy. MM. dd. a hh:mm")
     private LocalDateTime expirationDate;
-    private allliveyoung.allliveinbound.web.dto.InboundRequest inboundRequest;
+
+    private InboundRequest inboundRequest;
     private Product product;
+
+    public void updateTotalQuantity(Integer palletQuantity , Integer boxQuantity){
+        this.palletQuantity = palletQuantity;
+        this.boxQuantity = boxQuantity;
+    }
+
+
 }

@@ -9,28 +9,88 @@
     <p>회원 유형: <span th:text="${member.roleType}"></span></p>
     <p>회원 상태: <span th:text="${member.accountStatus}"></span></p>
 
-    <!-- 승인/탈퇴 승인/반려 버튼 (승인 요청, 탈퇴 요청일 때만 표시) -->
+    <!-- 회원 상태에 따른 액션 버튼 (승인 대기/탈퇴 대기인 경우 승인/반려 버튼 표시) -->
     <div th:if="${showActionButtons}">
         <div th:if="${member.accountStatus == 'WAITING_APPROVAL'}">
-            <form th:action="@{/admin/members/{memberId}/approve(memberId=${member.memberId})}" method="post">
-                <button type="submit">회원 승인</button>
+            <form th:action="@{/admin/members/{memberId}/approve(memberId=${member.memberId})}" method="post" style="display:inline;">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+                    가입 승인
+                </button>
             </form>
-            <form th:action="@{/admin/members/{memberId}/reject(memberId=${member.memberId})}" method="post">
-                <button type="submit">반려</button>
+            <form th:action="@{/admin/members/{memberId}/reject(memberId=${member.memberId})}" method="post" style="display:inline;">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationModalReject">
+                    가입 반려
+                </button>
             </form>
         </div>
 
         <div th:if="${member.accountStatus == 'WAITING_CANCEL'}">
-            <form th:action="@{/admin/members/{memberId}/approve-withdrawal(memberId=${member.memberId})}" method="post">
-                <button type="submit">탈퇴 승인</button>
-            </form>
-            <form th:action="@{/admin/members/{memberId}/reject(memberId=${member.memberId})}" method="post">
-                <button type="submit">반려</button>
+            <form th:action="@{/admin/members/{memberId}/approve-withdrawal(memberId=${member.memberId})}" method="post" style="display:inline;">
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#confirmationModalWithdraw">
+                    탈퇴 승인
+                </button>
             </form>
         </div>
     </div>
 
-    <a th:href="@{/admin/members}">회원 목록으로 돌아가기</a>
+    <a th:href="@{/admin/members}" class="btn btn-secondary mt-3">목록으로 돌아가기</a>
+
+    <!-- Modal for confirmation -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">회원 승인 확인</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    회원의 상태를 변경하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="submit" class="btn btn-primary">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for reject confirmation -->
+    <div class="modal fade" id="confirmationModalReject" tabindex="-1" aria-labelledby="confirmationModalRejectLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalRejectLabel">가입 반려 확인</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    회원을 반려하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="submit" class="btn btn-danger">반려</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for withdrawal confirmation -->
+    <div class="modal fade" id="confirmationModalWithdraw" tabindex="-1" aria-labelledby="confirmationModalWithdrawLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalWithdrawLabel">탈퇴 승인 확인</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    회원의 탈퇴를 승인하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="submit" class="btn btn-warning">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 </body>
 </html>

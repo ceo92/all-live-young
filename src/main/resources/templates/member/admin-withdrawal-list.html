@@ -2,24 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
 <body>
 <section>
-    <h2>탈퇴 요청 목록</h2>
+    <h2 class="mb-4">탈퇴 요청 목록</h2>
 
-    <table>
-        <thead>
+    <!-- 성공 메시지 표시 -->
+    <div th:if="${message}" class="alert alert-success">
+        <p th:text="${message}"></p>
+    </div>
+
+    <!-- 탈퇴 요청 목록 테이블 -->
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
         <tr>
             <th>이름</th>
             <th>이메일</th>
             <th>회원 유형</th>
+            <th>회원 상태</th>
+            <th>액션</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="member : ${members}">
             <td th:text="${member.name}"></td>
             <td>
-                <!-- 이메일을 클릭하면 상세 조회로 이동 -->
                 <a th:href="@{/admin/members/{memberId}(memberId=${member.memberId})}" th:text="${member.email}"></a>
             </td>
             <td th:text="${member.roleType}"></td>
+            <td th:text="${member.accountStatus}"></td>
+            <td>
+                <form th:action="@{/admin/members/{memberId}/approve-withdrawal(memberId=${member.memberId})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-success btn-sm">탈퇴 승인</button>
+                </form>
+                <form th:action="@{/admin/members/{memberId}/reject(memberId=${member.memberId})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">반려</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>

@@ -13,7 +13,7 @@ public class LoginDTO {
 
     @Email
     @NotBlank
-    private String username;
+    private String email;
 
     @NotBlank
     private String password;

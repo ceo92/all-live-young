@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CountRequestDTO {
-
     private Integer year;
     private Integer month;
     private Integer count;

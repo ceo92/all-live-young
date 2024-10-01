@@ -1,7 +1,7 @@
 package allliveyoung.wms.mapper;
 
+import allliveyoung.wms.constant.RequestStatus;
 import allliveyoung.wms.domain.OutboundRequest;
-import allliveyoung.wms.domain.Status;
 import allliveyoung.wms.web.dto.OutboundRequestDTO;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +13,7 @@ public interface OutboundRequestMapper {
 
   Long save(OutboundRequestDTO outboundRequestDTO);
 
-  List<OutboundRequest> findAll(@Param("status") Status status);
+  List<OutboundRequest> findAll(@Param("status") RequestStatus status);
 
   Optional<OutboundRequest> findById(Long id);
 

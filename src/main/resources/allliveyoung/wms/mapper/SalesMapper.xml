@@ -18,7 +18,7 @@
             <result property="name" column="warehouse_name"/>
             <result property="code" column="warehouse_code"/>
 
-            <association property="warehouseAddress" javaType="allliveyoung.wms.domain.Address">
+            <association property="address" javaType="allliveyoung.wms.domain.Address">
                 <result property="roadNameAddress" column="warehouse_road_address"/>
                 <result property="jibunAddress" column="warehouse_jibun_address"/>
                 <result property="zipCode" column="warehouse_zipcode"/>
@@ -27,7 +27,7 @@
         </association>
 
         <association property="member" javaType="allliveyoung.wms.domain.Member">
-            <id property="id" column="member_id"/>
+            <id property="memberId" column="member_id"/>
             <result property="name" column="name"/>
             <result property="password" column="password"/>
             <result property="phoneNumber" column="phone_number"/>
@@ -50,7 +50,7 @@
                 <result property="name" column="warehouse_name"/>
                 <result property="code" column="warehouse_code"/>
 
-                <association property="warehouseAddress" javaType="allliveyoung.wms.domain.Address">
+                <association property="address" javaType="allliveyoung.wms.domain.Address">
                     <result property="roadNameAddress" column="warehouse_road_address"/>
                     <result property="jibunAddress" column="warehouse_jibun_address"/>
                     <result property="zipCode" column="warehouse_zipcode"/>

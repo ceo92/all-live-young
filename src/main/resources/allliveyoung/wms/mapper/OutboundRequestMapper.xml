@@ -49,17 +49,21 @@
     <result property="stockCode" column="stock_code"/>
     <result property="regDate" column="reg_date"/>
     <result property="modDate" column="mode_date"/>
-    <association property="product" javaType="allliveyoung.wms.domain.Product" column="product_id" select="findProduct"/>
-    <association property="warehouse" javaType="allliveyoung.wms.domain.Warehouse" column="warehouse_id" select="findWarehouse"/>
+    <association property="product" javaType="allliveyoung.wms.domain.Product" column="product_id"
+      select="findProduct"/>
+    <association property="warehouse" javaType="allliveyoung.wms.domain.Warehouse"
+      column="warehouse_id" select="findWarehouse"/>
+    <association property="pallet" javaType="allliveyoung.wms.domain.Pallet" column="pallet_id"
+      select="findPallet"/>
   </resultMap>
 
   <resultMap id="ProductResultMap" type="allliveyoung.wms.domain.Product">
     <id property="id" column="product_id"/>
-    <result property="productName" column="product_name"/>
+    <result property="name" column="product_name"/>
     <result property="storeTemperature" column="store_temperature"/>
-    <result property="productType" column="product_type"/>
-    <result property="productLicenseDate" column="product_license_date"/>
-    <result property="productLicenseNum" column="product_license_num"/>
+    <result property="type" column="product_type"/>
+    <result property="licenseDate" column="product_license_date"/>
+    <result property="licenseNum" column="product_license_num"/>
   </resultMap>
 
   <resultMap id="WarehouseResultMap" type="allliveyoung.wms.domain.Warehouse">
@@ -72,7 +76,51 @@
       <result property="zipCode" column="warehouse_zipcode"/>
       <result property="detailsAddress" column="warehouse_details_address"/>
     </association>
+  </resultMap>
 
+  <resultMap id="PalletResultMap" type="allliveyoung.wms.domain.Pallet">
+    <id property="id" column="pallet_id"/>
+    <association property="inboundRequestProduct"
+      javaType="allliveyoung.wms.domain.InboundRequestProduct" column="inbound_request_product_id"
+      select="findPallet"/>
+    <association property="section" javaType="allliveyoung.wms.domain.Section" column="section_id"
+      select="findSection"/>
+  </resultMap>
+
+  <resultMap id="SectionResultMap" type="Section">
+    <id property="id" column="section_id"/>
+    <id property="code" column="section_code"/>
+    <id property="capacity" column="section_capacity"/>
+    <association property="warehouse" javaType="allliveyoung.wms.domain.Warehouse"
+      column="warehouse_id" select="findWarehouse"/>
+    <association property="storeTemperature" javaType="allliveyoung.wms.constant.StoreTemperature"/>
+    <association property="type" javaType="allliveyoung.wms.constant.ProductType"/>
+  </resultMap>
+
+  <resultMap id="InboundRequestProductResultMap" type="InboundRequestProduct">
+    <id property="id" column="inbound_request_product_id"/>
+    <id property="palletQuantity" column="inbound_request_product_id"/>
+    <id property="boxQuantity" column="inbound_request_product_id"/>
+    <id property="manufactureNum" column="inbound_request_product_id"/>
+    <id property="expDate" column="inbound_request_product_id"/>
+    <association property="inboundRequest" javaType="allliveyoung.wms.domain.InboundRequest"
+      column="inbound_request_id" select="findInboundRequest"/>
+    <association property="product" javaType="allliveyoung.wms.domain.Product" column="product_id"
+      select="findProduct"/>
+  </resultMap>
+
+  <resultMap id="InboundRequestResultMap" type="InboundRequest">
+    <id property="id" column="inbound_request_id"/>
+    <id property="code" column="inbound_request_code"/>
+    <id property="status" column="inbound_request_status"/>
+    <id property="regDate" column="reg_date"/>
+    <id property="modDate" column="mod_date"/>
+    <id property="isFault" column="is_fault"/>
+    <id property="rejectionNote" column="rejection_note"/>
+    <association property="member" javaType="allliveyoung.wms.domain.Member" column="member_id"
+      select="findMember"/>
+    <association property="warehouse" javaType="allliveyoung.wms.domain.Warehouse"
+      column="warehouse_id" select="findWarehouse"/>
   </resultMap>
 
   <select id="findMember" resultMap="MemberResultMap">
@@ -93,12 +141,35 @@
     WHERE product_id = #{id}
   </select>
 
-  <select id="findWarehouse"  resultMap="WarehouseResultMap">
+  <select id="findWarehouse" resultMap="WarehouseResultMap">
     SELECT *
     FROM WAREHOUSE
     WHERE warehouse_id = #{id}
   </select>
 
+  <select id="findSection" resultMap="SectionResultMap">
+    SELECT *
+    FROM SECTION
+    WHERE section_id = #{id}
+  </select>
+
+  <select id="findPallet" resultMap="PalletResultMap">
+    SELECT *
+    FROM PALLET
+    WHERE pallet_id = #{id}
+  </select>
+
+  <select id="findInboundRequestProduct" resultMap="InboundRequestProductResultMap">
+    SELECT *
+    FROM INBOUND_REQUEST_PRODUCT
+    WHERE inbound_request_product_id = #{id}
+  </select>
+
+  <select id="findInboundRequest" resultMap="InboundRequestResultMap">
+    SELECT *
+    FROM INBOUND_REQUEST
+    WHERE inbound_request_id = #{id}
+  </select>
 
   <select id="findAll" resultMap="OutboundRequestResultMap">
     select *
@@ -135,16 +206,17 @@
 
   <update id="managerUpdate">
     update OUTBOUND_REQUEST
-    set is_fault                = #{isFault},
-        rejection_note          = #{rejectionNote},
-        outbound_request_note   = #{note}
-    where outbound_request_id   = #{id}
+    set is_fault              = #{isFault},
+        rejection_note        = #{rejectionNote},
+        outbound_request_note = #{note}
+    where outbound_request_id = #{id}
   </update>
 
   <insert id="save" useGeneratedKeys="true" keyProperty="id">
     insert into OUTBOUND_REQUEST (member_id, stock_id, order_quantity, recipient_name,
                                   recipient_address, recipient_contact)
-    values (#{member.id}, #{stock.id}, #{quantity}, #{recipientName}, #{recipientAddress}, #{recipientContact})
+    values (#{member.id}, #{stock.id}, #{quantity}, #{recipientName}, #{recipientAddress},
+            #{recipientContact})
   </insert>
 
   <delete id="delete">

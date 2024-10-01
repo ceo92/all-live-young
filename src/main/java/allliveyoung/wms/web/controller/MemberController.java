@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Log4j2
 @Controller
-@RequestMapping("/member")
+@RequestMapping("/members")
 public class MemberController {
 
     private final MemberService memberService;
@@ -34,7 +34,7 @@ public class MemberController {
     public String showLoginForm(@RequestParam(value = "error", required = false) String error, Model model) {
         model.addAttribute("loginDTO", new LoginDTO());
         model.addAttribute("error", error);
-        return "login2";
+        return "login";
     }
 
     // 회원가입 유형 선택 페이지
@@ -59,7 +59,7 @@ public class MemberController {
                                  BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("roleType", memberSaveDTO.getRoleType());
-            return "register-success";
+            return "register";
         }
 
         memberService.registerMember(memberSaveDTO);
@@ -68,7 +68,7 @@ public class MemberController {
     }
 
     // 회원가입 완료 페이지 표시
-    @GetMapping("/register/success")
+    @GetMapping("/register-success")
     public String registerSuccess() {
         return "register-success";
     }
@@ -102,22 +102,24 @@ public class MemberController {
 
     // 마이페이지 조회
     @GetMapping("/profile")
-    public String getMemberDetails(Model model, HttpSession session) {
-//        Member member = (Member) session.getAttribute(LOGIN_MEMBER);
-//        if (member == null) {
-//            return "redirect";
-//        }
+    public String getMemberDetails(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        Member member = (Member) session.getAttribute(LOGIN_MEMBER);
+        if (member == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
+            return "redirect:/member/login";
+        }
 
-        Member memberDetails = memberService.getMemberDetails(1L);
+        Member memberDetails = memberService.getMemberDetails(member.getMemberId());
         model.addAttribute("member", memberDetails);
         return "profile";
     }
 
     // 마이페이지 수정 폼 표시
-    @GetMapping("/profile/edit")
-    public String showEditProfileForm(Model model, HttpSession session) {
+    @GetMapping("/profile-edit")
+    public String showEditProfileForm(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         Member member = (Member) session.getAttribute(LOGIN_MEMBER);
         if (member == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
             return "redirect:/member/login";
         }
 
@@ -128,18 +130,19 @@ public class MemberController {
     }
 
     // 마이페이지 수정 처리
-    @PostMapping("/profile/edit")
+    @PostMapping("/profile-edit")
     public String updateMember(@Valid @ModelAttribute("memberUpdateDTO") MemberUpdateDTO memberUpdateDTO,
                                BindingResult bindingResult,
                                HttpSession session,
                                RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            return "edit-profile";
+        Member sessionMember = (Member) session.getAttribute(LOGIN_MEMBER);
+        if (sessionMember == null || !sessionMember.getMemberId().equals(memberUpdateDTO.getMemberId())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "잘못된 접근입니다.");
+            return "redirect:/member/login";
         }
 
-        Member member = (Member) session.getAttribute(LOGIN_MEMBER);
-        if (member == null || !member.getMemberId().equals(memberUpdateDTO.getMemberId())) {
-            return "redirect:/member/login";
+        if (bindingResult.hasErrors()) {
+            return "edit-profile";
         }
 
         memberService.updateMember(memberUpdateDTO);
@@ -152,6 +155,7 @@ public class MemberController {
     public String showWithdrawConfirm(HttpSession session, RedirectAttributes redirectAttributes) {
         Member member = (Member) session.getAttribute(LOGIN_MEMBER);
         if (member == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
             return "redirect:/member/login";
         }
         return "withdraw-confirm";
@@ -162,7 +166,8 @@ public class MemberController {
     public String requestWithdrawal(HttpSession session, RedirectAttributes redirectAttributes) {
         Member member = (Member) session.getAttribute(LOGIN_MEMBER);
         if (member == null) {
-            return "redirect:/member/profile";
+            redirectAttributes.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
+            return "redirect:/member/login";
         }
 
         memberService.requestWithdrawal(member.getMemberId());

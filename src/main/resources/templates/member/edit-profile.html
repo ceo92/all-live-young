@@ -1,29 +1,87 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragment/layout :: layout(~{::body})}">
+<head>
+    <!-- Daum 우편번호 검색 스크립트 포함 -->
+    <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
+    <meta charset="UTF-8">
+    <title>프로필 수정</title>
+    <style>
+        /* 간단한 스타일 추가 (필요 시 수정) */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        section {
+            max-width: 600px;
+            margin: auto;
+        }
+        div {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        a {
+            display: inline-block;
+            margin-top: 10px;
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
 <body>
 <section>
     <h2>프로필 수정</h2>
     <form th:action="@{/member/profile/edit}" th:object="${memberUpdateDTO}" method="post">
+        <!-- CSRF 토큰 (Spring Security 사용 시) -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <!-- 회원 ID (숨겨진 필드) -->
         <input type="hidden" th:field="*{memberId}"/>
 
         <!-- 이름 (수정 가능) -->
         <div>
             <label for="name">이름:</label>
             <input type="text" id="name" th:field="*{name}" required>
-            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
         </div>
 
-        <!-- 이메일 (읽기 전용) -->
+        <!-- 이메일 (수정 가능) -->
         <div>
             <label for="email">이메일:</label>
-            <input type="email" id="email" th:field="*{email}" readonly>
+            <input type="email" id="email" th:field="*{email}" required>
+            <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
         </div>
 
         <!-- 전화번호 (수정 가능) -->
         <div>
             <label for="phoneNumber">전화번호:</label>
             <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required>
-            <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+            <div class="error" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
         </div>
 
         <!-- 우편번호 (읽기 전용) -->
@@ -43,7 +101,7 @@
         <div>
             <label for="detailsAddress">상세 주소:</label>
             <input type="text" id="detailsAddress" th:field="*{detailsAddress}" required>
-            <div th:if="${#fields.hasErrors('detailsAddress')}" th:errors="*{detailsAddress}"></div>
+            <div class="error" th:if="${#fields.hasErrors('detailsAddress')}" th:errors="*{detailsAddress}"></div>
         </div>
 
         <!-- 주소 검색 스크립트 -->
@@ -59,8 +117,8 @@
             }
         </script>
 
-        <!-- 에러 메시지 -->
-        <div th:if="${#fields.hasErrors('*')}">
+        <!-- 전반적인 에러 메시지 (필요 시) -->
+        <div class="error" th:if="${#fields.hasErrors('*')}">
             <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
         </div>
 

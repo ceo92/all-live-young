@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {
-    private Long id;
+private Long id;
     private String name;
     private Long memberId;  //호환성을 위해 우선 보류, 체크 후 클래스 객체 필드
     private String storeTemperature;
@@ -19,3 +19,4 @@ public class Product {
     private LocalDateTime licenseDate;
     private int licenseNum;
 }
+
