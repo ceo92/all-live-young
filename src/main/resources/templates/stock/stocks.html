@@ -36,7 +36,7 @@
               <div>
                 보관 온도 선택 :
                 <th:block th:each="storeTemperature : ${storeTemperatures}">
-                  <input type="checkbox" th:field="*{storeTemperatures}" th:value="${storeTemperature.name()}"> <!-- Boolean 아니면 무조건 value 존재해야됨 , boolean은 true false만 넘겨주면 되지만, non -boolean은 어떤 값을 넘길지를 지정해줘야됨!-->
+                  <input type="checkbox" th:field="*{storeTemperatures}" th:value="${storeTemperature.description}"> <!-- Boolean 아니면 무조건 value 존재해야됨 , boolean은 true false만 넘겨주면 되지만, non -boolean은 어떤 값을 넘길지를 지정해줘야됨!-->
                   <label th:for="${#ids.prev('storeTemperatures')}" th:text="${storeTemperature.description}"></label>
                 </th:block>
               </div>
@@ -45,7 +45,7 @@
               <div>
                 의약품 종류 선택 :
                 <th:block th:each="productType : ${productTypes}">
-                  <input type="checkbox" th:field="*{productTypes}" th:value="${productType.name()}"> <!-- Boolean 아니면 무조건 value 존재해야됨 , boolean은 true false만 넘겨주면 되지만, non -boolean은 어떤 값을 넘길지를 지정해줘야됨!-->
+                  <input type="checkbox" th:field="*{productTypes}" th:value="${productType.description}"> <!-- Boolean 아니면 무조건 value 존재해야됨 , boolean은 true false만 넘겨주면 되지만, non -boolean은 어떤 값을 넘길지를 지정해줘야됨!-->
                   <label th:for="${#ids.prev('productTypes')}" th:text="${productType.description}"></label>
                 </th:block>
                 <button type="submit" style="float:right" th:text="|검색하기|" class="btn btn-primary"></button>
@@ -87,6 +87,8 @@
                 </tr>
                 </tbody>
               </table>
+
+
 
             </div>
           </div>
