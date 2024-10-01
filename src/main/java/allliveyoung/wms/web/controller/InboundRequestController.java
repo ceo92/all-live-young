@@ -1,10 +1,8 @@
-package package allliveyoung.wms.web.controller;
+package allliveyoung.allliveinbound.web.controller;
 
+import allliveyoung.allliveinbound.domain.Member;
 import allliveyoung.allliveinbound.service.InboundRequestService;
-import allliveyoung.wms.web.dto.InboundPageRequestDTO;
-import allliveyoung.wms.web.dto.InboundProductUpdateDTO;
-import allliveyoung.wms.web.dto.InboundRequestSaveDTO;
-import allliveyoung.wms.web.dto.InboundRequestUpdateDTO;
+import allliveyoung.allliveinbound.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -14,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,28 +24,23 @@ public class InboundRequestController {
     private final InboundRequestService inboundRequestService;
 
     @GetMapping
-    public String getInboundRequests(@Validated InboundPageRequestDTO inboundPageRequestDTO, BindingResult bindingResult, Model model) {
-        log.info(inboundPageRequestDTO);
-        if(bindingResult.hasErrors()) {
-            inboundPageRequestDTO = InboundPageRequestDTO.builder().build();
-        }
+    public String getInboundRequests(InboundPageRequestDTO inboundPageRequestDTO, Model model, Member member) {
+        model.addAttribute("responseDTO", inboundRequestService.findInbounds(inboundPageRequestDTO, member));
 
-        model.addAttribute("responseDTO", inboundRequestService.findInbounds(inboundPageRequestDTO));
         return "inbound-list";
     }
 
     @GetMapping("/{id}")
-    public String getInboundRequest(@PathVariable(value = "id") Long id, Model model, InboundPageRequestDTO inboundPageRequestDTO) {
+    public String getInboundRequest(@PathVariable Long id, Model model) {
         log.info(id);
         inboundRequestService.findInbound(id).forEach(log::info);
         model.addAttribute("responseDTO", inboundRequestService.findInbound(id));
-
 
         return "inbound-detail";
     }
 
     @GetMapping("/save")
-    public String getInboundRequestSaveForm(Member member, Model model) {//todo 시큐리티 적용
+    public String getInboundRequestSaveForm(Model model) {//todo 시큐리티 적용
         log.info("getInboundRequestSaveForm..........");
 
         model.addAttribute("warehouseDTO", inboundRequestService.getWarehouseList());
@@ -59,6 +53,7 @@ public class InboundRequestController {
     public String getInboundRequestUpdateForm(@PathVariable(value = "id") Long id, Model model) {
         log.info("getInboundRequestUpdateForm..........");
         model.addAttribute("responseDTO", inboundRequestService.findInbound(id));
+
         return "inbound-modify";
     }
 
@@ -69,13 +64,9 @@ public class InboundRequestController {
                                              Model model) {
 
         Long savedId = inboundRequestService.saveInbound(inboundRequestSaveDTO);
-        log.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        log.info("inboundRequestSaveDTO = " + inboundRequestSaveDTO);
-        log.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
         redirectAttributes.addAttribute("id", savedId);
 
-        // 리다이렉트 URL에 플레이스홀더 대신 실제 값 사용
         return "redirect:/inbound-requests/{id}";
     }
 
@@ -91,19 +82,24 @@ public class InboundRequestController {
     }
 
     @PostMapping("/{id}/update")
-    public String postInboundRequestUpdateForm(@Validated InboundRequestUpdateDTO inboundRequestUpdateDTO, List<InboundProductUpdateDTO> inboundProductUpdateDTO, InboundPageRequestDTO inboundPageRequestDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String postInboundRequestUpdateForm(@PathVariable Long id,
+                                               @RequestBody InboundRequestUpdateDTO inboundRequestUpdateDTO,
+                                               InboundPageRequestDTO inboundPageRequestDTO,
+                                               BindingResult bindingResult,
+                                               RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             log.info("has error..........");
             redirectAttributes.addFlashAttribute("error",bindingResult.getAllErrors());
         }
 
-        inboundRequestService.updateInbound(inboundRequestUpdateDTO, inboundProductUpdateDTO);
+        inboundRequestService.updateInbound(id, inboundRequestUpdateDTO);
+        redirectAttributes.addAttribute("id", id);
 
         return "redirect:/inbound-requests/{id}";
     }
 
-    @PostMapping("/{id}/update-status")
-    public String PostRequestUpdateStatus(Long id, String status, RedirectAttributes redirectAttributes) {
+    @PostMapping("/{id}/update-status") //todo rejectionNote도 같이 넘겨줘야 함
+    public String PostRequestUpdateStatus(@PathVariable Long id, @RequestParam String status, @RequestParam String rejectionNote, RedirectAttributes redirectAttributes) {
         log.info("update status..........");
         inboundRequestService.updateInboundStatus(id, status);
 

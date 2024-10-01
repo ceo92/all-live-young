@@ -75,5 +75,6 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         return announcement;
     }
 
-    // 기타 필요한 서비스 메서드...
+
+
 }

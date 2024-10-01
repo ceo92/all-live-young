@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Address {
 
-    @NotBlank(message = "도로명 주소는 필수 입력 값입니다.")
+ @NotBlank(message = "도로명 주소는 필수 입력 값입니다.")
     @Size(max = 50, message = "도로명 주소는 최대 50자까지 가능합니다.")
     private String roadNameAddress;
 

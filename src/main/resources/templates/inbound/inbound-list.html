@@ -11,17 +11,19 @@
         <div class="card shadow mb-4 p-3">
             <div class="mt-2">
                 <form action="" method="get">
-                    <input type="hidden" name="size" value="${inboundPageRequestDTO.size}">
+                    <input type="hidden" name="size" th:value="${inboundPageRequestDTO.size}">
+                    <input type="hidden" name="size" th:value="${responseDTO.size}">
                     <div class="ml-1">
-                        <input type="checkbox" name="types" value="w"> 처리 대기중
-                        <input type="checkbox" name="types" value="a"> 승인
-                        <input type="checkbox" name="types" value="r"> 반려
+                        <input type="checkbox" name="types" value="w" th:checked="${inboundPageRequestDTO.types != null && #lists.contains(inboundPageRequestDTO.types, 'w')}"> 처리 대기중
+                        <input type="checkbox" name="types" value="a" th:checked="${inboundPageRequestDTO.types != null && #lists.contains(inboundPageRequestDTO.types, 'a')}"> 승인
+                        <input type="checkbox" name="types" value="r" th:checked="${inboundPageRequestDTO.types != null && #lists.contains(inboundPageRequestDTO.types, 'r')}"> 반려
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label for="keyword" class="mr-2 mb-0 align-self-center">입고요청코드 :</label>
+                        <input type="text" class="form-control bg-light border-0 small" id="keyword" name="keyword" th:value="${inboundPageRequestDTO.keyword}" style="width: 200px">
                     </div>
                     <button class="btn btn-primary" type="submit">조회</button>
                 </form>
-                <div>
-
-                </div>
             </div>
         </div>
 
@@ -76,7 +78,7 @@
                             </th:block>
                         </ul>
 
-                        <form th:action="@{/inbound-requests/save}" method="get">
+                        <form th:action="@{/inbound-requests/save}" method="get" th:if="${role == 'USER'}">
                             <button class="submit btn btn-primary" type="submit">등록</button>
                         </form>
                     </div>
@@ -85,6 +87,29 @@
         </div>
 
     </div>
+
+    <script th:inline="javascript">
+
+        document.querySelector(".pagination").addEventListener("click", function (e) {
+            e.preventDefault()
+            e.stopPropagation()
+
+            const target = e.target
+
+            if(target.tagName !== 'A') {
+                return
+            }
+
+            const num = target.getAttribute("data-num")
+
+            const formObj = document.querySelector("form")
+
+            formObj.innerHTML += `<input type='hidden' name='page' value='${num}'>`
+
+            formObj.submit();
+
+        },false)
+    </script>
 </section>
 
 </html>

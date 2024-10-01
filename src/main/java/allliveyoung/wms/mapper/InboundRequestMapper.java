@@ -1,10 +1,9 @@
 package allliveyoung.wms.mapper;
 
-
-import allliveyoung.wms.web.dto.InboundPageRequestDTO;
-import allliveyoung.wms.web.dto.InboundProductSaveDTO;
-import allliveyoung.wms.web.dto.InboundProductUpdateDTO;
-import allliveyoung.wms.web.dto.InboundRequestSaveDTO;
+import allliveyoung.wms.domain.Member;
+import allliveyoung.wms.domain.Product;
+import allliveyoung.wms.domain.Warehouse;
+import allliveyoung.wms.web.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,9 +11,9 @@ import java.util.*;
 
 @Mapper
 public interface InboundRequestMapper {
-    List<allliveyoung.allliveinbound.domain.InboundRequest> findAll(InboundPageRequestDTO inboundPageRequestDTO);
+    List<allliveyoung.allliveinbound.web.dto.InboundRequest> findAll(InboundPageRequestDTO inboundPageRequestDTO, Member member);
 
-    List<allliveyoung.allliveinbound.domain.InboundRequestProduct> findById(@Param("id") Long id);
+    List<InboundRequestProduct> findById(@Param("id") Long id);
 
     Long save(InboundRequestSaveDTO inboundRequestSaveDTO);
 
@@ -29,9 +28,15 @@ public interface InboundRequestMapper {
 
     void updateStatus(Map<String, Object> map);
 
-    int getCount(InboundPageRequestDTO inboundPageRequestDTO);
+    int getCount(InboundPageRequestDTO inboundPageRequestDTO, Member member);
 
     List<Warehouse> getWarehouseList();
 
-    List<allliveyoung.allliveinbound.domain.Product> getMatchedProductList(Long id);
+    List<Product> getMatchedProductList(Long id);
+
+    Integer countByStatus(String status);
+
+    List<CountRequestDTO> findCountInbound(Integer year);
+
+    List<CountStockDTO> findCountStock(Integer year);
 }

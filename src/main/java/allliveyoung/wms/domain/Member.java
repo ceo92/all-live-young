@@ -10,19 +10,18 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Member {
-    private Long memberId;
+private Long memberId;
     private String name;
     private String password;
     private String phoneNumber;
     private String email;
-    private String roadNameAddress;
-    private String detailsAddress;
+    private Address address;
     private AccountStatus accountStatus;
     private LocalDateTime joinDate;
     private LocalDateTime lastLoginDate;
     private RoleType roleType;
     private String businessNumber;
-    private Long warehouseId;
+    private Warehouse warehouse;
     private Boolean isAgree;
     private LocalDateTime agreeDate;
 }

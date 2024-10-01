@@ -15,4 +15,5 @@ public class Answer {
     private Long memberId;
     private String answerContent;
     private LocalDateTime answerWriteTime;
+    private String memberName; // Added
 }

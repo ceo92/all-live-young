@@ -1,7 +1,8 @@
 package allliveyoung.wms.service;
 
+import allliveyoung.wms.constant.RequestStatus;
 import allliveyoung.wms.domain.OutboundRequest;
-import allliveyoung.wms.domain.Status;
+import allliveyoung.wms.constant.RequestStatus;
 import allliveyoung.wms.mapper.OutboundRequestMapper;
 import allliveyoung.wms.web.dto.OutboundRequestDTO;
 import java.util.List;
@@ -25,7 +26,7 @@ public class OutboundRequestServiceImpl implements OutboundRequestService {
   }
 
   @Override
-  public List<OutboundRequest> findOutboundRequests(@Param("status") Status status) {
+  public List<OutboundRequest> findOutboundRequests(@Param("status") RequestStatus status) {
     List<OutboundRequest> list = outboundRequestMapper.findAll(status);
     return list;
   }

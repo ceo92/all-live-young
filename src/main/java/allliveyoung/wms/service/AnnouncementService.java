@@ -22,5 +22,5 @@ public interface AnnouncementService {
     // 공지사항 상세 조회
     Announcement getAnnouncementDetails(Long announcementId);
 
-    // 기타 필요한 서비스 메서드...
+
 }

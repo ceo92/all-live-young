@@ -1,8 +1,11 @@
-package allliveyoung.wms.web.dto;package allliveyoung.wms.web.dto;
+package allliveyoung.wms.web.dto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Builder
 @Data
@@ -10,5 +13,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InboundRequestUpdateDTO {
     private Long id;
-    private String status;
+    private List<InboundProductUpdateDTO> inboundProductUpdateDTOList;
 }

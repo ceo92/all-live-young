@@ -1,6 +1,7 @@
 package allliveyoung.wms.service;
 
 import allliveyoung.wms.domain.Expense;
+import allliveyoung.wms.domain.Warehouse;
 import allliveyoung.wms.mapper.ExpenseMapper;
 import allliveyoung.wms.web.dto.*;
 import lombok.RequiredArgsConstructor;

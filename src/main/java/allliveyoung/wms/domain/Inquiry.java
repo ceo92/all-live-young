@@ -16,4 +16,5 @@ public class Inquiry {
     private String inquiryContent;
     private LocalDateTime writeTime;
     private Boolean answered;
+    private String memberName; // Added
 }

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InboundProductUpdateDTO {
     private Long id;
-    private String inboundRequestId;
+    private Long inboundRequestId;
     private int palletQuantity;
     private int boxQuantity;
     private String manufactureNum;
