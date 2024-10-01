@@ -11,11 +11,12 @@
         <div class="card shadow mb-4 p-3">
             <div class="mt-2">
                 <form action="" method="get">
-                    <input type="hidden" name="size" value="${inboundPageRequestDTO.size}">
+                    <input type="hidden" name="size" th:value="${inboundPageRequestDTO.size}">
+                    <input type="hidden" name="size" th:value="${responseDTO.size}">
                     <div class="ml-1">
-                        <input type="checkbox" name="types" value="w"> 처리 대기중
-                        <input type="checkbox" name="types" value="a"> 승인
-                        <input type="checkbox" name="types" value="r"> 반려
+                        <input type="checkbox" name="types" value="w" th:checked="${#arrays.contains(inboundPageRequestDTO.types, 'w')}"> 처리 대기중
+                        <input type="checkbox" name="types" value="a" th:checked="${#arrays.contains(inboundPageRequestDTO.types, 'a')}"> 승인
+                        <input type="checkbox" name="types" value="r" th:checked="${#arrays.contains(inboundPageRequestDTO.types, 'r')}"> 반려
                     </div>
                     <button class="btn btn-primary" type="submit">조회</button>
                 </form>
@@ -85,6 +86,29 @@
         </div>
 
     </div>
+
+    <script th:inline="javascript">
+
+        document.querySelector(".pagination").addEventListener("click", function (e) {
+            e.preventDefault()
+            e.stopPropagation()
+
+            const target = e.target
+
+            if(target.tagName !== 'A') {
+                return
+            }
+
+            const num = target.getAttribute("data-num")
+
+            const formObj = document.querySelector("form")
+
+            formObj.innerHTML += `<input type='hidden' name='page' value='${num}'>`
+
+            formObj.submit();
+
+        },false)
+    </script>
 </section>
 
 </html>
