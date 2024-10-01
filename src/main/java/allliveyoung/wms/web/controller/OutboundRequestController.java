@@ -1,13 +1,20 @@
 package allliveyoung.wms.web.controller;
 
+import allliveyoung.wms.domain.Member;
 import allliveyoung.wms.domain.OutboundRequest;
-import allliveyoung.wms.domain.Status;
+import allliveyoung.wms.constant.RequestStatus;
+import allliveyoung.wms.domain.Stock;
 import allliveyoung.wms.service.OutboundRequestService;
+import allliveyoung.wms.service.StockService;
 import allliveyoung.wms.web.dto.OutboundRequestDTO;
+import allliveyoung.wms.web.dto.UserDetailsDTO;
 import java.nio.file.Path;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,32 +32,34 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class OutboundRequestController {
 
   private final OutboundRequestService outboundRequestService;
+  private final StockService stockService;
 
   @GetMapping("/dashboard")
   public String getDashboard() {
     // 필요한 데이터를 모델에 추가할 수 있습니다.
-    return "mem-dashboard";
+    return "dashboard";
   }
 
-  @GetMapping("/charts")
-  public String getCharts() {
-    return "charts";
-  }
   //사용자, 총관리자, 창고관리자가 출고요청 리스트를 조회하는 페이지
   @GetMapping("/outbound-requests")
-  public String getOutboundRequests(Model model, @RequestParam(value = "status", required = false) Status status) {
+  public String getOutboundRequests(Model model, @RequestParam(value = "status", required = false) RequestStatus status) {
 
     List<OutboundRequest> outboundRequestList = outboundRequestService.findOutboundRequests(status);
     model.addAttribute("outboundRequestList", outboundRequestList);
     model.addAttribute("status", status);
-    return "mem-outboundrequest";
+    return "outbound/outbounds2";
   }
 
   // 사용자가 출고요청을 등록하는 페이지
   @GetMapping("/outbound-request/save")
-  public String getOutboundRequestsSaveForm(Model model) {
+  public String getOutboundRequestsSaveForm(Model model,  @AuthenticationPrincipal UserDetailsDTO userDetails) {
+
+    // 여기서 해당 사용자가 보유한 재고 목록을 불러옴
+    List<Stock> stockList = stockService.findStocks(userDetails.getMember());
+
     model.addAttribute("outboundRequestDTO", new OutboundRequestDTO());
-    return "mem-outboundrequest_insert";
+    model.addAttribute("stockList", stockList);  // 해당 사용자의 재고 목록을 모델에 추가
+    return "outbound/outbound-register";
   }
 
 
@@ -60,13 +69,13 @@ public class OutboundRequestController {
       BindingResult bindingResult, RedirectAttributes redirectAttributes) {
     if (bindingResult.hasErrors()) {
       redirectAttributes.addFlashAttribute("errors", bindingResult);
-      return "mem-outboundrequest_insert";
+      return "outbound/outbound-register";
     }
 
     outboundRequestService.saveOutboundRequest(outboundRequestDTO);
     redirectAttributes.addFlashAttribute("message","저장 성공");
 
-    return "redirect:/outbound-requests";
+    return "redirect:/outbound-request/save";
   }
 
   // 사용자, 총관리자, 창고관리자가 출고요청 조회 후 수정하는 페이지
@@ -74,7 +83,7 @@ public class OutboundRequestController {
   public String getOutboundRequest(@PathVariable("id") Long id, Model model) {
     OutboundRequest outboundRequest = outboundRequestService.findOneOutboundRequest(id);
     model.addAttribute("outboundRequest", outboundRequest);
-    return "mem-outboundrequest_detail";
+    return "outbound/outbound";
   }
 
   // 출고요청 수정입력 동적처리

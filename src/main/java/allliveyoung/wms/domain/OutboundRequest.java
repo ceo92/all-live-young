@@ -1,5 +1,6 @@
 package allliveyoung.wms.domain;
 
+import allliveyoung.wms.constant.RequestStatus;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,7 @@ import lombok.ToString;
 public class OutboundRequest {
   private Long id;
   private String code;
-  private Status status;
+  private RequestStatus status;
   private Member member;
   private Stock stock;
   private Integer quantity;

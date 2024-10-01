@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Member {
-    private Long memberId;
+private Long memberId;
     private String name;
     private String password;
     private String phoneNumber;

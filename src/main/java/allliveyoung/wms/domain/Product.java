@@ -10,12 +10,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {
-    private Long id;
+private Long id;
     private String name;
     private Long memberId;
     private String storeTemperature;
     private String type;
     private LocalDateTime licenseDate;
     private int licenseNum;
-
-}
+  }
