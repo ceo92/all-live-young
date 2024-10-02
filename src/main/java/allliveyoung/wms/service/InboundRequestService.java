@@ -1,7 +1,10 @@
-package allliveyoung.wms.service;
+package allliveyoung.allliveinbound.service;
 
-import allliveyoung.wms.domain.Member;
-import allliveyoung.wms.web.dto.*;
+import allliveyoung.allliveinbound.domain.InboundRequest;
+import allliveyoung.allliveinbound.domain.InboundRequestProduct;
+import allliveyoung.allliveinbound.domain.Member;
+import allliveyoung.allliveinbound.domain.Warehouse;
+import allliveyoung.allliveinbound.web.dto.*;
 
 import java.util.List;
 
@@ -16,7 +19,7 @@ public interface InboundRequestService {
 
     void deleteInbound(Long id);
 
-    void updateInboundStatus(Long id, String status);
+    void updateInboundStatus(InboundStatusUpdateDTO inboundStatusUpdateDTO);
 
     List<WarehouseDTO> getWarehouseList();
 

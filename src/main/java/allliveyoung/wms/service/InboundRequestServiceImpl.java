@@ -1,11 +1,12 @@
-package allliveyoung.wms.service;
+package allliveyoung.allliveinbound.service;
 
-
+import allliveyoung.allliveinbound.config.ModelMapperConfig;
+import allliveyoung.allliveinbound.domain.InboundRequest;
+import allliveyoung.allliveinbound.domain.InboundRequestProduct;
+import allliveyoung.allliveinbound.domain.Member;
+import allliveyoung.allliveinbound.domain.Warehouse;
 import allliveyoung.allliveinbound.mapper.InboundRequestMapper;
-
-import allliveyoung.wms.domain.Member;
-import allliveyoung.wms.domain.Warehouse;
-import allliveyoung.wms.web.dto.*;
+import allliveyoung.allliveinbound.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -31,6 +32,7 @@ public class InboundRequestServiceImpl implements InboundRequestService {
                 .map(request -> modelMapper.map(request,InboundRequestDTO.class)).collect(Collectors.toList());
 
         int total = inboundRequestMapper.getCount(inboundPageRequestDTO, member);
+        log.info(total);
 
         InboundPageResponseDTO<InboundRequestDTO> responseDTO = InboundPageResponseDTO.<InboundRequestDTO>withAll()
                 .dtoList(requests).total(total).inboundPageRequestDTO(inboundPageRequestDTO).build();
@@ -67,9 +69,9 @@ public class InboundRequestServiceImpl implements InboundRequestService {
     }
 
     @Override
-    public void updateInboundStatus(Long id, String status) {
-        Map map = Map.of("id",id,"status",status);
-        inboundRequestMapper.updateStatus(map);
+    public void updateInboundStatus(InboundStatusUpdateDTO inboundStatusUpdateDTO) {
+        log.info("*************************************************************");
+        inboundRequestMapper.updateStatus(inboundStatusUpdateDTO);
     }
 
     @Override
