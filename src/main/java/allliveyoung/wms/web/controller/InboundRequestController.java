@@ -5,6 +5,7 @@ import allliveyoung.allliveinbound.service.InboundRequestService;
 import allliveyoung.allliveinbound.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -99,9 +100,9 @@ public class InboundRequestController {
     }
 
     @PostMapping("/{id}/update-status") //todo rejectionNote도 같이 넘겨줘야 함
-    public String PostRequestUpdateStatus(@PathVariable Long id, @RequestParam String status, @RequestParam String rejectionNote, RedirectAttributes redirectAttributes) {
+    public String PostRequestUpdateStatus(@ModelAttribute InboundStatusUpdateDTO inboundStatusUpdateDTO, RedirectAttributes redirectAttributes) {
         log.info("update status..........");
-        inboundRequestService.updateInboundStatus(id, status);
+        inboundRequestService.updateInboundStatus(inboundStatusUpdateDTO);
 
         return "redirect:/inbound-requests/{id}";
     }

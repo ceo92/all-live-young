@@ -78,7 +78,7 @@
                             </th:block>
                         </ul>
 
-                        <form th:action="@{/inbound-requests/save}" method="get" th:if="${role == 'USER'}">
+                        <form th:action="@{/inbound-requests/save}" method="get" th:if="${role == 'COMPANY'}">
                             <button class="submit btn btn-primary" type="submit">등록</button>
                         </form>
                     </div>
@@ -91,24 +91,30 @@
     <script th:inline="javascript">
 
         document.querySelector(".pagination").addEventListener("click", function (e) {
-            e.preventDefault()
-            e.stopPropagation()
+            e.preventDefault();
+            e.stopPropagation();
 
-            const target = e.target
+            const target = e.target;
 
-            if(target.tagName !== 'A') {
-                return
+            if (target.tagName !== 'A') {
+                return;
             }
 
-            const num = target.getAttribute("data-num")
+            const num = target.getAttribute("data-num");
+            const formObj = document.querySelector("form");
 
-            const formObj = document.querySelector("form")
+            // 현재 폼의 검색 조건 값을 유지하기 위해 히든 필드로 추가
+            const keyword = document.getElementById("keyword").value;
+            const types = Array.from(document.querySelectorAll("input[name='types']:checked")).map(cb => cb.value);
 
-            formObj.innerHTML += `<input type='hidden' name='page' value='${num}'>`
+            formObj.innerHTML += `<input type='hidden' name='page' value='${num}'>`;
+            formObj.innerHTML += `<input type='hidden' name='keyword' value='${keyword}'>`;
+            types.forEach(type => {
+                formObj.innerHTML += `<input type='hidden' name='types' value='${type}'>`;
+            });
 
             formObj.submit();
-
-        },false)
+        }, false);
     </script>
 </section>
 
