@@ -18,7 +18,7 @@
 ## 기술적 목표
 ![](https://velog.velcdn.com/images/coo9292/post/111ea0db-42f0-4049-8b4e-b6f4d7cc4a9f/image.png)
 
-위와 같은 스프링 MVC 및 계층형 아키텍처의 기술적 목표를 잡고 구현하고자 함
+- 위와 같은 스프링 MVC 및 계층형 아키텍처의 기술적 목표를 잡고 구현하고자 함
 
 <br>
 <br>
@@ -37,7 +37,7 @@
 ### 2. 핵심 기능(3PL 구조)
 ![](https://velog.velcdn.com/images/coo9292/post/edeb405b-26a5-4506-b62a-0d545882edf9/image.png)
 
-회원 관리,  창고 관리 , 재고 관리 , 재무 관리 , 입고 관리 , 출고 관리 , 고객센터(공지사항 게시판 , 1대1 문의 게시판) 페이지를 구현할 것
+- 회원 관리,  창고 관리 , 재고 관리 , 재무 관리 , 입고 관리 , 출고 관리 , 고객센터(공지사항 게시판 , 1대1 문의 게시판) 페이지를 구현할 것
 
 <br>
 
@@ -121,10 +121,10 @@
 
 ## 팀원 및 내 역할
 #### 내 역할
->  팀장 , 재고 관리 페이지 설계 , 창고 관리 페이지 설계 , Github 관리 , 회의록 관리 , 일정(WBS) 관리
+팀장 , 재고 관리 페이지 설계 , 창고 관리 페이지 설계 , Github 관리 , 회의록 관리 , 일정(WBS) 관리
 
 #### 팀원(4명) 역할
-> - K : 입고 관리 페이지 설계 , Notion 관리 , 
+- K : 입고 관리 페이지 설계 , Notion 관리 , 
 - P : 대시보드 설계 , 재무 관리 페이지 설계 , Spring Security 적용 , 산출물 및 기획안 작성
 - C : 회원 관리 , 로그인 페이지 설계 , 고객센터 설계 , 시연 영상 편집 
 - J : 출고 관리 페이지 설계
@@ -135,7 +135,7 @@
 ## Git 관리
 #### Branch(9)
 ![](https://velog.velcdn.com/images/coo9292/post/e418065c-d601-403e-b8dd-2bdad140a07f/image.png)
-> - ```main 브랜치``` : 배포용 브랜치
+- ```main 브랜치``` : 배포용 브랜치
 -  ```develop 브랜치``` : 각 기능 별 개발 후 merge용 브랜치
 - ```feature 브랜치``` : 팀원 간 각 기능 별 구현 브랜치
 
@@ -143,7 +143,7 @@
 
 #### Pull Request(39)
 ![](https://velog.velcdn.com/images/coo9292/post/747392e5-8551-4384-b502-256a2658b94e/image.png)
-> 39번의 PR을 통한 git flow 관리 및 conflict 방지
+39번의 PR을 통한 git flow 관리 및 conflict 방지
 
 <br>
 
@@ -153,7 +153,7 @@
 
 ![](https://velog.velcdn.com/images/coo9292/post/3b6f116f-4121-4e43-8adc-73df83ec82d5/image.png)
 
-> 총 203개의 main 브랜치 커밋
+총 203개의 main 브랜치 커밋
 
 
 
@@ -162,7 +162,7 @@
 
 ## 요구사항 분석 및 도메인 설계
 ### 들어가기 전
-> - 모든 의약품 WMS를 담당하는 의약 회사(지오영 , 동원약품 , 백제약품 , ...)는 표준 의약 법령에 의거하여 3PL 방식으로 수행됨
+- 모든 의약품 WMS를 담당하는 의약 회사(지오영 , 동원약품 , 백제약품 , ...)는 표준 의약 법령에 의거하여 3PL 방식으로 수행됨
 - 그에 따라 All live 榮 WMS 또한 모든 설계를 의약품 법령에 근거하여 설계하였음
 
 <br>
@@ -197,13 +197,13 @@
 
 ![](https://velog.velcdn.com/images/coo9292/post/fb1e0547-5b2a-4a6d-a419-95dc0e0edcda/image.svg)
 
->- 한 지역에 한 창고가 할당됨
+- 한 지역에 한 창고가 할당됨
 - 한 창고에는 상온 , 냉장 , 냉동 의약품이 보관하는 영역이 층 별로 분리됨(1층에 상온 의약품 보관 , 2층에 냉장 의약품 보관 , 3층에 냉동 의약품 보관)
 - 의약품 종류(일반 , 폭발물 , 마약 , 생물학적제제)는 의약품의 고유번호로 판별함에 따라 분리하지 않음
 
 ![](https://velog.velcdn.com/images/coo9292/post/6089c9f8-22a3-40a4-b202-0099bc85f476/image.png)
 
-> - 창고의 한 층 내에서는 **열** 형태의 여러 구역(section)이 존재함 , 각 구역에는 여러 블록이 존재하고 한 블록 내에는 한 파레트가 적재가 됨
+- 창고의 한 층 내에서는 **열** 형태의 여러 구역(section)이 존재함 , 각 구역에는 여러 블록이 존재하고 한 블록 내에는 한 파레트가 적재가 됨
 <br>
 - 즉 RDBMS관점에서 본다면, 층이 테이블이고, 구역이 칼럼, 블록이 레코드, 파레트가 데이터가 됨
 <br>
@@ -243,7 +243,7 @@
 ![](https://velog.velcdn.com/images/coo9292/post/3815eaf6-37ca-4e13-ad2f-18452a893b47/image.png)
 
 
-> [해당 링크](https://www.erdcloud.com/d/E6iQPxSRmuLZqKYCT)에서 ERD 클라우드를 이용한 ERD를 확인할 수 있음
+[이 링크](https://www.erdcloud.com/d/E6iQPxSRmuLZqKYCT)에서 ERD를 자세히 확인할 수 있음
 
 <br>
 <br>
@@ -258,7 +258,7 @@
 ![](https://velog.velcdn.com/images/coo9292/post/eeaf6af7-7745-4104-853d-b014e49c5922/image.png)
 
 
-> [해당 링크](https://app.diagrams.net/#G1NIGiwJ8J_AbUkhJuomLXx3L7yV0vSAJT#%7B%22pageId%22%3A%22C5RBs43oDa-KdzZeNtuy%22%7D)에서 내가 설계한 플로우 차트를 자세히 확인할 수 있다.
+[이 링크](https://app.diagrams.net/#G1NIGiwJ8J_AbUkhJuomLXx3L7yV0vSAJT#%7B%22pageId%22%3A%22C5RBs43oDa-KdzZeNtuy%22%7D)에서 플로우 차트를 자세히 확인할 수 있음.
 
 <br>
 <br>
@@ -277,7 +277,7 @@
 
 
 
-> [해당 링크](https://app.diagrams.net/#G1NIGiwJ8J_AbUkhJuomLXx3L7yV0vSAJT#%7B%22pageId%22%3A%22geDZxhMXNpkiSSZ967Mz%22%7D)에서 내가 설계한 유스케이스 다이어그램을 자세히 확인할 수 있다.
+[이 링크](https://app.diagrams.net/#G1NIGiwJ8J_AbUkhJuomLXx3L7yV0vSAJT#%7B%22pageId%22%3A%22geDZxhMXNpkiSSZ967Mz%22%7D)에서 유스케이스 다이어그램을 자세히 확인할 수 있음.
 
 <br>
 <br>
@@ -287,13 +287,12 @@
 ### 1. 재고 관리
 #### ① 검색 조건 별 재고 목록 조회
 ![](https://velog.velcdn.com/images/coo9292/post/2d37d132-caf7-448c-a997-932b8fd35b30/image.png)
-> 검색 조건 : 보관 온도 , 의약품 종류 , 회사 이름 , 재고 코드 , 유효기간 , 의약품 이름
+검색 조건 : 보관 온도 , 의약품 종류 , 회사 이름 , 재고 코드 , 유효기간 , 의약품 이름
 
 <br>
 
 #### ② 재고 상세 조회
 ![](https://velog.velcdn.com/images/coo9292/post/0f57149a-4e14-4253-af97-b50781ca0749/image.png)
->
 - 목록에서 보이지 않는 상세 정보 출력
 - 재고 사진은 스프링 프레임워크가 제공하는 ```UrlResource``` API를 통해 출력
 - 해당 화면을 거쳐서 수정 폼 접근 가능
@@ -302,7 +301,6 @@
 
 #### ③ 재고 수정
 ![](https://velog.velcdn.com/images/coo9292/post/1472ed51-f2a3-4efd-abe6-b9bc28fcaf5a/image.png)
->
 - 실제 재고 실사를 통해 발생된 수량 오차를 수정해주는 작업을 해주는 페이지
 - 즉 수량에 대한 수정이 가능
 
@@ -312,7 +310,7 @@
 ### 2. 창고 관리
 #### ① 검색 조건 별 창고 목록 조회
 ![](https://velog.velcdn.com/images/coo9292/post/95f73887-4a27-443f-b714-cfb40a8d361d/image.png)
->- 검색 조건은 창고 이름 , 창고 주소로 가능
+- 검색 조건은 창고 이름 , 창고 주소로 가능
 - Kakao Map API를 통해 창고 위치를 카카오 지도로 식별 가능
 
 <br>
@@ -320,33 +318,33 @@
 #### ② 창고 상세 조회
 ![](https://velog.velcdn.com/images/coo9292/post/2306bffe-ec2d-41d2-8fec-0e58f08ccba5/image.png)
 
->- 창고에 대한 상세 정보 확인 가능
+- 창고에 대한 상세 정보 확인 가능
 - Kakao Map API를 통해 창고 위치를 카카오 지도로 식별 가능
 
 <br>
 
 #### ③ 창고 수정
 ![](https://velog.velcdn.com/images/coo9292/post/e8435f8d-20d8-4521-be28-534e4dd62cf9/image.png)
-> 수정을 위해 사용자의 입력 값 유지
+수정을 위해 사용자의 입력 값 유지
 
 <br>
 
 <img src="https://velog.velcdn.com/images/coo9292/post/38aff0bf-396d-4455-93d1-53ff22133fd0/image.png" width="350">
 
-> 카카오 우편번호 찾기 API를 통해 주소를 찾을 수 있음
+카카오 우편번호 찾기 API를 통해 주소를 찾을 수 있음
 
 <br>
 
 
 #### ④ 창고 등록
 ![](https://velog.velcdn.com/images/coo9292/post/6c886e0e-9908-4e5c-b2e6-ba44ff6ef686/image.png)
-> 새로운 창고를 해당 폼에서 등록 가능
+새로운 창고를 해당 폼에서 등록 가능
 
 <br>
 
 <img src="https://velog.velcdn.com/images/coo9292/post/8ad19cff-9113-4ae4-9ae1-a95bb3c1e4a4/image.png" width="350">
 
-> 사진과 같이 카카오 우편번호 찾기 API를 통해 주소를 찾을 수 있음
+사진과 같이 카카오 우편번호 찾기 API를 통해 주소를 찾을 수 있음
 
 
 <br>
@@ -355,7 +353,6 @@
 ### 3. 공통 레이아웃 정의
 ![](https://velog.velcdn.com/images/coo9292/post/7fbf7075-ffc3-4d56-9506-d8675ed0bf96/image.png)
 
->
 - 모든 팀원들이 일관된 레이아웃 안에서 작업을 하기 위하여 위 사진과 같은 공통 레이아웃 html(layout.html)을 배포
 - ```Thymeleaf```의 ```Fragment```를 이용해서 공통 템플릿 레이아웃을 정의
 
@@ -376,7 +373,7 @@
 
 </html>
 ```
->```th:fragment```를 통해 fragment(조각)를 선언 , 이때 content 파라메터도 덩달아 선언하면서 외부로부터 태그를 주입받겠다고 지정
+```th:fragment```를 통해 fragment(조각)를 선언 , 이때 content 파라메터도 덩달아 선언하면서 외부로부터 태그를 주입받겠다고 지정
 
 <br>
 
@@ -389,7 +386,7 @@
  </section>
 </html>
 ```
->
+
 - ```th:replace```를 통해 어떤 fragment로 현재 html파일을 "대체"할지 지정했음
 - ```fragment/layout.html```을 호출해서 ```<section></section>```영역을 content 파라메터에 넘기고자 함
 - 이에 따라 모든 팀원들은 일관된 경로에 공통 레이아웃 파일 배치만 하고  ```<section></section>``` 영역 안에 자신이 맡은 기능만 정의하면 됨
@@ -473,7 +470,7 @@ public class MapperTest {
 #### resultMap 개요
 - 공식문서에는 다음과 같이 정의됨
 
-> - resultMap엘리먼트는 마이바티스에서 가장 중요하고 강력한 엘리먼트이다.
+- resultMap엘리먼트는 마이바티스에서 가장 중요하고 강력한 엘리먼트이다.
 - ResultSet에서 데이터를 가져올때 작성되는 JDBC코드를 대부분 줄여주는 역할을 담당한다. 
 - ResultMap은 간단한 구문에서는 매핑이 필요하지 않고 복잡한 구문에서 관계를 서술하기 위해 필요하다.
 
@@ -557,7 +554,7 @@ public class MapperTest {
 #### 결과 및 깨달은점
 ![](https://velog.velcdn.com/images/coo9292/post/ab5b33ea-782e-426a-a15e-6843a5489a02/image.png)
 
-> 테스트 실패가 되며 null이 아닌 Product 타입의 객체가 잘 담기는 것을 알 수 있었음
+테스트 실패가 되며 null이 아닌 Product 타입의 객체가 잘 담기는 것을 알 수 있었음
 
 
 
@@ -577,7 +574,7 @@ public class MapperTest {
 }
 ```
 
->-  Product 인스턴스인지 확인하려고 테스트 코드를 리팩토링해도 잘 출력되는 것을 알 수 있었음
+-  Product 인스턴스인지 확인하려고 테스트 코드를 리팩토링해도 잘 출력되는 것을 알 수 있었음
 - <span style="color:red">즉 단순 조회가 아닌 연관관계에 대한 조인 조회 시에는 무조건 resultMap을 활용해야한다는 사실을 깨달음</span>
 
 
