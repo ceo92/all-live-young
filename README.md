@@ -204,8 +204,11 @@
 - 한 창고에는 상온 , 냉장 , 냉동 의약품이 보관하는 영역이 층 별로 분리됨(1층에 상온 의약품 보관 , 2층에 냉장 의약품 보관 , 3층에 냉동 의약품 보관)
 - 의약품 종류(일반 , 폭발물 , 마약 , 생물학적제제)는 의약품의 고유번호로 판별함에 따라 분리하지 않음
 
+<br>
+
 ![](https://velog.velcdn.com/images/coo9292/post/6089c9f8-22a3-40a4-b202-0099bc85f476/image.png)
 - 창고의 한 층 내에서는 **열** 형태의 여러 구역(section)이 존재함 , 각 구역에는 여러 블록이 존재하고 한 블록 내에는 한 파레트가 적재가 됨
+- 
 - 즉 RDBMS관점에서 본다면, 층이 테이블이고, 구역이 칼럼, 블록이 레코드, 파레트가 데이터가 됨
 - 각 섹션은 고유번호 값으로 특정지어짐에 따라 고유번호를 통해 창고에 저장된 섹션의 **위치**를 알 수 있고, 섹션 내의 각 블록은 섹션 내의 인덱스를 통해 알 수 있음
 
@@ -213,6 +216,7 @@
 
 ### 4. 입고 설계
 - 입고 시 같은 생산일자, 같은 제품일 경우 한 파레트로 묶여서 창고의 블럭에 적재됨
+
 - 입고 요청에 이상이 있을 경우 이상유무 체크박스에 체크 후 반려 이유 작성 후 반려됨
 
 
@@ -265,12 +269,12 @@
 #### 1. 재고 관리
 ![](https://velog.velcdn.com/images/coo9292/post/e72d450c-9861-4369-96a0-81dd7d802c74/image.png)
 
-
+<br>
 
 #### 2. 창고 관리
 ![](https://velog.velcdn.com/images/coo9292/post/724237f9-d997-4e6d-a1bf-892e5f0bf1d1/image.png)
 
-
+<br>
 
 [이 링크](https://app.diagrams.net/#G1NIGiwJ8J_AbUkhJuomLXx3L7yV0vSAJT#%7B%22pageId%22%3A%22geDZxhMXNpkiSSZ967Mz%22%7D)에서 유스케이스 다이어그램을 자세히 확인할 수 있음.
 
@@ -284,13 +288,15 @@
 ![](https://velog.velcdn.com/images/coo9292/post/2d37d132-caf7-448c-a997-932b8fd35b30/image.png)
 검색 조건 : 보관 온도 , 의약품 종류 , 회사 이름 , 재고 코드 , 유효기간 , 의약품 이름
 
-
+<br>
 
 #### ② 재고 상세 조회
 ![](https://velog.velcdn.com/images/coo9292/post/0f57149a-4e14-4253-af97-b50781ca0749/image.png)
 - 목록에서 보이지 않는 상세 정보 출력
 - 재고 사진은 스프링 프레임워크가 제공하는 ```UrlResource``` API를 통해 출력
 - 해당 화면을 거쳐서 수정 폼 접근 가능
+
+<br>
 
 #### ③ 재고 수정
 ![](https://velog.velcdn.com/images/coo9292/post/1472ed51-f2a3-4efd-abe6-b9bc28fcaf5a/image.png)
@@ -306,7 +312,7 @@
 - 검색 조건은 창고 이름 , 창고 주소로 가능
 - Kakao Map API를 통해 창고 위치를 카카오 지도로 식별 가능
 
-
+<br>
 
 #### ② 창고 상세 조회
 ![](https://velog.velcdn.com/images/coo9292/post/2306bffe-ec2d-41d2-8fec-0e58f08ccba5/image.png)
@@ -314,30 +320,30 @@
 - 창고에 대한 상세 정보 확인 가능
 - Kakao Map API를 통해 창고 위치를 카카오 지도로 식별 가능
 
-
+<br>
 
 #### ③ 창고 수정
 ![](https://velog.velcdn.com/images/coo9292/post/e8435f8d-20d8-4521-be28-534e4dd62cf9/image.png)
 수정을 위해 사용자의 입력 값 유지
 
-
+<br>
 
 <img src="https://velog.velcdn.com/images/coo9292/post/38aff0bf-396d-4455-93d1-53ff22133fd0/image.png" width="350">
 
 카카오 우편번호 찾기 API를 통해 주소를 찾을 수 있음
 
-
+<br>
 
 
 #### ④ 창고 등록
 ![](https://velog.velcdn.com/images/coo9292/post/6c886e0e-9908-4e5c-b2e6-ba44ff6ef686/image.png)
 새로운 창고를 해당 폼에서 등록 가능
 
+<br>
 
 <img src="https://velog.velcdn.com/images/coo9292/post/8ad19cff-9113-4ae4-9ae1-a95bb3c1e4a4/image.png" width="350">
 
 사진과 같이 카카오 우편번호 찾기 API를 통해 주소를 찾을 수 있음
-
 
 <br>
 <br>
@@ -346,9 +352,10 @@
 ![](https://velog.velcdn.com/images/coo9292/post/7fbf7075-ffc3-4d56-9506-d8675ed0bf96/image.png)
 
 - 모든 팀원들이 일관된 레이아웃 안에서 작업을 하기 위하여 위 사진과 같은 공통 레이아웃 html(layout.html)을 배포
+
 - ```Thymeleaf```의 ```Fragment```를 이용해서 공통 템플릿 레이아웃을 정의
 
-
+<br>
 
 #### 공통 레이아웃 html 정의(layout.html)
 ```html
@@ -367,7 +374,7 @@
 ```
 ```th:fragment```를 통해 fragment(조각)를 선언 , 이때 content 파라메터도 덩달아 선언하면서 외부로부터 태그를 주입받겠다고 지정
 
-
+<br>
 
 #### 공통 레이아웃 호출
 ```html
@@ -545,7 +552,7 @@ public class MapperTest {
 #### 결과 및 깨달은점
 ![](https://velog.velcdn.com/images/coo9292/post/ab5b33ea-782e-426a-a15e-6843a5489a02/image.png)
 
-테스트 실패가 되며 null이 아닌 Product 타입의 객체가 잘 담기는 것을 알 수 있었음
+- 테스트 실패가 되며 null이 아닌 Product 타입의 객체가 잘 담기는 것을 알 수 있었음
 
 
 
