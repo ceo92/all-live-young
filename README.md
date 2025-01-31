@@ -4,7 +4,7 @@
 하지만 지속적인 코로나 바이러스 변이로 인해 재유행함에 따라 국내 및 해외 증상 관련 약품들이 부족한 현상 발생함에 따라 **의약품 재고 및 유통 관리 창고시스템(WMS)을 개발**하여 대한민국의 의약품 보급난을 해결하는데 도움이 되고자 다짐
 
 <br>
-<br>
+
 
 ## 프로젝트 목표
 **1. code-chain WMS 서비스 개발** : 누설성 원칙을 기반으로 하는 WMS 설계 및 구현
@@ -14,7 +14,7 @@
 **3. 의약품 유통관리표준(KGSP)에 부합** : 지정의약품 등의 특별 취급 의약품 법령에 따른 관리 표준 충족
 
 <br>
-<br>
+
 
 ## 기술적 목표
 ![](https://velog.velcdn.com/images/coo9292/post/111ea0db-42f0-4049-8b4e-b6f4d7cc4a9f/image.png)
@@ -22,7 +22,7 @@
 - 위와 같은 스프링 MVC 및 계층형 아키텍처의 기술적 목표를 잡고 구현하고자 함
 
 <br>
-<br>
+
 
 ## 프로젝트 구조
 
@@ -85,7 +85,7 @@
 
 <br>
 
-#### URI(기본 틀)
+#### URI
 - 목록 페이지 조회 : /warehouses GET
 - 상세 페이지 조회 : /warehouses/{id} GET
 - 수정 폼 조회 : /warehouses/{id}/update GET(수정 시 동일한 URI POST 방식)
@@ -94,13 +94,14 @@
 - 등록 폼 조회 : /warehouses/save GET(등록 시 동일한 URI POST 방식)
 
 
+
 #### Controller 기본 메서드명
 - 목록 페이지 조회 : getWarehouses()
 - 상세 페이지 조회 : getWarehouse()
 - 수정 폼 조회 & 수정: updateWarehouseForm()
 - 등록 폼 조회 & 등록 : saveWarehouseForm()
 - 삭제 : deleteOneWarehouse()
-<br>
+
 
 #### Service 메서드명
 - 목록 페이지 조회 : findWarehouses()
@@ -108,7 +109,7 @@
 - 수정 : updateWarehouse()
 - 등록 : saveWarehouse()
 - 삭제 : deleteWarehouse()
-<br>
+
 
 #### Mapper
 - 목록 페이지 조회 : findAll()
