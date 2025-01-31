@@ -84,8 +84,6 @@
 
 - 예시는 창고(Warehouse) 관리 페이지에 대한 네이밍을 하겠음 , 즉 창고 페이지에 대한 URI 및 컨트롤러 , 서비스 , 매퍼 계층에서의 메서드 네이밍을 정할 것임
 
-<br>
-
 #### URI
 - 목록 페이지 조회 : /warehouses GET
 - 상세 페이지 조회 : /warehouses/{id} GET
@@ -142,13 +140,13 @@
 -  ```develop 브랜치``` : 각 기능 별 개발 후 merge용 브랜치
 - ```feature 브랜치``` : 팀원 간 각 기능 별 구현 브랜치
 
-
+<br>
 
 #### Pull Request(39)
 ![](https://velog.velcdn.com/images/coo9292/post/747392e5-8551-4384-b502-256a2658b94e/image.png)
 39번의 PR을 통한 git flow 관리 및 conflict 방지
 
-
+<br>
 
 #### Commit(203)
 
@@ -181,10 +179,10 @@
 
 ### ★ 2. 의약품 설계
 #### 사진 1)
-<p align="center"><img src="https://velog.velcdn.com/images/coo9292/post/147087d9-6450-4a44-aaa1-cde694c19907/image.svg" width=600></p>
+<div align="center"><img src="https://velog.velcdn.com/images/coo9292/post/147087d9-6450-4a44-aaa1-cde694c19907/image.svg" width=600></div>
 
 #### 사진 2)
-<p><img src="https://velog.velcdn.com/images/coo9292/post/653e47d1-21c7-417f-82ee-d3d295a40995/image.svg" width=600></p>
+<div><img src="https://velog.velcdn.com/images/coo9292/post/653e47d1-21c7-417f-82ee-d3d295a40995/image.svg" width=600></div>
 
 - 사진 1,2는 의약품 유통 관리 기준(KGSP)에서 발췌
 
