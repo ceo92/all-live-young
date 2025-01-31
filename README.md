@@ -142,13 +142,13 @@
 -  ```develop 브랜치``` : 각 기능 별 개발 후 merge용 브랜치
 - ```feature 브랜치``` : 팀원 간 각 기능 별 구현 브랜치
 
-<br>
+
 
 #### Pull Request(39)
 ![](https://velog.velcdn.com/images/coo9292/post/747392e5-8551-4384-b502-256a2658b94e/image.png)
 39번의 PR을 통한 git flow 관리 및 conflict 방지
 
-<br>
+
 
 #### Commit(203)
 
@@ -159,7 +159,8 @@
 총 203개의 main 브랜치 커밋
 
 
-
+<br>
+<br>
 
 
 
@@ -272,7 +273,6 @@
 #### 1. 재고 관리
 ![](https://velog.velcdn.com/images/coo9292/post/e72d450c-9861-4369-96a0-81dd7d802c74/image.png)
 
-<br>
 
 
 #### 2. 창고 관리
@@ -292,15 +292,13 @@
 ![](https://velog.velcdn.com/images/coo9292/post/2d37d132-caf7-448c-a997-932b8fd35b30/image.png)
 검색 조건 : 보관 온도 , 의약품 종류 , 회사 이름 , 재고 코드 , 유효기간 , 의약품 이름
 
-<br>
+
 
 #### ② 재고 상세 조회
 ![](https://velog.velcdn.com/images/coo9292/post/0f57149a-4e14-4253-af97-b50781ca0749/image.png)
 - 목록에서 보이지 않는 상세 정보 출력
 - 재고 사진은 스프링 프레임워크가 제공하는 ```UrlResource``` API를 통해 출력
 - 해당 화면을 거쳐서 수정 폼 접근 가능
-
-<br>
 
 #### ③ 재고 수정
 ![](https://velog.velcdn.com/images/coo9292/post/1472ed51-f2a3-4efd-abe6-b9bc28fcaf5a/image.png)
@@ -316,7 +314,7 @@
 - 검색 조건은 창고 이름 , 창고 주소로 가능
 - Kakao Map API를 통해 창고 위치를 카카오 지도로 식별 가능
 
-<br>
+
 
 #### ② 창고 상세 조회
 ![](https://velog.velcdn.com/images/coo9292/post/2306bffe-ec2d-41d2-8fec-0e58f08ccba5/image.png)
@@ -324,26 +322,25 @@
 - 창고에 대한 상세 정보 확인 가능
 - Kakao Map API를 통해 창고 위치를 카카오 지도로 식별 가능
 
-<br>
+
 
 #### ③ 창고 수정
 ![](https://velog.velcdn.com/images/coo9292/post/e8435f8d-20d8-4521-be28-534e4dd62cf9/image.png)
 수정을 위해 사용자의 입력 값 유지
 
-<br>
+
 
 <img src="https://velog.velcdn.com/images/coo9292/post/38aff0bf-396d-4455-93d1-53ff22133fd0/image.png" width="350">
 
 카카오 우편번호 찾기 API를 통해 주소를 찾을 수 있음
 
-<br>
+
 
 
 #### ④ 창고 등록
 ![](https://velog.velcdn.com/images/coo9292/post/6c886e0e-9908-4e5c-b2e6-ba44ff6ef686/image.png)
 새로운 창고를 해당 폼에서 등록 가능
 
-<br>
 
 <img src="https://velog.velcdn.com/images/coo9292/post/8ad19cff-9113-4ae4-9ae1-a95bb3c1e4a4/image.png" width="350">
 
@@ -359,7 +356,7 @@
 - 모든 팀원들이 일관된 레이아웃 안에서 작업을 하기 위하여 위 사진과 같은 공통 레이아웃 html(layout.html)을 배포
 - ```Thymeleaf```의 ```Fragment```를 이용해서 공통 템플릿 레이아웃을 정의
 
-<br>
+
 
 #### 공통 레이아웃 html 정의(layout.html)
 ```html
@@ -378,7 +375,6 @@
 ```
 ```th:fragment```를 통해 fragment(조각)를 선언 , 이때 content 파라메터도 덩달아 선언하면서 외부로부터 태그를 주입받겠다고 지정
 
-<br>
 
 
 #### 공통 레이아웃 호출
