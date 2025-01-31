@@ -182,7 +182,7 @@
 <div align="center"><img src="https://velog.velcdn.com/images/coo9292/post/147087d9-6450-4a44-aaa1-cde694c19907/image.svg" width=600></div>
 
 #### 사진 2)
-<div><img src="https://velog.velcdn.com/images/coo9292/post/653e47d1-21c7-417f-82ee-d3d295a40995/image.svg" width=600></div>
+<div align="center"><img src="https://velog.velcdn.com/images/coo9292/post/653e47d1-21c7-417f-82ee-d3d295a40995/image.svg" width=600></div>
 
 - 사진 1,2는 의약품 유통 관리 기준(KGSP)에서 발췌
 
