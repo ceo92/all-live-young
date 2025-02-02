@@ -1,7 +1,9 @@
-# 의약품 WMS(Warehouse Management System) : All live 榮
+<img width="904" alt="image" src="https://github.com/user-attachments/assets/188f5bfa-e9d0-489f-8e7e-4adf78acdf57" /># 의약품 WMS(Warehouse Management System) : All live 榮
 
+<p align="center">
+	![올리브영-removebg-preview](https://github.com/user-attachments/assets/9846e68a-a7e7-43cb-a7f1-f3499fcc88c4)
+</p>
 
-![올리브영-removebg-preview](https://github.com/user-attachments/assets/9846e68a-a7e7-43cb-a7f1-f3499fcc88c4)
 
 
 ## 기획 배경
