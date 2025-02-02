@@ -1,6 +1,6 @@
 # 의약품 WMS(Warehouse Management System) : All live 榮
-![올리브영-removebg-preview](https://github.com/user-attachments/assets/86e0a6dd-3e26-4279-9658-9f6b10e621b5)
 
+<img width="482" alt="image" src="https://github.com/user-attachments/assets/93e7a75d-b160-473f-ab01-09ffb1cdecde" />
 
 ## 기획 배경
 2019년 11월 17일에 중국에서 COVID-19가 최초로 보고되어 전세계적으로 수많은 확진자 및 사상자를 배출(2023년 9월까지 6억 9천만명이 확진)되며 그에 따라 여러 의약 회사에서 백신도 개발하며 전세계가 합작한 결과 2023년 5월 5일 WHO에서는 펜데믹을 해제했다.
