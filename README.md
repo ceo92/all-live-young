@@ -1,4 +1,4 @@
-<img width="482" alt="image" src="https://github.com/user-attachments/assets/93e7a75d-b160-473f-ab01-09ffb1cdecde" /># 의약품 WMS(Warehouse Management System) : All live 榮
+# 의약품 WMS(Warehouse Management System) : All live 榮
 ![올리브영-removebg-preview](https://github.com/user-attachments/assets/86e0a6dd-3e26-4279-9658-9f6b10e621b5)
 
 
