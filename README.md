@@ -574,7 +574,7 @@ public class MapperTest {
 ```
 
 -  Product 인스턴스인지 확인하려고 테스트 코드를 리팩토링해도 잘 출력되는 것을 알 수 있었음
-- <span style="color:red">즉 단순 조회가 아닌 연관관계에 대한 조인 조회 시에는 무조건 resultMap을 활용해야한다는 사실을 깨달음</span>
+- <span style="color:red">즉 단순 조회가 아닌 조인 시에는 가급적 resultMap을 활용해야하는 게 안전하다는 사실을 깨달음</span>
 
 
 <br>
