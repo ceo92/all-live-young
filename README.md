@@ -524,7 +524,7 @@ public class MapperTest {
 <br>
 <br>
 
-#### resultMap 사용한 StockMapper.xml
+#### StockMapper.xml을 resultMap으로 리팩토링
 ```xml
 <select id="findAll" resultMap="stocks">
     SELECT *
@@ -543,9 +543,7 @@ public class MapperTest {
   	<!-- where문 동적쿼리 코드 생략-->
   </select>
 ```
-- 문제점 코드에서 resultType을 resultMap으로 바꾼 후 정의한 resultMap을 지정하였음
-
-- 동일한 코드로 테스트를 해보겠음
+- 방금 생성한 ```resultMap```을 ```<select>```의 리턴값으로 지정 후 테스트를 진행 후 아래의 결과가 나옴
 
 <br>
 <br>
