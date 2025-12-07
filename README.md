@@ -4,7 +4,7 @@
 	<img src="https://github.com/user-attachments/assets/9846e68a-a7e7-43cb-a7f1-f3499fcc88c4">	
 </p>
 
-## 들어가기 전: 시연 영상 보기
+## 들어가기 전: 시연 영상 보기(썸네일 클릭)
 [![의약품 WMS](https://github.com/user-attachments/assets/858b08ed-2eff-4c76-af18-d0600e9d11d9)](https://youtu.be/VWa-wLc8I4s)
 
 <br>
